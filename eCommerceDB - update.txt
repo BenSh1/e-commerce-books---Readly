@@ -1,0 +1,46 @@
+CREATE TABLE Authors (
+    AuthorID INT SERIAL PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Categories (
+    CategoryID INT SERIAL PRIMARY KEY,
+    CategoryName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Books (
+    BookID INT SERIAL PRIMARY KEY,
+    Title VARCHAR(100) NOT NULL,
+    AuthorID INT,
+    CategoryID INT,
+    Price DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL,
+    FOREIGN KEY (AuthorID) REFERENCES Authors(AuthorID),
+    FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID)
+);
+
+CREATE TABLE Customers (
+    CustomerID INT PRIMARY KEY,
+    FirstName VARCHAR(50) NOT NULL,
+    LastName VARCHAR(50) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Phone VARCHAR(15)
+);
+
+CREATE TABLE Orders (
+    OrderID INT SERIAL PRIMARY KEY,
+    CustomerID INT,
+    OrderDate TIMESTAMP NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+);
+
+CREATE TABLE OrderDetails (
+    OrderDetailID INT SERIAL PRIMARY KEY,
+    OrderID INT,
+    BookID INT,
+    Quantity INT NOT NULL,
+    Price DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (OrderID) REFERENCES Orders(OrderID),
+    FOREIGN KEY (BookID) REFERENCES Books(BookID)
+);
