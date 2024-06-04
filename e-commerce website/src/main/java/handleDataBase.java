@@ -12,12 +12,12 @@ public class handleDataBase {
             System.out.println("Connection has been established!");
 
             Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT * FROM users");
+            ResultSet resultSet = statement.executeQuery("SELECT * FROM customers");
 
             //some of the data from database will be printed to the screen
             while (resultSet.next())
             {
-                System.out.println("User id: " + resultSet.getString("user_id")+ " ,email: " + resultSet.getString("email") +" and created at: " + resultSet.getString("created_at"));
+                System.out.println("User id: " + resultSet.getString("customer id")+ " ,email: " + resultSet.getString("email") /*+" and created at: " + resultSet.getString("created_at")*/ );
             }
 
 
