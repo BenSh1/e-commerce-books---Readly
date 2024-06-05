@@ -1,0 +1,14 @@
+package com.ecommerce.ecommerce;
+import org.springframework.boot.autoconfigure.jdbc.*;
+import org.springframework.boot.autoconfigure.orm.jpa.*;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ECommerceWebsiteApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ECommerceWebsiteApplication.class, args);
+    }
+
+}
