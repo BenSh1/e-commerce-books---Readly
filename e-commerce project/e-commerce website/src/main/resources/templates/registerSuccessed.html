@@ -6,7 +6,9 @@
 </head>
 <body>
     <h1>Form Submission Result</h1>
-    <p>Name: <span th:text="${formData.name}"></span></p>
-    <p>Email: <span th:text="${formData.email}"></span></p>
+    <p>Name: <span th:text="${customer.firstName}"></span></p>
+    <p>ID: <span th:text="${customer.customerId}"></span></p>
+    <p>Email: <span th:text="${customer.email}"></span></p>
+
 </body>
 </html>

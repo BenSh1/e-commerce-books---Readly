@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
+/*
 import jakarta.persistence.*;
 
 @Entity
@@ -37,3 +38,4 @@ public class Customers {
         this.email = email;
     }
 }
+*/

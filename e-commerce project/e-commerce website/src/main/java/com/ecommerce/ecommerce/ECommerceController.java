@@ -1,15 +1,32 @@
 package com.ecommerce.ecommerce;
 
+//import com.ecommerce.ecommerce.dao.CustomerDAO;
+//import com.ecommerce.ecommerce.dao.CustomerDAOImpl;
+import com.ecommerce.ecommerce.entity.Customer;
 import com.ecommerce.ecommerce.Data_Transfer_Object.FormData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 @Controller
 public class ECommerceController {
+
+
+    @Autowired
+    private ServiceController customerService;
+
+
+    /*
+    @Autowired
+    private CustomerDAO customerDAO;
+
+     */
+
 
     @GetMapping("/greeting")
     public String helloWorld(){
@@ -38,10 +55,92 @@ public class ECommerceController {
     }
 
     @GetMapping("/register")
+    public String getPageRegistration(Model model){
+        model.addAttribute("customer", new Customer());
+        return "registration";
+    }
+
+    @PostMapping("/submit")
+    public String submitForm(@ModelAttribute Customer customer, Model model) {
+        // Handle form data
+        customerService.save(customer);
+        model.addAttribute("customer", customer);
+        System.out.println("customer id :  " + customer.getCustomerId());
+        //customerService.createCustomer(customer);
+        //customerDAO.save(customer);
+        return "registerSuccessed";
+    }
+
+    @GetMapping("/login")
+    public String getPageLogin(Model model){
+        model.addAttribute("customer", new Customer());
+        return "Login";
+    }
+
+
+    /*
+    @GetMapping("/view")
+    public String viewHtml(Model model) throws IOException {
+        File htmlFile = new File("path/to/your/file.html");
+        String htmlContent = myService.parseHtml(htmlFile);
+        model.addAttribute("htmlContent", htmlContent);
+        return "view";
+    }
+    @GetMapping("/register")
+    public String getPageRegistration(Model model){
+        File htmlFile = new File("path/to/your/file.html" "");
+        model.addAttribute("customer", new Customer());
+        return "registration";
+    }
+
+     */
+
+
+    /*
+    @GetMapping("/register")
     public String getPageRegistration(){
         return "registration";
     }
 
+    @PostMapping("/register")
+    public String submitForm(@RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("customerId") int customerId,
+                             @RequestParam("userName") String userName,
+                             @RequestParam("password") String password,
+                             @RequestParam("email") String email,
+                             @RequestParam("phone") String phone) {
+
+        Customer customer = new Customer(customerId,firstName,lastName,userName,password,email,phone);
+        System.out.println("customer id : " + customer.getCustomerId());
+        customerService.createConsumer(customer);
+        return "redirect:/registerSuccessed"; // Redirect to a success page
+    }
+    */
+
+
+    /*
+    @GetMapping("/register")
+    public String getPageRegistration(){
+        return "registration";
+    }*/
+
+    /*
+    @PostMapping("/submit")
+    public String submitForm(@RequestParam("firstName") String firstName,
+                             @RequestParam("lastName") String lastName,
+                             @RequestParam("customerId") int customerId,
+                             @RequestParam("userName") String userName,
+                             @RequestParam("password") String password,
+                             @RequestParam("email") String email,
+                             @RequestParam("phone") String phone) {
+
+        Customer customer = new Customer(customerId,firstName,lastName,userName,password,email,phone);
+        System.out.println("customer id : " + customer.getCustomerId());
+        customerService.createConsumer(customer);
+        return "redirect:/registerSuccessed"; // Redirect to a success page
+    }
+    */
     @GetMapping("/register2")
     public String getPageRegistration2(Model model){
         model.addAttribute("formData", new FormData());
@@ -53,19 +152,18 @@ public class ECommerceController {
         model.addAttribute("formData", new FormData());
         return "registration3";
     }
-
+    /*
     @PostMapping("/submit")
     public String submitForm(@ModelAttribute FormData formData, Model model) {
         // Handle form data
         model.addAttribute("formData", formData);
-        return "registerSuccessed";
+        return "registerSuccessed2";
     }
+    */
 
 
-    @GetMapping("/login")
-    public String getPageLogin(){
-        return "Login";
-    }
+
+
 
 
 
