@@ -7,11 +7,12 @@ import jakarta.persistence.*;
 public class Customer {
 
     // define fields
+    /*
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-
+     */
 
     @Column(name="customerId")
     private int customerId;
@@ -22,8 +23,10 @@ public class Customer {
     @Column(name="lastName")
     private String lastName;
 
+    @Id
     @Column(name="userName")
     private String userName;
+
     @Column(name="password")
     private String password;
     @Column(name="phone")

@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 
 @Controller
 public class ECommerceController {
@@ -19,13 +21,6 @@ public class ECommerceController {
 
     @Autowired
     private ServiceController customerService;
-
-
-    /*
-    @Autowired
-    private CustomerDAO customerDAO;
-
-     */
 
 
     @GetMapping("/greeting")
@@ -57,24 +52,52 @@ public class ECommerceController {
     @GetMapping("/register")
     public String getPageRegistration(Model model){
         model.addAttribute("customer", new Customer());
+
         return "registration";
     }
 
-    @PostMapping("/submit")
+    //@PostMapping("/submit")
+    @PostMapping("/successfulRegister")
     public String submitForm(@ModelAttribute Customer customer, Model model) {
         // Handle form data
-        customerService.save(customer);
+        //customerService.saveCustomer(customer);
         model.addAttribute("customer", customer);
-        System.out.println("customer id :  " + customer.getCustomerId());
-        //customerService.createCustomer(customer);
+        //System.out.println("customer id :  " + customer.getCustomerId());
+        customerService.saveCustomer(customer);
         //customerDAO.save(customer);
         return "registerSuccessed";
     }
 
     @GetMapping("/login")
     public String getPageLogin(Model model){
-        model.addAttribute("customer", new Customer());
-        return "Login";
+        //model.addAttribute("customer", new Customer());
+        return "login";
+    }
+
+    @PostMapping("/successfulLogin")
+    public String getResultLogin(@RequestParam("userName") String userName,
+                                 @RequestParam("password") String password,
+                                 Model model) {
+        // Handle form data
+        //customerService.getCustomer(userName,password);
+        //model.addAttribute("customer", customer);
+
+        System.out.println("customer userName :  " + userName);
+        System.out.println("customer password :  " + password);
+        List<Customer> theCustomers = customerService.queryForCustomersByUserNameAndPassword(userName , password);
+        //model.addAttribute("customer", theCustomers.getFirst());
+
+        if (theCustomers != null)
+        {
+            // Add the first customer to the model
+            if (!theCustomers.isEmpty()) {
+                model.addAttribute("customer", theCustomers.getFirst());
+            }
+            return "loginSuccessed";
+        }
+        return "loginFail";
+
+
     }
 
 
