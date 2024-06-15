@@ -6,9 +6,9 @@
 </head>
 <body>
     <h1>log in Result</h1>
-    <p>Hello  <span th:text="${customer.firstName}"></span></p>
+    <p>Hello  <span th:text="${customer.firstName} + ' ' + ${customer.lastName}"></span></p>
     <p>Welcome back to the site!</p>
-    <p>Your password: <span th:text="${customer.customerId}"></span></p>
+    <p>Your password: <span th:text="${customer.password}"></span></p>
 
 </body>
 </html>

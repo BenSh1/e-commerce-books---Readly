@@ -3,17 +3,17 @@ package com.ecommerce.ecommerce;
 //import com.ecommerce.ecommerce.dao.CustomerDAO;
 //import com.ecommerce.ecommerce.dao.CustomerDAOImpl;
 import com.ecommerce.ecommerce.dao.CustomerDAO;
+import com.ecommerce.ecommerce.dao.UserDao;
 //import com.ecommerce.ecommerce.repository.CustomerRepository;
 
 import com.ecommerce.ecommerce.entity.Customer;
 //import com.ecommerce.ecommerce.repository.CustomerRepository;
+import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.entity.Users;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,8 +22,15 @@ public class ServiceController {
     @Autowired
     private CustomerDAO customerDAO;
 
+    @Autowired
+    private UserDao userDAO;
+
     public void saveCustomer(Customer customer) {
         customerDAO.save(customer);
+        //customerRepository.save(customer);
+    }
+    public void saveUser(User user) {
+        userDAO.save(user);
         //customerRepository.save(customer);
     }
 
