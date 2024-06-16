@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <div>
+        <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
+    </div>
+    <div>
+        <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
+    </div>
+    <div>
+        <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a> <!-- Link to the login page --><br>
+    </div>
+
+    <hr>
+
+    <title>Items for Sale</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .item-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 200px;
+            text-align: center;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .item img {
+            max-width: 100%;
+            height: auto;
+        }
+        .item h3 {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+        .item p {
+            margin: 10px 0;
+            color: #555;
+        }
+        .item .price {
+            font-weight: bold;
+            color: #d9534f;
+        }
+    </style>
+</head>
+
+<body>
+<h1>Items for Sale</h1>
+<div class="item-list">
+
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 1">
+        <h3>Item 1</h3>
+        <p>Description of item 1.</p>
+        <p class="price">$10.00</p>
+    </div>
+
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 2">
+        <h3>Item 2</h3>
+        <p>Description of item 2.</p>
+        <p class="price">$15.00</p>
+    </div>
+
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 3">
+        <h3>Item 3</h3>
+        <p>Description of item 3.</p>
+        <p class="price">$20.00</p>
+    </div>
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 4">
+        <h3>Item 4</h3>
+        <p>Description of item 4.</p>
+        <p class="price">$25.00</p>
+    </div>
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 5">
+        <h3>Item 5</h3>
+        <p>Description of item 5.</p>
+        <p class="price">$30.00</p>
+    </div>
+    <div class="item">
+        <img src="https://via.placeholder.com/150" alt="Item 6">
+        <h3>Item 6</h3>
+        <p>Description of item 6.</p>
+        <p class="price">$35.00</p>
+    </div>
+</div>
+</body>
+</html>
