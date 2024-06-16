@@ -3,9 +3,14 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.ServiceController;
 import com.ecommerce.ecommerce.entity.Customer;
+import com.ecommerce.ecommerce.service.UserService;
+import com.ecommerce.ecommerce.user.WebUser;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.ui.Model;
@@ -23,6 +28,22 @@ public class ECommerceController {
     @Autowired
     private ServiceController customerService;
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+    private UserService userService;
+
+    @Autowired
+    public ECommerceController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder dataBinder) {
+
+        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
+
+        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
+    }
 
     @GetMapping("/")
     public String getIndexPage() {
@@ -43,7 +64,7 @@ public class ECommerceController {
     public String getPage2(){
         return "page2";
     }
-
+    /*
     @GetMapping("/register")
     public String getPageRegistration(Model model){
         model.addAttribute("customer", new Customer());
@@ -63,6 +84,7 @@ public class ECommerceController {
         return "registerSuccessed";
     }
 
+     */
 
 
 

@@ -1,5 +1,5 @@
 package com.ecommerce.ecommerce.entity;
-
+/*
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -44,4 +44,6 @@ public class Users {
         this.enabled = enabled;
     }
 }
+
+ */
 

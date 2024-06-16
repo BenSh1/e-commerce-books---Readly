@@ -1,5 +1,5 @@
 package com.ecommerce.ecommerce.security;
-/*
+
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.UserService;
 import jakarta.servlet.ServletException;
@@ -38,9 +38,9 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("user", theUser);
 
         // forward to home page
-        response.sendRedirect(request.getContextPath() + "/");
+        response.sendRedirect(request.getContextPath() + "/home");
     }
 
 }
-*/
+
 
