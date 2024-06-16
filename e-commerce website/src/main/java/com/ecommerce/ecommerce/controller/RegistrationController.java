@@ -50,6 +50,7 @@ public class RegistrationController {
         return "register/registration-form";
     }
 
+
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(
             @Valid @ModelAttribute("webUser") WebUser theWebUser,
@@ -89,51 +90,6 @@ public class RegistrationController {
         return "register/registration-confirmation";
     }
 
-    /*
-    @GetMapping("/showRegistrationForm")
-	public String showMyLoginPage(Model theModel) {
-		
-		theModel.addAttribute("webUser", new WebUser());
-		
-		return "registration";
-	}
-
-	@PostMapping("/processRegistrationForm")
-	public String processRegistrationForm(
-			@Valid @ModelAttribute("webUser") WebUser theWebUser,
-			BindingResult theBindingResult,
-			HttpSession session, Model theModel) {
-
-		String userName = theWebUser.getUserName();
-		logger.info("Processing registration form for: " + userName);
-		
-		// form validation
-		 if (theBindingResult.hasErrors()){
-			 return "registration";
-		 }
-
-		// check the database if user already exists
-        User existing = userService.findByUserName(userName);
-        if (existing != null){
-        	theModel.addAttribute("webUser", new WebUser());
-			theModel.addAttribute("registrationError", "User name already exists.");
-
-			logger.warning("User name already exists.");
-        	return "registration";
-        }
-        
-        // create user account and store in the databse
-        userService.save(theWebUser);
-        
-        logger.info("Successfully created user: " + userName);
-
-		// place user in the web http session for later use
-		session.setAttribute("user", theWebUser);
-
-        return "registerSuccessed";
-	}
-
-     */
 }
 
 

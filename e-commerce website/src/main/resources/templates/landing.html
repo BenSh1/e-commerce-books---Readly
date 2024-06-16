@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <title>Landing Page</title>
+</head>
+
+<body>
+<h2>Landing Page</h2>
+<hr>
+
+
+<a href="/page1">Go to Page 1</a><br>
+<a href="/page2">Go to Page 2</a><br>
+
+
+<a th:href="@{/showMyLoginPage}">Sign-in</a> <!-- Link to the login page --><br>
+<a th:href="@{/register/showRegistrationForm}">Sign-up</a><br>
+
+<p>
+Welcome to the landing page! This page is open to the public ... no login required :-)
+</p>
+
+<hr>
+<p>
+    <a th:href="@{/home}">Access Secure Site</a>
+</p>
+
+</body>
+</html>

@@ -10,7 +10,7 @@
 
     <body>
         <div class="container">
-            <div id="loginbox" style="margin-top: 50px;" class="col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
+            <div id="loginbox" style="margin-top: 50px; margin-left: 50px;" class="col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
                 <div class="card border-info">
                     <div class="card-header bg-info">
                         Sign In
@@ -68,10 +68,15 @@
                         </div>
                     </div>
                 </div>
+                <div>
+                    <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Register New User Ben</a>
+                </div>
+                <div>
+                    <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a> <!-- Link to the login page --><br>
+                </div>
             </div>
-            <div>
-                <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Register New User Ben</a>
-            </div>
+
+
         </div>
     </body>
 </html>
