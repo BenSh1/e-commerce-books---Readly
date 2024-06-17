@@ -35,7 +35,7 @@ public class SecurityConfig  {
 
         http.authorizeRequests(configurer ->
                         configurer
-                                .requestMatchers("/", "/register/**" , "/showMyLoginPage","/itemSells").permitAll()  // Allow access to URLs starting with /public
+                                .requestMatchers("/", "/register/**" , "/showMyLoginPage","/itemSells" , "/addBook").permitAll()  // Allow access to URLs starting with /public
                                 .requestMatchers("/home/**").hasRole("EMPLOYEE")
                                 .requestMatchers("/leaders/**").hasRole("MANAGER")
                                 .requestMatchers("/systems/**").hasRole("ADMIN")

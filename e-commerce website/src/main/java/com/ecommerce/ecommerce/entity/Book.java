@@ -3,7 +3,7 @@ package com.ecommerce.ecommerce.entity;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="books")
+@Table(name="book")
 public class Book {
 
     // define fields
@@ -13,9 +13,9 @@ public class Book {
     private int bookId;
     @Column(name="title")
     private String title;
-    @Column(name="authorId")
-    private int authorId;
-    @Column(name="categoryID")
+    @Column(name="authorName")
+    private String authorName;
+    @Column(name="categoryName")
     private int categoryID;
     @Column(name="price")
     private int price;
@@ -39,12 +39,12 @@ public class Book {
         this.title = title;
     }
 
-    public int getAuthorId() {
-        return authorId;
+    public String getAuthorId() {
+        return authorName;
     }
 
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     public int getCategoryID() {
@@ -76,7 +76,7 @@ public class Book {
         return "Book{" +
                 "bookId=" + bookId +
                 ", title='" + title + '\'' +
-                ", authorId=" + authorId +
+                ", authorId=" + authorName +
                 ", categoryID=" + categoryID +
                 ", price=" + price +
                 ", stock=" + stock +
