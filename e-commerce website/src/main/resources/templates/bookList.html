@@ -4,25 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
+    <style>
+
+        .vertical-line {
+            border-left: 2px solid black; /* Border on the left side */
+            height: 200px; /* Specify the height */
+            margin: 20px; /* Optional margin */
+        }
+
+
+         table {
+             border-collapse: collapse;
+         }
+        th, td {
+            padding: 10px;
+        }
+        .vertical-line {
+            border-left: 2px solid black; /* Add left border */
+        }
+
+
+    </style>
 </head>
 <body>
 <h1>Book List</h1>
-<ul>
+<table>
+    <a href="/addBook">Go to Add book</a><br>
+    <a href="/home">Go to Home</a><br>
 
-    <th:block th:each="book : ${books}">
-        <li>
-            <img th:src="${book.image}" alt="Book Image" width="100">
 
-            <h2 th:text="${book.title}">Title: </h2>
-            <p th:text="${book.authorName}" >author: </p>
-            <p th:text="${book.description}">Description: </p>
-            <p th:text="${book.price}">Price: </p>
-            <p th:text="${book.stock}">Stock: </p>
-
-        </li>
-    </th:block>
-
-</ul>
-<a href="/addBook">Add Another Book</a>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Image</th>
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.title}" ></td>
+        <td th:text="${book.authorName}" class="vertical-line"></td>
+        <td th:text="${book.description}" class="vertical-line"></td>
+        <td th:text="${book.category}" class="vertical-line"></td>
+        <td th:text="${book.price}" class="vertical-line"></td>
+        <td th:text="${book.stock}" class="vertical-line"></td>
+        <td class="vertical-line">
+            <img th:src="${'data:image/png;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>
+        </td>
+    </tr>
+</table>
 </body>
 </html>

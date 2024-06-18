@@ -40,6 +40,7 @@ public class BookController {
         System.out.println("processAddBookForm");
 
         System.out.println("title : " + theBook.getTitle());
+        System.out.println("title : " + theBook.getCategory());
 
         bookService.addBook(theBook);
 

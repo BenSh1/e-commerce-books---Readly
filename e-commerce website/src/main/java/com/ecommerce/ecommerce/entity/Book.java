@@ -28,6 +28,35 @@ public class Book {
     @Column(name="image")
     private byte[] image;
 
+    @Transient
+    private String imageBase64;
+
+
+    // Add this method to convert image to Base64
+    public String getImageBase64() {
+        if (this.image != null) {
+            String base64 = java.util.Base64.getEncoder().encodeToString(this.image);
+            System.out.println("Base64 Image: " + base64);
+            return base64;
+        }
+        return null;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
+    }
+
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+
+
 
     public String getDescription() {
         return description;
@@ -41,13 +70,7 @@ public class Book {
         return author;
     }
 
-    public byte[] getImage() {
-        return image;
-    }
 
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
 
     public int getBookId() {
         return bookId;
@@ -73,7 +96,7 @@ public class Book {
         return category;
     }
 
-    public void setCategoryID(String categoryName) {
+    public void setCategory(String categoryName) {
         this.category = categoryName;
     }
 

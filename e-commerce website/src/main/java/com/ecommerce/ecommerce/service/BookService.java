@@ -21,9 +21,19 @@ public class BookService {
         //books.add(book);
         bookDao.save(book);
     }
-
+/*
     public List<Book> getBooks() {
         return bookDao.findAll();
+    }
+
+ */
+
+    public List<Book> getBooks() {
+        List<Book> books = bookDao.findAll();
+        for (Book book : books) {
+            book.setImageBase64(book.getImageBase64());
+        }
+        return books;
     }
 
 

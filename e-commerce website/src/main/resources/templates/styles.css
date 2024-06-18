@@ -12,3 +12,7 @@ body, html {
     border: 1px solid #ccc;
     border-radius: 5px;
 }
+
+.vertical-line {
+    border-left: 2px solid black; /* Add left border */
+}
