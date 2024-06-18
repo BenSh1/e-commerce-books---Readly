@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +8,20 @@
 <body>
 <h1>Book List</h1>
 <ul>
+
     <th:block th:each="book : ${books}">
         <li>
-            <img th:src="${book.imageUrl}" alt="Book Image" width="100">
-            <h2 th:text="${book.title}"></h2>
-            <p th:text="${book.author}"></p>
-            <p th:text="${book.description}"></p>
+            <img th:src="${book.image}" alt="Book Image" width="100">
+
+            <h2 th:text="${book.title}">Title: </h2>
+            <p th:text="${book.authorName}" >author: </p>
+            <p th:text="${book.description}">Description: </p>
+            <p th:text="${book.price}">Price: </p>
+            <p th:text="${book.stock}">Stock: </p>
+
         </li>
     </th:block>
+
 </ul>
 <a href="/addBook">Add Another Book</a>
 </body>

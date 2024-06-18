@@ -39,7 +39,7 @@ public class RegistrationController {
 	}
 
     @GetMapping("/showRegistrationForm")
-    public String showMyLoginPage(
+    public String showMyRegisterPage(
             @Valid @ModelAttribute("webUser") WebUser theWebUser,
             BindingResult theBindingResult,
             HttpSession session, Model theModel)

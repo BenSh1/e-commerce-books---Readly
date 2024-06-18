@@ -13,15 +13,41 @@ public class Book {
     private int bookId;
     @Column(name="title")
     private String title;
-    @Column(name="authorName")
-    private String authorName;
-    @Column(name="categoryName")
-    private int categoryID;
+    @Column(name="author")
+    private String author;
+    @Column(name="description")
+    private String description;
+    @Column(name="category")
+    private String category;
     @Column(name="price")
     private int price;
     @Column(name="stock")
     private int stock;
 
+    @Lob
+    @Column(name="image")
+    private byte[] image;
+
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getAuthorName() {
+        return author;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
 
     public int getBookId() {
         return bookId;
@@ -39,20 +65,16 @@ public class Book {
         this.title = title;
     }
 
-    public String getAuthorId() {
-        return authorName;
-    }
-
     public void setAuthorName(String authorName) {
-        this.authorName = authorName;
+        this.author = authorName;
     }
 
-    public int getCategoryID() {
-        return categoryID;
+    public String getCategory() {
+        return category;
     }
 
-    public void setCategoryID(int categoryID) {
-        this.categoryID = categoryID;
+    public void setCategoryID(String categoryName) {
+        this.category = categoryName;
     }
 
     public int getPrice() {
@@ -76,8 +98,8 @@ public class Book {
         return "Book{" +
                 "bookId=" + bookId +
                 ", title='" + title + '\'' +
-                ", authorId=" + authorName +
-                ", categoryID=" + categoryID +
+                ", authorId=" + author +
+                ", categoryID=" + category +
                 ", price=" + price +
                 ", stock=" + stock +
                 '}';
