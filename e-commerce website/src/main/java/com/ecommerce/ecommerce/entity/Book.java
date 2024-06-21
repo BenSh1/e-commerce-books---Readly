@@ -24,10 +24,44 @@ public class Book {
     @Column(name="stock")
     private int stock;
 
-    @Lob
+/*
     @Column(name="image")
+    @Lob
     private byte[] image;
 
+ */
+    @Column(name="image")
+    //@Lob
+    private String image;
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+
+
+    /*
+    @Column(name="image")
+    private String image;
+
+ */
+
+
+/*
     @Transient
     private String imageBase64;
 
@@ -46,14 +80,18 @@ public class Book {
         this.imageBase64 = imageBase64;
     }
 
+ */
 
-    public byte[] getImage() {
+/*
+    public String getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(String image) {
         this.image = image;
     }
+
+ */
 
 
 

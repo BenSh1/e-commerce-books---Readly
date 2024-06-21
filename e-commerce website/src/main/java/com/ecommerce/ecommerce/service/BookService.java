@@ -27,7 +27,7 @@ public class BookService {
     }
 
  */
-
+/*
     public List<Book> getBooks() {
         List<Book> books = bookDao.findAll();
         for (Book book : books) {
@@ -36,6 +36,22 @@ public class BookService {
         return books;
     }
 
+ */
+
+    public List<Book> getBooks() {
+        List<Book> books = bookDao.findAll();
+        /*
+        for (Book book : books) {
+            book.setImageBase64(book.getImageBase64());
+        }
+
+         */
+        return books;
+    }
+
+    public Book getBook(Long id) {
+        return bookDao.findById(id);
+    }
 
     /*
     public List<Book> getBooks() {

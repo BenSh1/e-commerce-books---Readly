@@ -22,7 +22,17 @@
         .vertical-line {
             border-left: 2px solid black; /* Add left border */
         }
-
+        <!--
+        .item img {
+            max-width: 100px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .item td {
+            vertical-align: middle;
+        }
+        -->
 
     </style>
 </head>
@@ -41,6 +51,8 @@
         <th>Price</th>
         <th>Stock</th>
         <th>Image</th>
+        <th>Action</th>
+
     </tr>
     <tr th:each="book : ${books}">
         <td th:text="${book.title}" ></td>
@@ -49,10 +61,33 @@
         <td th:text="${book.category}" class="vertical-line"></td>
         <td th:text="${book.price}" class="vertical-line"></td>
         <td th:text="${book.stock}" class="vertical-line"></td>
+        <td><img th:src="${book.image}"  alt="Item Image"></td>
+        <!--
         <td class="vertical-line">
-            <img th:src="${'data:image/png;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>
+            <img th:src="${'data:image/jpg;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>
         </td>
+        -->
+        <!--
+        <td class="vertical-line" th:src="@{'/images/' + ${book.imageBase64}}" > </td>
+        -->
+
+
+
+        <!--
+        <td class="vertical-line">
+            <img  th:src="'data:image/jpeg;base64,' + ${book.imageBase64}" alt="Book Image"/>
+        </td>
+        -->
+
+        <td class="vertical-line" style="white-space:nowrap">
+            <a class="btn btn-primary btn-sm"
+               th:href="@{edit}">Edit</a>
+            <a class="btn btn-danger btn-sm"
+               th:href="@{delete}">Delete</a>
+        </td>
+
     </tr>
 </table>
+
 </body>
 </html>
