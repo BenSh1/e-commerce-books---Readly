@@ -42,8 +42,6 @@ public class Book {
         this.image = image;
     }
 
-
-
     public String getAuthor() {
         return author;
     }

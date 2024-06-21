@@ -1,31 +1,19 @@
 package com.ecommerce.ecommerce.controller;
 
 
-import com.ecommerce.ecommerce.ServiceController;
 import com.ecommerce.ecommerce.dao.BookDao;
 //import com.ecommerce.ecommerce.dao.BookRepository;
-import com.ecommerce.ecommerce.dao.BookRepository;
+//import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.service.BookService;
-import com.ecommerce.ecommerce.user.WebUser;
-import jakarta.persistence.Column;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.TypedQuery;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -33,9 +21,11 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
-
+/*
     @Autowired
     private BookRepository bookRepository;
+
+ */
 
     @Autowired
     @PersistenceContext
@@ -47,38 +37,7 @@ public class BookController {
     @Autowired
     private BookDao bookDao;
 
-/*
-    @GetMapping("ben")
-    public String showBookList(Model model) {
-        List<Book> books = bookDao.findAll();
 
-        model.addAttribute("books", books);
-        return "bookList"; // Return the view to display the books
-    }
-
- */
-    @GetMapping("/addBook2")
-    public String addBookForm2(Model model) {
-        model.addAttribute("book",new Book());
-        System.out.println("addBookForm");
-        return "addBook2";
-    }
-
-    @PostMapping("/addBook2")
-    public String addBook2(@ModelAttribute Book theBook) {
-        bookDao.save(theBook);
-        //bookRepository.save(theBook);
-        return "redirect:/bookList2";
-    }
-    @GetMapping("/bookList2")
-    public String listBooks2(Model model) {
-        //List<Book> books = bookService.getBooks();
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-
-        model.addAttribute("books", books);
-        return "bookList2"; // Return the view to display the books
-    }
 
     @GetMapping("/addBook")
     public String addBookForm(Model model) {
@@ -92,6 +51,8 @@ public class BookController {
         //bookRepository.save(theBook);
         return "redirect:/bookList";
     }
+
+
     @GetMapping("/bookList")
     public String listBooks(Model model) {
         //List<Book> books = bookService.getBooks();
@@ -101,6 +62,88 @@ public class BookController {
         model.addAttribute("books", books);
         return "bookList"; // Return the view to display the books
     }
+
+    @GetMapping("/itemSells2")
+    public String getItems(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+
+        return "itemSells2";
+    }
+
+    @GetMapping("/itemSells")
+    public String getItems3(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+        return "itemSells";
+    }
+
+
+    @GetMapping("/edit")
+    public String showEditBookPage(Model model, @RequestParam long id) {
+        try{
+            Book book = bookDao.findById(id);
+            model.addAttribute("book", book);
+
+            Book editedBook = new Book();
+            editedBook.setTitle(book.getTitle());
+            editedBook.setAuthorName(book.getAuthorName());
+            editedBook.setCategory(book.getCategory());
+            editedBook.setDescription(book.getDescription());
+            editedBook.setPrice(book.getPrice());
+            editedBook.setStock(book.getStock());
+            editedBook.setImage(book.getImage());
+
+            model.addAttribute("editedBook", editedBook);
+
+        }catch (Exception e)
+        {
+            System.out.println("Exception in showEditBookPage: " + e.getMessage());
+            return "redirect:/bookList";
+
+        }
+        return "redirect:/editBook";
+    }
+/*
+    @PostMapping("/editBook")
+    public String showEditBookPage(Model model, @RequestParam long id,
+                                   @Valid ModelAttribute ) {
+        model.addAttribute("editedBook", editedBook);
+    }
+
+*/
+
+    /*
+    @GetMapping("/addBook2")
+    public String addBookForm2(Model model) {
+        model.addAttribute("book",new Book());
+        System.out.println("addBookForm");
+        return "addBook";
+    }
+
+    @PostMapping("/addBook2")
+    public String addBook2(@ModelAttribute Book theBook) {
+        bookDao.save(theBook);
+        //bookRepository.save(theBook);
+        return "redirect:/bookList2";
+    }
+
+     */
+    /*
+    @GetMapping("/bookList2")
+    public String listBooks2(Model model) {
+        //List<Book> books = bookService.getBooks();
+        //List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.getBooks();
+
+        model.addAttribute("books", books);
+        return "bookList2"; // Return the view to display the books
+    }
+
+     */
+
 
 
 /*
@@ -147,32 +190,6 @@ public class BookController {
         return "bookList"; // Show the updated book list
     }
 */
-
-
-    @GetMapping("/itemSells2")
-    public String getItems(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
-        return "itemSells2";
-    }
-
-    @GetMapping("/itemSells3")
-    public String getItems3(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
-        return "itemSells3";
-    }
-
-    /*
-    @GetMapping("/bookList")
-    public String showBookList() {
-        return "bookList";
-    }
-
-     */
-
 
 
 

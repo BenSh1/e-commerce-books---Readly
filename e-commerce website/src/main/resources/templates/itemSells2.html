@@ -25,10 +25,13 @@
         <td th:text="${book.category}" class="vertical-line"></td>
         <td th:text="${book.price}" class="vertical-line"></td>
         <td th:text="${book.stock}" class="vertical-line"></td>
+        <td ><img th:src="${book.image}"  alt="Item Image"></td>
 
+        <!--
         <td class="vertical-line">
             <img  th:src="'data:image/jpeg;base64,' + ${book.imageBase64}" alt="Book Image"/>
         </td>
+        -->
 
     </tr>
     </tbody>

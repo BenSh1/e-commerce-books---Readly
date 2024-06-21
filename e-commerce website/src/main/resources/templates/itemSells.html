@@ -2,7 +2,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <div>
@@ -15,7 +14,7 @@
         <a th:href="@{/home}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Home</a>
     </div>
     <div>
-        <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a> <!-- Link to the login page --><br>
+        <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
     </div>
 
     <hr>
@@ -60,51 +59,12 @@
 <body>
 <h1>Items for Sale</h1>
 <div class="item-list">
-
-    <div class="item">
-        <!--
-        <img src="/images/history_of_Humankind.jpg" alt="From Animals into gods ;A brief history of Humankind">
-        -->
-        <img src="/images/1.jpg" alt="The Subtle Art of not Giving a f*ck - Mark Manson">
-        <h3>From Animals into gods ;A brief history of Humankind</h3>
-        <p>Description of item 1.</p>
-        <p class="price">$10.00</p>
-    </div>
-
-    <div class="item">
-        <!--
-        <img src="/images/The_Subtle_Art_of_not_Giving_a_fck.jpg" alt="The Subtle Art of not Giving a f*ck - Mark Manson">
-        -->
-        <img src="/images/3.jpg" alt="The Subtle Art of not Giving a f*ck - Mark Manson">
-
-        <h3>The Subtle Art of not Giving a f*ck</h3>
-        <p>Description of item 2.</p>
-        <p class="price">$15.00</p>
-    </div>
-
-    <div class="item">
-        <img src="https://via.placeholder.com/150" alt="Item 3">
-        <h3>Item 3</h3>
-        <p>Description of item 3.</p>
-        <p class="price">$20.00</p>
-    </div>
-    <div class="item">
-        <img src="https://via.placeholder.com/150" alt="Item 4">
-        <h3>Item 4</h3>
-        <p>Description of item 4.</p>
-        <p class="price">$25.00</p>
-    </div>
-    <div class="item">
-        <img src="https://via.placeholder.com/150" alt="Item 5">
-        <h3>Item 5</h3>
-        <p>Description of item 5.</p>
-        <p class="price">$30.00</p>
-    </div>
-    <div class="item">
-        <img src="https://via.placeholder.com/150" alt="Item 6">
-        <h3>Item 6</h3>
-        <p>Description of item 6.</p>
-        <p class="price">$35.00</p>
+    <div class="item" th:each="book : ${books}">
+        <!--<img th:src="${book.imageBase64}" alt="Item Image">-->
+        <img th:src="${book.image}"  alt="Item Image">
+        <h3 th:text="${book.title}">Item Name</h3>
+        <p th:text="${book.description}">Item Description</p>
+        <p class="price" th:text="'$' + ${book.price}">Item Price</p>
     </div>
 </div>
 </body>

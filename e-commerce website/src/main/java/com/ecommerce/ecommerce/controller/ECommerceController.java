@@ -33,11 +33,13 @@ public class ECommerceController {
     public String getHomePage() {
         return "home";
     }
-
+/*
     @GetMapping("/itemSells")
     public String getItemSellsPage() {
         return "itemSells";
     }
+
+ */
 
 
 
