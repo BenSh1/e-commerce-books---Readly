@@ -30,11 +30,12 @@ public class BookDaoImpl implements BookDao{
         return entityManager.createQuery("SELECT b FROM Book b", Book.class).getResultList();
     }
 
-
     @Transactional
     public Book findById(Long id) {
         return entityManager.find(Book.class, id);
     }
+
+
 
     @Override
     public Book findBookByName(String theBookName) {
@@ -52,4 +53,11 @@ public class BookDaoImpl implements BookDao{
 
         return theBook;
     }
+
+    public void deleteBookById(Long id) {
+        Book theBook = entityManager.find(Book.class, id);
+        entityManager.remove(theBook);
+    }
+
+
 }

@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,22 +22,6 @@ public class BookService {
         //books.add(book);
         bookDao.save(book);
     }
-/*
-    public List<Book> getBooks() {
-        return bookDao.findAll();
-    }
-
- */
-/*
-    public List<Book> getBooks() {
-        List<Book> books = bookDao.findAll();
-        for (Book book : books) {
-            book.setImageBase64(book.getImageBase64());
-        }
-        return books;
-    }
-
- */
 
     public List<Book> getBooks() {
         List<Book> books = bookDao.findAll();
@@ -53,12 +38,34 @@ public class BookService {
         return bookDao.findById(id);
     }
 
-    /*
-    public List<Book> getBooks() {
-        return books;
+    @Transactional
+    public void update(Long id, Book book) {
+        //Book existingBook = entityManager.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+
+        Book existingBook = bookDao.findById(id);
+
+        existingBook.setTitle(book.getTitle());
+        existingBook.setAuthor(book.getAuthor());
+        existingBook.setCategory(book.getCategory());
+        existingBook.setDescription(book.getDescription());
+        existingBook.setStock(book.getStock());
+        existingBook.setPrice(book.getPrice());
+        //existingBook.setImage(book.getImage());
+
+        bookDao.save(existingBook);
     }
 
-     */
+    @Transactional
+    public void delete(Long id) {
+        Book existingBook = bookDao.findById(id);
+
+        if (existingBook != null) {
+            // Mark for deletion
+            //entityManager.remove(entity);
+            bookDao.deleteBookById(id);
+        }
+
+    }
 
 /*
     public Book findBookById(Long id) {

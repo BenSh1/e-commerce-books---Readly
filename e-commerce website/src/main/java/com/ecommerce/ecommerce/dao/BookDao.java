@@ -11,5 +11,8 @@ public interface BookDao {
     public Book findById(Long id);
     //public Book findAll();
     public List<Book> findAll();
+    //void update(Long id, Book book);
+    public void deleteBookById(Long id);
+
 
 }

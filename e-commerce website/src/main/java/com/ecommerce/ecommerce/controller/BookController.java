@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -47,11 +48,10 @@ public class BookController {
     }
     @PostMapping("/addBook")
     public String addBook(@ModelAttribute Book theBook) {
-        bookDao.save(theBook);
+        bookService.addBook(theBook);
         //bookRepository.save(theBook);
         return "redirect:/bookList";
     }
-
 
     @GetMapping("/bookList")
     public String listBooks(Model model) {
@@ -63,14 +63,7 @@ public class BookController {
         return "bookList"; // Return the view to display the books
     }
 
-    @GetMapping("/itemSells2")
-    public String getItems(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
 
-        return "itemSells2";
-    }
 
     @GetMapping("/itemSells")
     public String getItems3(Model model) {
@@ -80,9 +73,64 @@ public class BookController {
         return "itemSells";
     }
 
+/*
+    @GetMapping("/itemSells2")
+    public String getItems(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
 
-    @GetMapping("/edit")
+        return "itemSells2";
+    }
+
+ */
+
+    @GetMapping("/editBook/{id}")
+    public String editBook(@PathVariable Long id, Model model) {
+        Book book = bookService.getBook(id);
+        model.addAttribute("book", book);
+        return "editBook";
+    }
+    @PostMapping("/editBook/{id}")
+    public String updateBook(Model model ,@PathVariable Long id, @ModelAttribute Book theBook, RedirectAttributes redirectAttributes) {
+
+        /*Book book = bookService.getBook(id);
+        model.addAttribute("book", book);*/
+        bookService.update(id, theBook);
+        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+        return "redirect:/bookList";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        bookService.delete(id);
+        redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
+        return "redirect:/bookList";
+    }
+
+/*
+    @PostMapping("/addBook")
+    public String addBook(@ModelAttribute Book theBook) {
+        bookDao.save(theBook);
+        //bookRepository.save(theBook);
+        return "redirect:/bookList";
+    }
+
+ */
+/*
+    @PostMapping("/delete/{id}")
+    public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        bookService.delete(id);
+        redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
+        return "redirect:/books";
+    }
+
+ */
+
+
+    @GetMapping("/editBook")
     public String showEditBookPage(Model model, @RequestParam long id) {
+
         try{
             Book book = bookDao.findById(id);
             model.addAttribute("book", book);
@@ -104,16 +152,25 @@ public class BookController {
             return "redirect:/bookList";
 
         }
-        return "redirect:/editBook";
-    }
-/*
-    @PostMapping("/editBook")
-    public String showEditBookPage(Model model, @RequestParam long id,
-                                   @Valid ModelAttribute ) {
-        model.addAttribute("editedBook", editedBook);
+
+
+        //return "redirect:/editBook";
+        return "editBook";
     }
 
-*/
+/*
+    @PostMapping("/edit")
+    public String EditBookPage(Model model,ModelAttribute editedBook) {
+
+        model.addAttribute("editedBook", editedBook);
+
+        return "redirect:/bookList";
+    }
+
+ */
+
+
+
 
     /*
     @GetMapping("/addBook2")
