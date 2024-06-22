@@ -4,12 +4,27 @@ import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.user.WebUser;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
 
-	public User findByUserName(String userName);
+	User findByUserName(String userName);
 
 	void save(WebUser webUser);
 
+	List<User> getUsers();
+	//List<WebUser> getUsers();
+
+
+	User findUserByName(String userName);
+
+
+	User getUser(Long id);
+
+
+	void update(Long id, User theUser);
+
+	void deleteUser(Long id);
 }
 
 

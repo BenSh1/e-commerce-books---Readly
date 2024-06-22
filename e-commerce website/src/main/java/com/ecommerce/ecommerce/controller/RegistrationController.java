@@ -76,7 +76,7 @@ public class RegistrationController {
             return "register/registration-form";
         }
 
-        // create user account and store in the databse
+        // create user account and store in the database
         userService.save(theWebUser);
 
         logger.info("Successfully created user: " + userName);

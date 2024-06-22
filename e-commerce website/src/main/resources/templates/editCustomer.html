@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit New Book</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 400px;
+        }
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+        button {
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Edit Book</h1>
+<!--
+<form th:action="@{/bookList/edit/{id}(id=${book.bookId})}" th:object="${book}" method="post">
+-->
+
+<form th:action="@{/editCustomer/{id}(id=${user.id})}" th:object="${user}" method="post">
+
+    <label for="id">ID:</label>
+    <input readonly id="id" name="id" class="form-control-plaintext" type="text" th:value="*{id}" placeholder="Id Name" required />
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name" required />
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" th:field="*{lastName}"  required />
+
+
+
+    <button type="submit">Edit Book</button>
+</form>
+<a href="/home">Go to Home</a><br>
+<a href="/customersList">Go to Customers List</a><br>
+
+</body>
+</html>

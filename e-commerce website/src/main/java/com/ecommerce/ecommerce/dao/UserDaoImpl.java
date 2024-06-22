@@ -1,12 +1,16 @@
 package com.ecommerce.ecommerce.dao;
 
 
+import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.user.WebUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class UserDaoImpl implements UserDao {
@@ -34,7 +38,6 @@ public class UserDaoImpl implements UserDao {
         } catch (Exception e) {
             theUser = null;
         }
-
         return theUser;
     }
 
@@ -42,11 +45,32 @@ public class UserDaoImpl implements UserDao {
     @Transactional
     public void save(User theUser) {
         //entityManager.persist(theUser);
-
         // create the user ... finally LOL
         entityManager.merge(theUser);
 
     }
+
+    @Override
+    public List<User> findAll() {
+        // Create JPQL query
+        String query = "SELECT u FROM User u";
+        TypedQuery<User> typedQuery = entityManager.createQuery(query, User.class);
+
+        // Execute the query and return results
+        return typedQuery.getResultList();
+    }
+
+    @Override
+    public User findById(Long id) {
+        return entityManager.find(User.class, id);
+    }
+
+    @Override
+    public void deleteUserById(Long id) {
+        User theUser = entityManager.find(User.class, id);
+        entityManager.remove(theUser);
+    }
+
 }
 
 
