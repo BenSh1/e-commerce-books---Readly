@@ -37,7 +37,8 @@ public class SecurityConfig  {
                         configurer
                                 .requestMatchers("/","/static/**", "/images/**", "/register/**" , "/showMyLoginPage","/itemSells",
                                         "/addBook","/bookList", "/bookList/**","/bookList2").permitAll()  // Allow access to URLs starting with /public
-                                .requestMatchers("/home/**").hasRole("EMPLOYEE")
+                                //.requestMatchers("/home/**").hasRole("EMPLOYEE")
+                                .requestMatchers("/home/**").hasRole("CUSTOMER")
                                 .requestMatchers("/leaders/**").hasRole("MANAGER")
                                 .requestMatchers("/systems/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()

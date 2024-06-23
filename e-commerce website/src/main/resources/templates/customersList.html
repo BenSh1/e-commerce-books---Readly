@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -115,6 +116,7 @@
         <th>Username</th>
         <th>Password</th>
         <th>Email</th>
+        <th>Rank</th>
         <th>Action</th>
     </tr>
     <tr th:each="customer : ${customers}">
@@ -125,6 +127,22 @@
         <td th:text="${customer.password}" class="vertical-line"></td>
         <td th:text="${customer.email}" class="vertical-line"></td>
 
+        <td class="vertical-line">
+            <!--
+            <p>
+                Role(s): <span sec:authentication="principal.authorities"></span>
+            </p>
+            -->
+
+            <ul>
+                <!--
+                <li  th:each="role : ${#authentication.authorities}" th:text="${role}">Role</li>
+                -->
+                <li  th:each="role : ${customer.getRoles()}" th:text="${role.getName()}">Role</li>
+
+            </ul>
+
+        </td>
 
         <td class="vertical-line" style="white-space:nowrap">
 
@@ -134,6 +152,15 @@
                 <input type="hidden" name="_method" value="delete" />
                 <button type="submit">Delete</button>
             </form>
+            <!--
+            <form th:action="@{updateRankUser/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
+                <input  type="hidden" name="_method" value="update" />
+                <button type="submit" >Update</button>
+            </form>
+
+            -->
+
+
 
         </td>
 

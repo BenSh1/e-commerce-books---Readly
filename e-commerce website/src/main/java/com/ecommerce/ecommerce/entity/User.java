@@ -46,6 +46,9 @@ public class User {
     public User() {
     }
 
+
+
+
     public User(String userName, String password, boolean enabled) {
         this.userName = userName;
         this.password = password;

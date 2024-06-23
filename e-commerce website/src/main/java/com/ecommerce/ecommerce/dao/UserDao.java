@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.dao;
 
+import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.user.WebUser;
 
@@ -20,6 +21,7 @@ public interface UserDao {
 
     void deleteUserById(Long id);
 
+    public Long count();
 
 
 }

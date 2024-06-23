@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.user.WebUser;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,17 @@ public class UserDaoImpl implements UserDao {
     public void deleteUserById(Long id) {
         User theUser = entityManager.find(User.class, id);
         entityManager.remove(theUser);
+    }
+
+    @Override
+    public Long count() {
+        String query = "SELECT COUNT(m) FROM User m";
+        Query countQuery = entityManager.createQuery(query);
+        //TypedQuery<Long> theQuery = entityManager.createQuery(query, Long.class);
+        Long totalEntities = (Long) countQuery.getSingleResult();
+        System.out.println("Total entities in MyTable: " + totalEntities);
+
+        return totalEntities;
     }
 
 }

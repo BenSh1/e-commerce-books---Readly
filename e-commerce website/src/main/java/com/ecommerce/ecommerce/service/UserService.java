@@ -22,7 +22,7 @@ public interface UserService extends UserDetailsService {
 	User getUser(Long id);
 
 
-	void update(Long id, User theUser);
+	void update(Long id, User theUser, String role);
 
 	void deleteUser(Long id);
 }

@@ -32,10 +32,22 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        /* Radio Button Styling */
+        .role-container {
+            display: flex;
+            align-items: center;
+        }
+        .role-container input[type="radio"] {
+            margin-right: 10px;
+        }
+        .role-container label {
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-<h1>Edit Book</h1>
+<h1>Edit Customer</h1>
 <!--
 <form th:action="@{/bookList/edit/{id}(id=${book.bookId})}" th:object="${book}" method="post">
 -->
@@ -52,8 +64,27 @@
     <input type="text" id="lastName" name="lastName" th:field="*{lastName}"  required />
 
 
+    <label >Roles:</label>
+    <!--<input type="text" id="role" name="role"  required />-->
 
-    <button type="submit">Edit Book</button>
+    <div class="role-container">
+        <input type="radio" id="role" name="role"
+               th:each="tempRole : ${roles}"
+               th:value="${tempRole}" th:text="${tempRole}"/>
+
+    </div>
+
+
+
+
+    <!--
+    <input type="radio" th:field="${user.setRoles()}"
+           th:each="tempRole : ${roles}"
+           th:value="${tempRole}" th:text="${tempRole}"/>
+           -->
+
+
+    <button type="submit">Edit Customer</button>
 </form>
 <a href="/home">Go to Home</a><br>
 <a href="/customersList">Go to Customers List</a><br>

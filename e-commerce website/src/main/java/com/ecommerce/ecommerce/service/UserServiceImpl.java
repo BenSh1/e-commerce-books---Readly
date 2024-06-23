@@ -52,11 +52,13 @@ public class UserServiceImpl implements UserService {
 		user.setEnabled(true);
 
 		// give user default role of "employee"
-		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+		//user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_CUSTOMER")));
 
 		// save user in the database
 		userDao.save(user);
 	}
+
 	@Override
 	public User findByUserName(String userName) {
 		// check the database if the user already exists
@@ -109,15 +111,45 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void update(Long id, User theUser) {
+	public void update(Long id, User theUser , String role) {
 
 		User existingUser = userDao.findById(id);
 
 		existingUser.setFirstName(theUser.getFirstName());
 		existingUser.setLastName(theUser.getLastName());
+		/*
+		// give user default role of "customer"
+		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
+
+ 		*/
+
+		Role newRole = roleDao.findRoleByName(role);
+		List<Role> userRoles = existingUser.getRoles() != null ? new ArrayList<>(existingUser.getRoles()) : new ArrayList<>(); // Create a copy or new list
+		userRoles.add(newRole);
+		existingUser.setRoles(userRoles);
+
 
 		userDao.save(existingUser);
 	}
+/*
+	@Override
+	public void save(WebUser webUser) {
+		User user = new User();
+
+		// assign user details to the user object
+		user.setUserName(webUser.getUserName());
+		user.setPassword(passwordEncoder.encode(webUser.getPassword()));
+		user.setFirstName(webUser.getFirstName());
+		user.setLastName(webUser.getLastName());
+		user.setEmail(webUser.getEmail());
+		user.setEnabled(true);
+
+
+		// save user in the database
+		userDao.save(user);
+	}
+
+ */
 
 	@Override
 	@Transactional
