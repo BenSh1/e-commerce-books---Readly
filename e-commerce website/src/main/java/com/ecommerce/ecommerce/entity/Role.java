@@ -2,6 +2,9 @@ package com.ecommerce.ecommerce.entity;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "role")
 public class Role {
@@ -13,6 +16,9 @@ public class Role {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users = new HashSet<>();
 
     public Role() {
     }

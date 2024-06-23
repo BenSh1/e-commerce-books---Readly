@@ -124,11 +124,21 @@ public class UserServiceImpl implements UserService {
 	public void deleteUser(Long id) {
 		User existingUser = userDao.findById(id);
 
+		// Remove the associations in the user_role table
+		existingUser.getRoles().clear();
+
+		// Now delete the user
+		userDao.deleteUserById(id);
+/*
 		if (existingUser != null) {
 			// Mark for deletion
 			//entityManager.remove(entity);
 			userDao.deleteUserById(id);
 		}
+
+ */
+
+
 	}
 
 
