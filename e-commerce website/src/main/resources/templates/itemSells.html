@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,13 +34,13 @@
         .item {
             border: 1px solid #ddd;
             padding: 10px;
-            width: 200px;
+            width: 250px;
             text-align: center;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
         }
         .item img {
             max-width: 100%;
-            height: auto;
+            /*height: auto;*/
         }
         .item h3 {
             margin: 10px 0;
@@ -53,19 +54,112 @@
             font-weight: bold;
             color: #d9534f;
         }
+
+        /* Styles for "buy page" and "add to the cart" links */
+        .item p a {
+            color: #007bff; /* Blue color for the links */
+            text-decoration: none; /* Remove underline */
+            padding: 5px 10px; /* Add some padding */
+            border: 1px solid #ddd; /* Add a thin border */
+            border-radius: 3px; /* Rounded corners */
+            margin: 5px; /* Add some space between links */
+        }
+
+        .item p a:hover { /* Styles on hover */
+            background-color: #ddd; /* Light gray background on hover */
+        }
+
+        #cart-message {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #ced4da;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        #cart-message-content {
+            margin: 0;
+            padding: 0;
+        }
+
+        #cart-message button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        #cart-message button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
 <body>
 <h1>Items for Sale</h1>
 <div class="item-list">
-    <div class="item" th:each="book : ${books}">
+    <div class="item" th:each="book : ${books} ">
         <!--<img th:src="${book.imageBase64}" alt="Item Image">-->
+        <!--
         <img th:src="${book.image}"  alt="Item Image">
+        -->
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="100" /><br/>
+
+        <!--
+        <img th:src="@{/books/{id}/image(id=${book.bookId})}" alt="Book Image" width="100" /><br/>
+        -->
+        <img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" width="250" height="350" />
+
         <h3 th:text="${book.title}">Item Name</h3>
         <p th:text="${book.description}">Item Description</p>
         <p class="price" th:text="'$' + ${book.price}">Item Price</p>
+
+
+        <div sec:authorize="hasRole('CUSTOMER')">
+        <p>
+            <a href="/cart">buy page</a>
+            <button th:attr="onclick=|addToCart(${book.bookId})|">Add to Cart</button>
+            <a th:href="@{cart}">add to Cart</a>
+        </p>
+
+        </div>
+
     </div>
 </div>
+<a href="/cart">Go to Cart</a>
+<div id="cart-message" style="display: none;">
+    <p id="cart-message-content"></p>
+    <button onclick="hideCartMessage()">Close</button>
+</div>
+
+<script>
+    function addToCart(bookId) {
+        fetch(`/api/carts/1/books/${bookId}?quantity=1`, {
+            method: 'POST'
+        }).then(response => {
+            if (response.ok) {
+                alert('Book added to cart');
+            } else {
+                alert('Error adding book to cart');
+            }
+        });
+    }
+
+    function showCartMessage(message) {
+        document.getElementById('cart-message-content').innerText = message;
+        document.getElementById('cart-message').style.display = 'block';
+    }
+
+    function hideCartMessage() {
+        document.getElementById('cart-message').style.display = 'none';
+    }
+</script>
+
 </body>
 </html>

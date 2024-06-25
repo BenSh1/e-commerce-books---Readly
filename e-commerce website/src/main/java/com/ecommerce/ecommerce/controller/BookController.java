@@ -6,10 +6,12 @@ import com.ecommerce.ecommerce.dao.BookDao;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.service.BookService;
+import com.ecommerce.ecommerce.service.CartService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,8 @@ public class BookController {
     @Autowired
     private BookDao bookDao;
 
-
+    @Autowired
+    private CartService cartService;
 
     @GetMapping("/addBook")
     public String addBookForm(Model model) {
@@ -48,42 +51,58 @@ public class BookController {
     }
     @PostMapping("/addBook")
     public String addBook(@ModelAttribute Book theBook) {
+        /*
+        try{
+            bookService.addBook(theBook);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+         */
         bookService.addBook(theBook);
         //bookRepository.save(theBook);
         return "redirect:/bookList";
     }
+
+    // checking the images
+    @GetMapping("/books/{id}/image")
+    public String showImage (@PathVariable Long id, Model model) {
+        Book book = bookService.getBook(id);
+        model.addAttribute("book", book);
+        return "checking";
+    }
+
+
+
+/*
+    @GetMapping("/books/{id}/image")
+    public ResponseEntity<byte[]> getBookImage(@PathVariable Long id) {
+        byte[] image = bookService.getImageByBookId(id);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(org.springframework.http.MediaType.IMAGE_JPEG);
+        return new ResponseEntity<>(image, headers, HttpStatus.OK);
+    }
+
+ */
 
     @GetMapping("/bookList")
     public String listBooks(Model model) {
         //List<Book> books = bookService.getBooks();
         //List<Book> books = bookRepository.findAll();
         List<Book> books = bookService.getBooks();
-
         model.addAttribute("books", books);
+
         return "bookList"; // Return the view to display the books
     }
-
-
 
     @GetMapping("/itemSells")
     public String getItems3(Model model) {
         //List<Book> books = bookRepository.findAll();
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
+
         return "itemSells";
     }
-
-/*
-    @GetMapping("/itemSells2")
-    public String getItems(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
-
-        return "itemSells2";
-    }
-
- */
 
     @GetMapping("/editBook/{id}")
     public String editBook(@PathVariable Long id, Model model) {
@@ -107,6 +126,38 @@ public class BookController {
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/bookList";
     }
+
+    @GetMapping("/cart")
+    public String getBuyPage(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        model.addAttribute("cart", cartService.getCart(1L));  // Assuming cart ID is 1 for simplicity
+        return "cart";
+    }
+/*
+    @PostMapping("/{cartId}/books/{bookId}")
+    public ResponseEntity<?> addBookToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {
+        try {
+            cartService.addToCart(cartId, bookId, quantity);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding book to cart");
+        }
+    }
+
+ */
+
+/*
+    @GetMapping("/itemSells2")
+    public String getItems(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+
+        return "itemSells2";
+    }
+
+ */
+
 
 /*
     @PostMapping("/addBook")

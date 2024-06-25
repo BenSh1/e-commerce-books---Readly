@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Checking images</title>
+</head>
+<body>
+
+<img th:src="@{/books/{id}/image(id=${book.bookId})}" alt="Book Image" width="100" />
+
+<div class="item" th:object="${book} ">
+    <!--
+    <img th:src="@{/books/{id}/image(id=${book.bookId})}" alt="Book Image" width="100" /><br/>
+    -->
+    <img th:src="*{image}" alt="Book Image" width="100" /><br/>
+    <img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" width="100" />
+
+    <h3 th:text="${book.title}">Item Name</h3>
+    <p th:text="${book.description}">Item Description</p>
+    <p class="price" th:text="'$' + ${book.price}">Item Price</p>
+
+</div>
+
+
+</body>
+</html>

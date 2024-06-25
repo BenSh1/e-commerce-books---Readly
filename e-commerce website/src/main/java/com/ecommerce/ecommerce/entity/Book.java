@@ -9,8 +9,9 @@ public class Book {
     // define fields
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="bookId")
-    private int bookId;
+    @Column(name="id")
+    private int id;
+
     @Column(name="title")
     private String title;
     @Column(name="author")
@@ -29,7 +30,17 @@ public class Book {
     @Lob
     private byte[] image;
 
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
  */
+
+
     @Column(name="image")
     //@Lob
     private String image;
@@ -41,6 +52,8 @@ public class Book {
     public void setImage(String image) {
         this.image = image;
     }
+
+
 
     public String getAuthor() {
         return author;
@@ -109,11 +122,11 @@ public class Book {
 
 
     public int getBookId() {
-        return bookId;
+        return id;
     }
 
     public void setBookId(int bookId) {
-        this.bookId = bookId;
+        this.id = bookId;
     }
 
     public String getTitle() {
@@ -155,7 +168,7 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "bookId=" + bookId +
+                "bookId=" + id +
                 ", title='" + title + '\'' +
                 ", authorId=" + author +
                 ", categoryID=" + category +

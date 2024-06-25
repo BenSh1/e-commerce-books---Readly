@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+
 @Repository
 public class RoleDaoImpl implements RoleDao {
 
@@ -52,6 +55,13 @@ public class RoleDaoImpl implements RoleDao {
 	@Transactional
 	public void save(Role theRole) {
 		entityManager.persist(theRole);
+	}
+
+	@Override
+	public List<Role> getAllRoles() {
+		String query = "SELECT e FROM Role e";
+		TypedQuery<Role> typedQuery = entityManager.createQuery(query, Role.class);
+		return typedQuery.getResultList();
 	}
 
 

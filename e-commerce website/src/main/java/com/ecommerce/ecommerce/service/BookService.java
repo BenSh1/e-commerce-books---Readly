@@ -6,7 +6,9 @@ import com.ecommerce.ecommerce.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,10 +20,25 @@ public class BookService {
 
     private final List<Book> books = new ArrayList<>();
 
-    public void addBook(Book book) {
-        //books.add(book);
+    public void addBook(Book book)  {
         bookDao.save(book);
     }
+
+/*
+    public void addBook(Book book, MultipartFile file) throws IOException {
+        //books.add(book);
+        if (file != null && !file.isEmpty()) {
+            book.setImage(file.getBytes());
+        }
+        bookDao.save(book);
+    }
+
+    public byte[] getImageByBookId(Long bookId) {
+        Book book = bookDao.findById(bookId);
+        return book.getImage();
+    }
+
+ */
 
     public List<Book> getBooks() {
         List<Book> books = bookDao.findAll();

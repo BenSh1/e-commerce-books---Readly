@@ -36,9 +36,8 @@
 </head>
 <body>
 <h1>Add New Book</h1>
-<form th:action="@{/addBook}" th:object="${book}" method="post">
+<form th:action="@{/addBook}" th:object="${book}" method="post" >
     <input type="text" th:field="*{title}" placeholder="Book Name" required />
-
     <input type="text" id="author" name="author" th:field="*{authorName}" placeholder="Author Name" required />
     <input type="text" id="category" name="category" th:field="*{category}" placeholder="Category" required />
 
@@ -50,8 +49,20 @@
     <!--
     <input type="text" th:field="*{imageUrl}" placeholder="Image URL" required />
     -->
-    <label for="image">Image:</label>
+    <!--
+    <img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" />
+    -->
+
+
+    <label>Image:</label>
+    <!--
     <input type="file" id="image" th:field="*{image}" accept="image/*" required><br><br>
+    -->
+    <input type="file" th:field="*{image}" id="image" name="image" accept="image/*" required><br/>
+
+    <!--
+    <input type="file" name="image" accept="image/*" /><br/>
+    -->
 
     <button type="submit">Add Book</button>
 </form>

@@ -132,7 +132,18 @@
         <td th:text="${book.category}" class="vertical-line"></td>
         <td th:text="${book.price}" class="vertical-line"></td>
         <td th:text="${book.stock}" class="vertical-line"></td>
+        <!--
         <td class="vertical-line"><img th:src="${book.image}"  alt="Item Image"></td>
+        -->
+        <!--
+        <td class="vertical-line"><img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" /></td>
+        -->
+
+        <td class="vertical-line"><img th:src="@{'/images/' + ${book.image}}" alt="Book Image"/></td>
+
+        <!--
+        <td class="vertical-line"><img  th:src="@{/images/}" th:src-append="${book.bookId}" alt="Book Image" /></td>
+        -->
         <!--
         <td class="vertical-line">
             <img th:src="${'data:image/jpg;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>

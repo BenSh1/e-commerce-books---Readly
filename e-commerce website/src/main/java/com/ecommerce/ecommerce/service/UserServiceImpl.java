@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 @Service
 public class UserServiceImpl implements UserService {
 
+	final int SECOND_ITEM_IN_ROLES_LIST  = 1;
+	final int THIRD_ITEM_IN_ROLES_LIST  = 2;
+
 	private UserDao userDao;
 
 	private RoleDao roleDao;
@@ -122,11 +125,87 @@ public class UserServiceImpl implements UserService {
 		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
 
  		*/
+		System.out.println("========================role=================== : "+ role);
 
+		Role newRole = roleDao.findRoleByName(role);
+		System.out.println("========================newRole=================== : "+ newRole);
+
+		System.out.println("========================roleDAO.getALlRoles========= : "+ roleDao.getAllRoles());
+
+		existingUser.setRoles(new ArrayList<Role>());
+		List<Role> userRoles = new ArrayList<>();
+
+		List<Role> r = roleDao.getAllRoles();
+
+		if(role.equals("ROLE_CUSTOMER") )
+		{
+			userRoles.add(r.getFirst());
+			existingUser.setRoles(userRoles);
+		}
+		else if(role.equals("ROLE_MANAGER") )
+		{
+			userRoles.add(r.getFirst());
+			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
+			existingUser.setRoles(userRoles);
+		}
+		else
+		{
+			userRoles.add(r.getFirst());
+			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
+			userRoles.add(r.get(THIRD_ITEM_IN_ROLES_LIST));
+			existingUser.setRoles(userRoles);
+		}
+
+
+
+		//List<Role> userRoles = existingUser.getRoles() != null ? new ArrayList<>(existingUser.getRoles()) : new ArrayList<>(); // Create a copy or new list
+		//List<Role> userRoles =  new ArrayList<>(); // Create a copy or new list
+/*
+		Collection<Role> userRoles = existingUser.getRoles();
+		userRoles.contains({2,"ROLE_MANAGER"});
+
+ */
+/*
+		List<Role> userRoles = new ArrayList<>();
+
+		if(role.equals("ROLE_CUSTOMER") )
+		{
+			existingUser.setRoles(new ArrayList<Role>() );
+		}
+		else{
+			existingUser.setRoles(new ArrayList<Role>() );
+			if(role.equals("ROLE_MANAGER")){
+				userRoles.add()
+			}
+
+
+			if(role.equals("ROLE_ADMIN")){
+				Collection<Role> collection = existingUser.getRoles();
+				for(Role tempRole : collection)
+				{
+					if(tempRole.equals("ROLE_MANAGER"))
+					{
+
+					}
+				}
+			}
+			userRoles = new ArrayList<>(existingUser.getRoles());
+		}
+		System.out.println("=======================checking========================= ");
+
+		userRoles.add(newRole);
+		existingUser.setRoles(userRoles);
+
+*/
+
+
+/*
 		Role newRole = roleDao.findRoleByName(role);
 		List<Role> userRoles = existingUser.getRoles() != null ? new ArrayList<>(existingUser.getRoles()) : new ArrayList<>(); // Create a copy or new list
 		userRoles.add(newRole);
 		existingUser.setRoles(userRoles);
+
+ */
 
 
 		userDao.save(existingUser);
