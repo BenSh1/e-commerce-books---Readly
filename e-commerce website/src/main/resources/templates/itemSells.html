@@ -109,12 +109,14 @@
         <!--
         <img th:src="${book.image}"  alt="Item Image">
         -->
-        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="100" /><br/>
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
 
         <!--
         <img th:src="@{/books/{id}/image(id=${book.bookId})}" alt="Book Image" width="100" /><br/>
         -->
+        <!--
         <img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" width="250" height="350" />
+        -->
 
         <h3 th:text="${book.title}">Item Name</h3>
         <p th:text="${book.description}">Item Description</p>

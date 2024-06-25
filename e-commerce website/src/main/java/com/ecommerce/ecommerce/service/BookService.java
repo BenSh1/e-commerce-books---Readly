@@ -67,7 +67,7 @@ public class BookService {
         existingBook.setDescription(book.getDescription());
         existingBook.setStock(book.getStock());
         existingBook.setPrice(book.getPrice());
-        //existingBook.setImage(book.getImage());
+        existingBook.setImage(book.getImage());
 
         bookDao.save(existingBook);
     }
