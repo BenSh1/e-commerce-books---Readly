@@ -4,6 +4,7 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
+
 }
 
 .container {
@@ -11,8 +12,11 @@ body, html {
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
+
+
 }
 
 .vertical-line {
     border-left: 2px solid black; /* Add left border */
 }
+

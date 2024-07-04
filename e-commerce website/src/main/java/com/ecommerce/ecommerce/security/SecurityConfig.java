@@ -7,13 +7,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig  {
+public class SecurityConfig {
 
     //bcrypt bean definition
     @Bean
@@ -35,10 +40,12 @@ public class SecurityConfig  {
 
         http.authorizeRequests(configurer ->
                         configurer
-                                .requestMatchers("/","/static/**", "/images/**", "/register/**" , "/showMyLoginPage","/itemSells",
-                                        "/addBook","/bookList", "/bookList/**","/bookList2").permitAll()  // Allow access to URLs starting with /public
+                                .requestMatchers("/","/static/**", "/images/**", "/register/**"
+                                        , "/showMyLoginPage","/itemSells"
+                                        , "/addBook","/bookList", "/bookList/**",
+                                        "/bookList2","/cart/**" ).permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
-                                .requestMatchers("/home/**").hasRole("CUSTOMER")
+                                .requestMatchers("/home/**", "/cart", "/shooping_cart").hasRole("CUSTOMER")
                                 .requestMatchers("/leaders/**").hasRole("MANAGER")
                                 .requestMatchers("/systems/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
@@ -63,6 +70,53 @@ public class SecurityConfig  {
         return http.build();
 
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoderFunction() {
+        return new BCryptPasswordEncoder();
+    }
+/*
+    @Bean
+    protected UserDetailsService userDetailsService() {
+        UserDetails customer = User.withUsername("customer")
+                .passwordEncoder(passwordEncoderFunction) // Pass the function reference
+                .password("password")
+                .roles("CUSTOMER")
+                .build();
+
+        UserDetails manager = User.withDefaultPasswordEncoder()
+                .username("manager")
+                .password("password")
+                .roles("CUSTOMER", "MANAGER")
+                .build();
+
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("password")
+                .roles("CUSTOMER", "MANAGER", "ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(customer, manager, admin);
+
+    }
+
+ */
+
+
+
+/*
+    @Bean
+    protected UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("password")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
+
+ */
 
     //  add support for JDBC... no more hardcoded users :-)
     /*

@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.dao.BookDao;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.entity.CartItem;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
 import jakarta.persistence.EntityManager;
@@ -98,6 +99,7 @@ public class BookController {
     @GetMapping("/itemSells")
     public String getItems3(Model model) {
         //List<Book> books = bookRepository.findAll();
+
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
 
@@ -111,7 +113,10 @@ public class BookController {
         return "editBook";
     }
     @PostMapping("/editBook/{id}")
-    public String updateBook(Model model ,@PathVariable Long id, @ModelAttribute Book theBook, RedirectAttributes redirectAttributes) {
+    public String updateBook(Model model ,
+                             @PathVariable Long id,
+                             @ModelAttribute Book theBook,
+                             RedirectAttributes redirectAttributes) {
 
         /*Book book = bookService.getBook(id);
         model.addAttribute("book", book);*/
@@ -126,13 +131,61 @@ public class BookController {
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/bookList";
     }
+/*
+    @GetMapping("/cart")
+    public List<CartItem> getCartItems() {
+        return cartService.getCartItems();
+    }
 
+ */
+/*
     @GetMapping("/cart")
     public String getBuyPage(Model model) {
         //List<Book> books = bookRepository.findAll();
         model.addAttribute("cart", cartService.getCart(1L));  // Assuming cart ID is 1 for simplicity
         return "cart";
     }
+
+ */
+    /*
+    @GetMapping("/cart")
+    public String getDetailsBuyPage(Model model) {
+        //List<Book> books = bookRepository.findAll();
+        model.addAttribute("cartItems", cart.getItems());  // Assuming cart ID is 1 for simplicity
+        return "cart";
+    }
+
+     */
+
+
+    //@PostMapping("/{cartId}/books/{bookId}")
+    @PostMapping("/cart/add")
+    public String addBookToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {
+        /*
+        try {
+            cartService.addToCart(cartId, bookId, quantity);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding book to cart");
+        }
+
+         */
+
+        //cartService.addToCart(cartId, bookId ,quantity);
+
+        /*
+        Book book = bookService.findById(bookId);
+        if (book != null) {
+            cartService.addToCart2(book, quantity);
+        }
+
+         */
+
+        // Redirect to cart view or display confirmation message (optional)
+        return "redirect:/cart";
+    }
+
+
 /*
     @PostMapping("/{cartId}/books/{bookId}")
     public ResponseEntity<?> addBookToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {

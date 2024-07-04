@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.user;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -26,6 +27,32 @@ public class WebUser {
 	@Size(min = 1, message = "is required")
 	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
 	private String email;
+
+	@NotNull(message = "is required")
+	@Size(min = 10, message = "Please enter a valid phone number. Valid formats of phone numbers include at least 10 digits ")
+	@Pattern(regexp="^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$" , message = "Please enter a valid phone number. Valid formats include (123) 456-7890, 123.456.7890, or 123 456 7890.")
+	private String phone;
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String country;
+
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String city;
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String streetAddress;
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String apartmentNumber;
+
+	@NotNull(message = "is required")
+	@Size(min = 1, message = "is required")
+	private String zipCode;
 
 	public WebUser() {
 
@@ -71,6 +98,53 @@ public class WebUser {
 		this.email = email;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getCountry() {
+		return country;
+	}
+
+	public void setCountry(String country) {
+		this.country = country;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
+	public String getApartmentNumber() {
+		return apartmentNumber;
+	}
+
+	public void setApartmentNumber(String apartmentNumber) {
+		this.apartmentNumber = apartmentNumber;
+	}
+
+	public String getZipCode() {
+		return zipCode;
+	}
+
+	public void setZipCode(String zipCode) {
+		this.zipCode = zipCode;
+	}
 }
 
 

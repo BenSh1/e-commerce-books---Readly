@@ -3,12 +3,15 @@ package com.ecommerce.ecommerce.service;
 import com.ecommerce.ecommerce.dao.RoleDao;
 import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.entity.Customer;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.user.WebUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -52,6 +55,13 @@ public class UserServiceImpl implements UserService {
 		user.setFirstName(webUser.getFirstName());
 		user.setLastName(webUser.getLastName());
 		user.setEmail(webUser.getEmail());
+		user.setPhone(webUser.getPhone());
+		user.setCountry(webUser.getCountry());
+		user.setCity(webUser.getCity());
+		user.setStreetAddress(webUser.getStreetAddress());
+		user.setApartmentNumber(webUser.getApartmentNumber());
+		user.setZipCode(webUser.getZipCode());
+
 		user.setEnabled(true);
 
 		// give user default role of "employee"
@@ -251,6 +261,35 @@ public class UserServiceImpl implements UserService {
 
 
 	}
+/*
+	public String getCurrentCustomerUsername() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+			System.out.println("userDetails.getUsername() : " + userDetails.getUsername());
+			return userDetails.getUsername();
+		}
+		return null;
+	}
+
+ */
+
+/*
+	@Override
+	public User getCurrentlyLoggedInUser(Authentication authentication) {
+		if(authentication == null)
+			return null;
+
+		User user = null;
+		Object principal = authentication.getPrincipal();
+
+		if(principal instanceof UserDetails){
+			user = ((User) principal);
+		}
+		else if(principal instanceof ){}
+	}
+
+ */
 
 
 

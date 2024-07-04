@@ -4,6 +4,7 @@ package com.ecommerce.ecommerce.entity;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,24 +31,49 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "phone")
+    private String phone;
+
     @Column(name = "email")
     private String email;
 
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "streetAddress")
+    private String streetAddress;
+
+    @Column(name = "apartmentNumber")
+    private String apartmentNumber;
+
+    @Column(name = "zipCode")
+    private String zipCode;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-
-
     //private Set<Role> roles = new HashSet<>();
     private Collection<Role> roles;
 
+    //a user can have multiple cart items
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    private List<CartItems> cartItems;
+
+/*
+    @OneToOne(mappedBy = "")
+    @JoinColumn(name = "user_id")
+    private Collection<Book> booksInCart;
+
+ */
+
+
     public User() {
     }
-
-
-
 
     public User(String userName, String password, boolean enabled) {
         this.userName = userName;
@@ -117,6 +143,54 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getStreetAddress() {
+        return streetAddress;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public String getApartmentNumber() {
+        return apartmentNumber;
+    }
+
+    public void setApartmentNumber(String apartmentNumber) {
+        this.apartmentNumber = apartmentNumber;
+    }
+
+    public String getZipCode() {
+        return zipCode;
+    }
+
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
     public Collection<Role> getRoles() {
