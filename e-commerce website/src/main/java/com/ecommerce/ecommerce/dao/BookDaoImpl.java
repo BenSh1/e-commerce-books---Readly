@@ -23,7 +23,8 @@ public class BookDaoImpl implements BookDao{
     @Override
     @Transactional
     public void save(Book theBook) {
-        entityManager.persist(theBook);
+        //entityManager.persist(theBook);
+        entityManager.merge(theBook);
     }
 
     public List<Book> findAll() {

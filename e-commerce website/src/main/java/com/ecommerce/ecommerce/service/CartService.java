@@ -3,13 +3,16 @@ package com.ecommerce.ecommerce.service;
 import com.ecommerce.ecommerce.dao.BookDao;
 
 import com.ecommerce.ecommerce.dao.CartItemsRepository;
+import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.entity.Book;
 
 import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,18 +37,71 @@ public class CartService {
     @Autowired
     private BookDao bookDao;
 
+    @Autowired
+    private UserDao userDao;
+
     public List<CartItems> getCartForUser(User user) {
         return cartItemsRepository.findByUser(user);
     }
 
+    @Transactional
     public void addToCart(User user, Long bookId) {
+        int isExistTheBookId = 0;
+        System.out.println("in addToCart");
+        System.out.println("user : " + user.toString());
+
         Book book = bookDao.findById(bookId);
-        CartItems cartItems = cartItemsRepository.findByUserAndBook(user, book)
-                .orElseGet(CartItems::new);
-        cartItems.setUser(user);
-        cartItems.setBook(book);
-        cartItems.setQuantity(cartItems.getQuantity() + 1);
-        cartItemsRepository.save(cartItems);
+        System.out.println("the book : " + book.toString());
+
+        User currentUser = userDao.findByUserName(user.getUserName());
+        System.out.println("userDao.findByUserName : " + currentUser.toString());
+
+        List<CartItems> cartItemsList = this.getCartForUser(currentUser);
+
+        //List<Book> booksOfUserInCart = new ArrayList<Book>();
+
+/*
+        if(cartItemsList.contains(cartItems)){
+
+        }
+
+ */
+
+
+        for(CartItems tempItem : cartItemsList) {
+            if(tempItem.getBook().getBookId() == book.getBookId())
+            {
+                isExistTheBookId = 1;
+                break;
+            }
+        }
+        if(isExistTheBookId == 1)
+        {
+            System.out.println("------------------------------------------------");
+            System.out.println("the book is already exist in the cart!");
+        }
+        else{
+            CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
+                    .orElseGet(CartItems::new);
+
+            cartItems.setUser(currentUser);
+            cartItems.setBook(book);
+            cartItems.setPrice(book.getPrice());
+            cartItems.setQuantity(cartItems.getQuantity() + 1);
+
+            System.out.println("the cartItems : " + cartItems.toString());
+
+            cartItemsRepository.save(cartItems);
+        }
+
+    }
+
+    public void removeBookFromCart(Integer id) {
+        /*
+        List<CartItems> cartItems = cartItemsRepository.find(id);
+        cartItemsRepository.delete(cartItems);
+
+         */
     }
 
     public void clearCart(User user) {

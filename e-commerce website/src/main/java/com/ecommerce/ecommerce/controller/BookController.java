@@ -6,13 +6,17 @@ import com.ecommerce.ecommerce.dao.BookDao;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.CartItem;
+import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -106,6 +110,31 @@ public class BookController {
         return "itemSells";
     }
 
+    @PostMapping("/itemSells/{id}")
+    public String addItemToCart(Model model, HttpSession session ,@PathVariable Long id,
+                                @AuthenticationPrincipal Authentication authentication) {
+
+        System.out.println("------------in addItemToCart--------------------------------------------------");
+        System.out.println("id: " + id );
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        System.out.println("user : " + currentUser.toString());
+
+        cartService.addToCart(currentUser,id);
+
+        return "redirect:/itemSells"; // Redirect back to the items sell page
+    }
+
+    @GetMapping("/bookDetails/{id}")
+    public String bookDetails(@PathVariable Long id, Model model) {
+        Book book = bookService.getBook(id);
+        model.addAttribute("book", book);
+        return "bookDetails";
+    }
+
+
     @GetMapping("/editBook/{id}")
     public String editBook(@PathVariable Long id, Model model) {
         Book book = bookService.getBook(id);
@@ -131,6 +160,9 @@ public class BookController {
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/bookList";
     }
+
+
+
 /*
     @GetMapping("/cart")
     public List<CartItem> getCartItems() {

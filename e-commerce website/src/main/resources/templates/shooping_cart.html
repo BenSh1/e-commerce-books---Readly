@@ -89,14 +89,22 @@
             <th:block th:each="item, status : ${cartItems}">
                 <div class="row border rounded" th:with="book = ${item.book}">
                     <div class="col-1">
-                        <div> [[${status.count}]] </div>
+                        <div>
+                            [[${status.count}]]
+                        </div>
+
                         <!-- <div><a  class="fa fa-trash-o" th:href="@{/}"></a></div> -->
                         <button class="remove-button" >
                             <i class="fas fa-trash-alt" th:href="@{/}"></i> Remove
                         </button>
-                    </div>
-                    <div class="col">
 
+                        <form th:action="@{remove/{id}(id=${book.bookId})}" method="post">
+                            <input type="hidden" th:name="bookId" th:value="${book.bookId}" />
+                            <button type="submit">REmove</button>
+                        </form>
+                    </div>
+
+                    <div class="col">
                         <img th:src="@{'/images/' + ${item.book.image}}" alt="Book Image"
                              class="img-fluid" />
                     </div>

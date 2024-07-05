@@ -12,7 +12,7 @@ public class CartItems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Integer cartItemsId;
+    private int cartItemsId;
 
 /*
     @Column(name="bookId")
@@ -135,5 +135,16 @@ public class CartItems {
 
     public void setPrice(int price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "CartItems{" +
+                "cartItemsId=" + cartItemsId +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", book=" + book +
+                ", user=" + user +
+                '}';
     }
 }

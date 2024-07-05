@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+<div class="container">
+    <a href="/itemSells"> Go to Item Sells</a><br> <br>
+    <div class="book-image">
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image"/>
+    </div>
+
+    <div class="book-info">
+        <h2 th:text="${book.title}"></h2>
+        <p class="author" th:text="${book.authorName}" ></p>
+        <p class = "description" th:text="${book.description}" ></p>
+        <div class="details">
+            Category:  <p th:text="${book.category}" ><b></b> </p>
+            <p><b>Pages:</b> 384</p>
+            <p><b>ISBN:</b> 978-0345448996</p>
+            <button class="buy-button">Buy Now</button>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+
+
+</body>
+</html>

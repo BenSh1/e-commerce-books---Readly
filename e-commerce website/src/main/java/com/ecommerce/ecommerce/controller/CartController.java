@@ -1,6 +1,5 @@
 package com.ecommerce.ecommerce.controller;
 
-import com.ecommerce.ecommerce.dao.BookDao;
 import com.ecommerce.ecommerce.entity.*;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
@@ -10,11 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -55,7 +53,12 @@ public class CartController {
     }
 
 
-
+    @PostMapping("/remove/{id}")
+    public String removeBookInCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
+        cartService.removeBookFromCart(id);
+        redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
+        return "redirect:/cart";
+    }
 
 
 
