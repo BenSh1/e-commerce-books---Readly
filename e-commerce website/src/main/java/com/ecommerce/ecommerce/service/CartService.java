@@ -96,12 +96,27 @@ public class CartService {
 
     }
 
-    public void removeBookFromCart(Integer id) {
+    public void removeBookFromCart(Integer id , User user) {
+        System.out.println("----------------------------------id: "+ id );
+
+        User currentUser = userDao.findByUserName(user.getUserName());
+        System.out.println("userDao.findByUserName : " + currentUser.toString());
+
+
+        List<CartItems> cartItemsList = this.getCartForUser(currentUser);
+        for(CartItems tempItem : cartItemsList) {
+            if(tempItem.getBook().getBookId() == id){
+                //cartItemsList.remove(tempItem);
+                cartItemsRepository.delete(tempItem);
+            }
+        }
+
         /*
         List<CartItems> cartItems = cartItemsRepository.find(id);
         cartItemsRepository.delete(cartItems);
 
          */
+
     }
 
     public void clearCart(User user) {

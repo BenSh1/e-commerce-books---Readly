@@ -54,8 +54,19 @@ public class CartController {
 
 
     @PostMapping("/remove/{id}")
-    public String removeBookInCart(@PathVariable Integer id, RedirectAttributes redirectAttributes) {
-        cartService.removeBookFromCart(id);
+    public String removeBookInCart(@PathVariable Integer id,
+                                   HttpSession session ,
+                                   RedirectAttributes redirectAttributes) {
+
+        User currentUser = (User) session.getAttribute("user");
+        //User user = userService.get
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
+
+
+        cartService.removeBookFromCart(id, currentUser);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/cart";
     }
