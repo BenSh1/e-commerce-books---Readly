@@ -31,6 +31,7 @@ public class CartController {
 
 
 
+
     @GetMapping("/cart")
     public String showShoppingCart(Model model, HttpSession session ,
                                    @AuthenticationPrincipal Authentication authentication)
@@ -45,8 +46,15 @@ public class CartController {
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
+        // Calculate the total amount
+        double totalAmount = cartItems.stream()
+                .mapToDouble(item -> item.getBook().getPrice() * item.getQuantity())
+                .sum();
+
+
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("pageTitle", "Shopping Cart");
+        model.addAttribute("totalAmount",totalAmount);
 
 
         return "shooping_cart";

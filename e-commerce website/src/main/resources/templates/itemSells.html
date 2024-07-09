@@ -120,15 +120,46 @@
         }
     </script>
     -->
+    <!--
+    <script>
+        function hideMessage() {
+            console.log("hideMessage function called");
+            const messageDiv = document.getElementById('message');
+            if (messageDiv) {
+                console.log("Message div found");
+                setTimeout(() => {
+                    console.log("Hiding message div");
+                    messageDiv.style.display = 'none';
+                }, 3000); // Hide after 3 seconds
+            } else {
+                console.log("Message div not found");
+            }
+        }
+
+        window.onload = hideMessage;
+    </script>
+    -->
 </head>
 
 <body>
+<!--
+<div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+-->
+
 <h1>Items for Sale</h1>
 <div class="item-list">
     <div class="item" th:each="book : ${books} ">
-        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
-        <h3 th:text="${book.title}">Item Name</h3>
-        <p th:text="${book.description}">Item Description</p>
+        <form th:action="@{bookDetails/{id}(id=${book.bookId})}">
+            <button type="submit">
+                <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
+                <input type="hidden" name="bookId" th:value="${book.bookId}">
+            </button>
+        </form>
+        <!--<h3 th:text="${book.title}">Item Name</h3>-->
+
+        <a th:href="@{/bookDetails/{id}(id=${book.bookId})}"><span style="font-size: 30px;">[[${book.title}]]</span></a>
+
+        <!--<p th:text="${book.description}">Item Description</p>-->
         <p class="price" th:text="'$' + ${book.price}">Item Price</p>
 
         <form th:action="@{bookDetails/{id}(id=${book.bookId})}">

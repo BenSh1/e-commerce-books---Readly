@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,16 +11,6 @@ public class CartItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int cartItemId;
-/*
-    @Column(name="cartId")
-    private int cartId;
-
- */
-/*
-    @Column(name="bookId")
-    private int bookId;
-
- */
 
     @Column(name="quantity")
     private int quantity;
@@ -65,26 +56,7 @@ public class CartItem {
     public void setCartItemId(int cartItemId) {
         this.cartItemId = cartItemId;
     }
-/*
-    public int getCartId() {
-        return cartId;
-    }
 
-    public void setCartId(int cartId) {
-        this.cartId = cartId;
-    }
-
- */
-/*
-    public int getBookId() {
-        return bookId;
-    }
-
-    public void setBookId(int bookId) {
-        this.bookId = bookId;
-    }
-
- */
 
     public int getQuantity() {
         return quantity;
@@ -102,3 +74,5 @@ public class CartItem {
         this.price = price;
     }
 }
+
+

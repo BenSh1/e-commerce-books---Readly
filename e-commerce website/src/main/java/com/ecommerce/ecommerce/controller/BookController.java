@@ -5,7 +5,7 @@ import com.ecommerce.ecommerce.dao.BookDao;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 //import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.entity.Book;
-import com.ecommerce.ecommerce.entity.CartItem;
+import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
@@ -13,8 +13,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -40,7 +38,6 @@ public class BookController {
     private EntityManager entityManager;
 
     private static String UPLOADED_FOLDER = "src/main/resources/static/images/";
-
 
     @Autowired
     private BookDao bookDao;
@@ -112,7 +109,8 @@ public class BookController {
 
     @PostMapping("/itemSells/{id}")
     public String addItemToCart(Model model, HttpSession session ,@PathVariable Long id,
-                                @AuthenticationPrincipal Authentication authentication) {
+                                @AuthenticationPrincipal Authentication authentication,
+                                            RedirectAttributes redirectAttributes) {
 
         System.out.println("------------in addItemToCart--------------------------------------------------");
         System.out.println("id: " + id );
@@ -123,9 +121,50 @@ public class BookController {
         System.out.println("user : " + currentUser.toString());
 
         cartService.addToCart(currentUser,id);
+        redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
 
         return "redirect:/itemSells"; // Redirect back to the items sell page
     }
+
+
+    @PostMapping("bookDetails/itemSells/{id}")
+    public String addItemToCartFromDetailBook(Model model,
+                                              HttpSession session ,
+                                              @PathVariable Long id,
+                                @AuthenticationPrincipal Authentication authentication,
+                                RedirectAttributes redirectAttributes) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        System.out.println("user : " + currentUser.toString());
+
+        cartService.addToCart(currentUser,id);
+        redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+
+        return "redirect:/bookDetails/{id}"; // Redirect back to the items sell page
+    }
+    /*
+    @PostMapping("/bookDetails/{id}")
+    public String addBook(@PathVariable Long id, Model model, HttpSession session ,) {
+
+        User currentUser = (User) session.getAttribute("user");
+        //User user = userService.get
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
+
+        List<CartItems> cartItems = cartService.getCartForUser(currentUser);
+
+        cartService.addToCart(currentUser,id,  quantity);
+
+        return "bookDetails";
+    }
+
+     */
+
 
     @GetMapping("/bookDetails/{id}")
     public String bookDetails(@PathVariable Long id, Model model) {
@@ -133,6 +172,7 @@ public class BookController {
         model.addAttribute("book", book);
         return "bookDetails";
     }
+
 
 
     @GetMapping("/editBook/{id}")

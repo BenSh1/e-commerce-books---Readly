@@ -16,7 +16,7 @@ public class Book {
     private String title;
     @Column(name="author")
     private String author;
-    @Column(name="description")
+    @Column(name="description" , length = 10000)
     private String description;
     @Column(name="category")
     private String category;
