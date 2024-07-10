@@ -46,7 +46,7 @@ public class RoleDaoImpl implements RoleDao {
 		Query countQuery = entityManager.createQuery(query);
 		//TypedQuery<Long> theQuery = entityManager.createQuery(query, Long.class);
 		Long totalEntities = (Long) countQuery.getSingleResult();
-		System.out.println("Total entities in MyTable: " + totalEntities);
+		System.out.println("Total entities in Role Table: " + totalEntities);
 
 		return totalEntities;
 	}

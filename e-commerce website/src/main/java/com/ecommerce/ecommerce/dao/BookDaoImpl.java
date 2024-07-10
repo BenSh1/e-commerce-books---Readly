@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.dao;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -58,6 +59,16 @@ public class BookDaoImpl implements BookDao{
     public void deleteBookById(Long id) {
         Book theBook = entityManager.find(Book.class, id);
         entityManager.remove(theBook);
+    }
+
+    @Override
+    public Long count() {
+        String query = "SELECT COUNT(b) FROM Book b";
+        Query countQuery = entityManager.createQuery(query);
+        Long totalEntities = (Long) countQuery.getSingleResult();
+        System.out.println("Total entities in Book Table: " + totalEntities);
+
+        return totalEntities;
     }
 
 

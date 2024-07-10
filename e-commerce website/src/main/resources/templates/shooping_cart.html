@@ -163,9 +163,19 @@
         <div class="total">
             <span class="h2">[Total Amount]</span>
         </div>
-        <div style="text-align: right; margin-top: 20px;">
-            <button class="btn btn-danger">Check Out</button>
+        <div style="text-align: right; margin-top: 20px;" >
+            <button class="btn btn-danger" >Check Out</button>
         </div>
+
+        <div style="text-align: right; margin-top: 20px;">
+            <a class="btn btn-danger" th:href="@{addOrder}">Check Out</a>
+        </div>
+
+        <form th:action="@{/addOrder}" method="post">
+            <input type="hidden" />
+            <button type="submit">Check Out</button>
+        </form>
+
     </div>
 </div>
 

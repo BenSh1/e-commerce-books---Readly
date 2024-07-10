@@ -1,6 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
-
+/*
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -21,6 +21,8 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<CartItem> items = new ArrayList<>();
+
+
 
 
     public int getCartId() {
@@ -47,4 +49,6 @@ public class Cart {
         this.items = items;
     }
 }
+
+ */
 

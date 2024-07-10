@@ -45,6 +45,22 @@ public class Book {
     //@Lob
     private String image;
 
+
+    public Book() {
+
+    }
+
+    public Book(String title, String author, String description,
+                String category, int price, int stock, String image) {
+        this.title = title;
+        this.author = author;
+        this.description = description;
+        this.category = category;
+        this.price = price;
+        this.stock = stock;
+        this.image = image;
+    }
+
     public String getImage() {
         return image;
     }
@@ -52,8 +68,6 @@ public class Book {
     public void setImage(String image) {
         this.image = image;
     }
-
-
 
     public String getAuthor() {
         return author;

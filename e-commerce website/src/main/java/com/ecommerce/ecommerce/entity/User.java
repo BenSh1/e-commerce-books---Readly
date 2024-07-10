@@ -65,6 +65,25 @@ public class User {
     private List<CartItems> cartItems;
 
 /*
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Order> orders;
+
+ */
+
+
+
+
+
+    /*
+    //a user can have multiple orders
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
+            CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Order> orders;
+
+     */
+
+/*
     @OneToOne(mappedBy = "")
     @JoinColumn(name = "user_id")
     private Collection<Book> booksInCart;

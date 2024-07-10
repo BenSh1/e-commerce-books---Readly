@@ -13,6 +13,6 @@ public interface BookDao {
     public List<Book> findAll();
     //void update(Long id, Book book);
     public void deleteBookById(Long id);
-
+    public Long count();
 
 }

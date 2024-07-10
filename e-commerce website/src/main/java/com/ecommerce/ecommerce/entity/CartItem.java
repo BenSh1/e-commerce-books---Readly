@@ -1,6 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
-
+/*
 import jakarta.persistence.*;
 
 @Entity
@@ -74,5 +74,7 @@ public class CartItem {
         this.price = price;
     }
 }
+
+ */
 
 
