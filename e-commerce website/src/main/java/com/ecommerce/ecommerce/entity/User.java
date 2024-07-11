@@ -64,12 +64,14 @@ public class User {
             CascadeType.DETACH, CascadeType.REFRESH})
     private List<CartItems> cartItems;
 
-/*
+
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     private List<Order> orders;
 
- */
+
+
+
 
 
 

@@ -53,7 +53,7 @@ public class OrderController {
 
 
 
-        Order order = orderService.createOrder(orderDetails);
+        Order order = orderService.createOrder(orderDetails, currentUser);
         model.addAttribute("order", order);
 
 
@@ -62,7 +62,7 @@ public class OrderController {
         return "orderConfirmation";
     }
 
-     
+
 
 
 }

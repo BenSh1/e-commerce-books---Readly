@@ -34,15 +34,12 @@ public class Order {
     private User user;
 
  */
-/*
+
     // a user can have multiple cart items
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
             CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
-
- */
-
 
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -73,6 +70,13 @@ public class Order {
     }
 
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public List<OrderDetails> getOrderDetails() {
         return orderDetails;
