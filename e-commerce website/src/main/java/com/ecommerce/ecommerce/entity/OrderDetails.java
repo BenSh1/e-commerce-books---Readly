@@ -26,6 +26,8 @@ public class OrderDetails {
     @Column(name="price")
     private int price;
 
+
+
     public int getOrderDetailID() {
         return orderDetailID;
     }

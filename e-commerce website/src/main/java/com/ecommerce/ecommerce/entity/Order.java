@@ -2,6 +2,7 @@ package com.ecommerce.ecommerce.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class Order {
     private User user;
 
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<OrderDetails> orderDetails;
 
     public int getOrderId() {
@@ -85,4 +86,16 @@ public class Order {
     public void setOrderDetails(List<OrderDetails> orderDetails) {
         this.orderDetails = orderDetails;
     }
+
+    public void add(OrderDetails tempOrderDetails) {
+
+        if(orderDetails == null) {
+            orderDetails = new ArrayList<>();
+        }
+
+        orderDetails.add(tempOrderDetails);
+
+        tempOrderDetails.setOrder(this);
+    }
+
 }

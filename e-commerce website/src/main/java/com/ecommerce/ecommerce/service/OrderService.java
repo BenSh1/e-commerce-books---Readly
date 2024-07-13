@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.service;
 
+import com.ecommerce.ecommerce.dao.CartItemsRepository;
 import com.ecommerce.ecommerce.dao.OrderDetailsRepository;
 import com.ecommerce.ecommerce.dao.OrderRepository;
 import com.ecommerce.ecommerce.dao.UserDao;
@@ -26,25 +27,34 @@ public class OrderService {
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
 
+
+    @Transactional
+    public List<Order> getAllOrdersWithDetails() {
+        List<Order> orders = orderRepository.findAll();
+        // Ensure orderDetails are initialized
+        for (Order order : orders) {
+            order.getOrderDetails().size(); // Trigger lazy loading
+        }
+        return orders;
+    }
+
+
     @Transactional
     public Order createOrder(List<OrderDetails> orderDetailsList , User user){
 
-
-        System.out.println("==========================currentUser==============: " + user.toString());
-
-        //User currentUser = userDao.findByUserName(user.getUserName());
-        User managedUser = userDao.findById(user.getId());
+        User currentUser = userDao.findById(user.getId());
 
         Order order = new Order();
         order.setOrderDate(new Date());
         double totalAmount = orderDetailsList.stream().mapToDouble(detail -> detail.getPrice() * detail.getQuantity()).sum();
         order.setTotalAmount(totalAmount);
-        order.setUser(managedUser);
+        order.setUser(currentUser);
 
         order = orderRepository.save(order);
-        System.out.println("=================================================================: ");
+
 
         for (OrderDetails detail : orderDetailsList) {
+            //order.add(detail);
             detail.setOrder(order);
             orderDetailsRepository.save(detail);
         }
