@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,25 @@ public class OrderService {
 
     @Autowired
     private OrderDetailsRepository orderDetailsRepository;
+
+    @Transactional
+    public List<Order> getAllMyOrdersWithDetails(User user) {
+        
+        //the error is in here i must to exchange it to addDao and write jdbc query
+        List<Order> orders = orderRepository.findAll();
+        // Ensure orderDetails are initialized
+
+        List<Order> tempOrders = new ArrayList<Order>();
+
+        for (Order order : orders) {
+            if(order.getUser().getId().equals(user.getId()))
+            {
+                tempOrders.add(order);
+                order.getOrderDetails().size(); // Trigger lazy loading
+            }
+        }
+        return tempOrders;
+    }
 
 
     @Transactional

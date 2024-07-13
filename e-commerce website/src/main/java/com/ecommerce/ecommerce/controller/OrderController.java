@@ -55,7 +55,21 @@ public class OrderController {
 
 
 
+    @GetMapping("/myOrderList")
+    public String getOrderListPerUser(Model model ,HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
 
+        System.out.println("===currentUser.getFirstName()========================= : " +currentUser.toString());
+
+        List<Order> orders = orderService.getAllMyOrdersWithDetails(currentUser);
+        model.addAttribute("orders", orders);
+
+
+        return "myOrderList";
+    }
 
 
 
