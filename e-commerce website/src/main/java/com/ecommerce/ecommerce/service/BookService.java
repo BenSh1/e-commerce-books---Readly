@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.service;
 
 import com.ecommerce.ecommerce.dao.BookDao;
+import com.ecommerce.ecommerce.dao.BookRepository;
 import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.entity.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ public class BookService {
 
     @Autowired
     private BookDao bookDao;
+
+    @Autowired
+    private BookRepository bookRepository;
 
     private final List<Book> books = new ArrayList<>();
 
@@ -54,6 +58,13 @@ public class BookService {
     public Book getBook(Long id) {
         return bookDao.findById(id);
     }
+    /*
+    public Book findBookById(Long id) {
+        return bookDao.findById(id).orElse(null);
+    }
+
+ */
+
 
     @Transactional
     public void update(Long id, Book book) {
@@ -84,10 +95,12 @@ public class BookService {
 
     }
 
-/*
-    public Book findBookById(Long id) {
-        return bookDao.findById(id).orElse(null);
+
+    public List<Book> searchBooks(String query) {
+        return bookRepository.findByTitleContainingIgnoreCase(query);
     }
 
- */
+
+
+
 }

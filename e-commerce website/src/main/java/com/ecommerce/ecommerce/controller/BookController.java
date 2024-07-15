@@ -74,19 +74,6 @@ public class BookController {
         return "checking";
     }
 
-
-
-/*
-    @GetMapping("/books/{id}/image")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable Long id) {
-        byte[] image = bookService.getImageByBookId(id);
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(org.springframework.http.MediaType.IMAGE_JPEG);
-        return new ResponseEntity<>(image, headers, HttpStatus.OK);
-    }
-
- */
-
     @GetMapping("/bookList")
     public String listBooks(Model model) {
         //List<Book> books = bookService.getBooks();
@@ -98,14 +85,37 @@ public class BookController {
     }
 
     @GetMapping("/itemSells")
-    public String getItems3(Model model) {
+    public String getItems(Model model) {
         //List<Book> books = bookRepository.findAll();
 
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
+        List<Book> allBooks = bookService.getBooks();
+        model.addAttribute("allBooks", allBooks);
 
         return "itemSells";
     }
+
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam("query") String query, Model model) {
+        List<Book> books = bookService.searchBooks(query);
+        model.addAttribute("books", books);
+        return "itemSells";
+    }
+
+
+/*
+    @GetMapping("/itemSells/{id}")
+    public String getItemSells(@PathVariable Long id, Model model) {
+        // Get the list of books on sale
+        //List<Book> books = bookService.getAllBooksOnSale();
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+
+        // Add the item ID to the model (if needed for further logic)
+        model.addAttribute("itemId", id);
+
+        return "itemSells";
+    }
+    */
 
     @PostMapping("/itemSells/{id}")
     public String addItemToCart(Model model, HttpSession session ,@PathVariable Long id,
@@ -113,18 +123,44 @@ public class BookController {
                                             RedirectAttributes redirectAttributes) {
 
         System.out.println("------------in addItemToCart--------------------------------------------------");
-        System.out.println("id: " + id );
+        //System.out.println("id: " + id );
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        System.out.println("user : " + currentUser.toString());
+        //System.out.println("user : " + currentUser.toString());
 
         cartService.addToCart(currentUser,id);
+        //redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+
+        model.addAttribute("message", "Book added to cart successfully!");
+        System.out.println("=================================================================");
+
+
+        //return "redirect:/itemSells"; // Redirect back to the items sell page
+        //return "/itemSells"; // Redirect back to the items sell page
+        return "redirect:/itemSells";
+    }
+
+
+/*
+    @PostMapping("/itemSells/{id}/addToCart")
+    public String addToCart(@PathVariable Long id,HttpSession session, RedirectAttributes redirectAttributes) {
+
+        // Logic to add the book to the cart
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        cartService.addToCart(currentUser, id);
+
+        // Add a flash attribute for feedback
         redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
 
-        return "redirect:/itemSells"; // Redirect back to the items sell page
+        // Redirect to the itemSells page
+        return "redirect:/itemSells/" + id;
     }
+ */
 
 
     @PostMapping("bookDetails/itemSells/{id}")
@@ -173,8 +209,6 @@ public class BookController {
         return "bookDetails";
     }
 
-
-
     @GetMapping("/editBook/{id}")
     public String editBook(@PathVariable Long id, Model model) {
         Book book = bookService.getBook(id);
@@ -200,35 +234,6 @@ public class BookController {
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/bookList";
     }
-
-
-
-/*
-    @GetMapping("/cart")
-    public List<CartItem> getCartItems() {
-        return cartService.getCartItems();
-    }
-
- */
-/*
-    @GetMapping("/cart")
-    public String getBuyPage(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        model.addAttribute("cart", cartService.getCart(1L));  // Assuming cart ID is 1 for simplicity
-        return "cart";
-    }
-
- */
-    /*
-    @GetMapping("/cart")
-    public String getDetailsBuyPage(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        model.addAttribute("cartItems", cart.getItems());  // Assuming cart ID is 1 for simplicity
-        return "cart";
-    }
-
-     */
-
 
     //@PostMapping("/{cartId}/books/{bookId}")
     @PostMapping("/cart/add")
@@ -257,53 +262,6 @@ public class BookController {
         return "redirect:/cart";
     }
 
-
-/*
-    @PostMapping("/{cartId}/books/{bookId}")
-    public ResponseEntity<?> addBookToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {
-        try {
-            cartService.addToCart(cartId, bookId, quantity);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding book to cart");
-        }
-    }
-
- */
-
-/*
-    @GetMapping("/itemSells2")
-    public String getItems(Model model) {
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
-
-        return "itemSells2";
-    }
-
- */
-
-
-/*
-    @PostMapping("/addBook")
-    public String addBook(@ModelAttribute Book theBook) {
-        bookDao.save(theBook);
-        //bookRepository.save(theBook);
-        return "redirect:/bookList";
-    }
-
- */
-/*
-    @PostMapping("/delete/{id}")
-    public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        bookService.delete(id);
-        redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
-        return "redirect:/books";
-    }
-
- */
-
-
     @GetMapping("/editBook")
     public String showEditBookPage(Model model, @RequestParam long id) {
 
@@ -329,101 +287,20 @@ public class BookController {
 
         }
 
-
         //return "redirect:/editBook";
         return "editBook";
     }
-
 /*
-    @PostMapping("/edit")
-    public String EditBookPage(Model model,ModelAttribute editedBook) {
-
-        model.addAttribute("editedBook", editedBook);
-
-        return "redirect:/bookList";
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam("query") String query, Model model) {
+        System.out.println("==============================================================");
+        System.out.println("Search query: " + query);
+        List<Book> books = bookService.searchBooks(query);
+        model.addAttribute("books", books);
+        return "search";
     }
 
  */
-
-
-
-
-    /*
-    @GetMapping("/addBook2")
-    public String addBookForm2(Model model) {
-        model.addAttribute("book",new Book());
-        System.out.println("addBookForm");
-        return "addBook";
-    }
-
-    @PostMapping("/addBook2")
-    public String addBook2(@ModelAttribute Book theBook) {
-        bookDao.save(theBook);
-        //bookRepository.save(theBook);
-        return "redirect:/bookList2";
-    }
-
-     */
-    /*
-    @GetMapping("/bookList2")
-    public String listBooks2(Model model) {
-        //List<Book> books = bookService.getBooks();
-        //List<Book> books = bookRepository.findAll();
-        List<Book> books = bookService.getBooks();
-
-        model.addAttribute("books", books);
-        return "bookList2"; // Return the view to display the books
-    }
-
-     */
-
-
-
-/*
-    @GetMapping("/addBook")
-    public String addBookForm(Model model) {
-        model.addAttribute("book",new Book());
-        System.out.println("addBookForm");
-        return "addBook";
-    }
-
-    @PostMapping("/addBook2")
-    public String addBook(@ModelAttribute Book theBook) {
-        bookDao.save(theBook);
-        return "redirect:/bookList";
-    }
-
-    @PostMapping("/bookList")
-    public String processAddBookForm(@ModelAttribute("book") Book theBook,
-                                     Model model)
-    {
-
-        //try {
-        //     theBook.setImage(image.getBytes());
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-
-
-        System.out.println("processAddBookForm");
-        System.out.println("title : " + theBook.getTitle());
-        System.out.println("category : " + theBook.getCategory());
-
-        if (theBook.getImageBase64() != null && !theBook.getImageBase64().isEmpty()) {
-            String base64Image = Base64.getEncoder().encodeToString(theBook.getImageBase64().getBytes());
-            System.out.println("base64Image : " + base64Image);
-            theBook.setImageBase64(base64Image);
-        }
-
-        bookService.addBook(theBook);
-
-        model.addAttribute("books", bookService.getBooks());
-
-
-        return "bookList"; // Show the updated book list
-    }
-*/
-
 
 
 
@@ -493,20 +370,10 @@ public class BookController {
         return "bookList"; // Show the updated book list
     }
 
-    @GetMapping("/bookList")
-    public String showBookList() {
-        return "bookList";
-    }
-
      */
 
 
     /*
-        @GetMapping("/addBook")
-    public String addBookForm() {
-        return "addBook";
-    }
-
     @PostMapping("/addBook")
     public String addBook(@RequestParam("title") String title,
                           @RequestParam("author") String author,

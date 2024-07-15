@@ -50,6 +50,10 @@ public class OrderController {
     public String getOrderList(Model model) {
         List<Order> orders = orderService.getAllOrdersWithDetails();
         model.addAttribute("orders", orders);
+
+        String title = " Order List";
+        model.addAttribute("title", title);
+
         return "orderList";
     }
 
@@ -66,7 +70,8 @@ public class OrderController {
 
         List<Order> orders = orderService.getAllMyOrdersWithDetails(currentUser);
         model.addAttribute("orders", orders);
-
+        String title = currentUser.getUserName() + "'s Order List";
+        model.addAttribute("title", title);
 
         return "myOrderList";
     }
