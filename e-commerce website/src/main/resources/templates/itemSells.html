@@ -139,6 +139,20 @@
         window.onload = hideMessage;
     </script>
     -->
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var feedbackMessage = document.getElementById("feedbackMessage");
+            if (feedbackMessage) {
+                setTimeout(function() {
+                    feedbackMessage.style.display = 'none';
+                }, 5000); // Hide after 5 seconds
+            }
+        });
+    </script>
+
+
 </head>
 
 <body>
@@ -146,9 +160,42 @@
 <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
 -->
 
-<h1>Items for Sale</h1>
+<form th:action="@{/search}" method="get">
+    <input type="text" name="query" placeholder="Search for books...">
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${books != null}">
+    <h2>Search Results:</h2>
+    <ul>
+        <li th:each="book : ${books}">
+            <form th:action="@{bookDetails/{id}(id=${book.bookId})}">
+                <button type="submit">
+                    <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
+                    <input type="hidden" name="bookId" th:value="${book.bookId}">
+                </button>
+            </form>
+            <span th:text="${book.title}">Book Title</span> -
+            <span th:text="${book.author}">Author</span>
+            <div sec:authorize="hasRole('CUSTOMER')">
+
+                <!-- Add to Cart Button -->
+                <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post">
+                    <input type="hidden" th:name="bookId" th:value="${book.bookId}" />
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+</div>
+
+
+<h2>Items for Sale</h2>
+
+<div id="feedbackMessage" th:if="${message}" th:text="${message}" class="alert alert-success"></div>
+
 <div class="item-list">
-    <div class="item" th:each="book : ${books} ">
+    <div class="item" th:each="book : ${allBooks} ">
         <form th:action="@{bookDetails/{id}(id=${book.bookId})}">
             <button type="submit">
                 <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
@@ -171,6 +218,7 @@
 
             <!-- Add to Cart Button -->
             <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post">
+            <!--<form th:action="@{/itemSells/{id}/addToCart(id=${book.bookId})}" method="post">-->
                 <input type="hidden" th:name="bookId" th:value="${book.bookId}" />
                 <button type="submit">Add to Cart</button>
             </form>
@@ -232,8 +280,15 @@
     </div>
 </div>
 
+
+
+
+
+
+<!--
 <button onclick="buy()">Buy</button>
 <a href="/cart"><button>View Cart</button></a>
+-->
 
 <!--
 <a href="/cart">Go to Cart</a>
