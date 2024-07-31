@@ -13,15 +13,19 @@
             color: #333;
         }
         header {
-            background-color: #4CAF50;
+            background-color: #343a40;
             color: white;
-            padding: 10px 0;
+            padding: 20px 0;
             text-align: center;
         }
-        h1, h2 {
+        h1{
             color: #4CAF50;
-            position:relative; left:650px; top:2px;
+            text-align: center;
+        }
 
+        h2 {
+            color: white;
+            text-align: center;
         }
         hr {
             border: 0;
@@ -30,8 +34,9 @@
             margin: 20px 0;
         }
         p {
-            margin: 0 0 10px;
+            margin: 10px 0;
             padding: 0;
+            line-height: 1.5;
         }
         .content {
             margin: 20px;
@@ -43,12 +48,14 @@
         a {
             color: #4CAF50;
             text-decoration: none;
+            font-weight: bold;
         }
         a:hover {
             text-decoration: underline;
         }
         .logout-form {
-            margin-top: 20px;
+            text-align: center;
+            margin: 20px 0;
         }
         .logout-form input[type="submit"] {
             background-color: #f44336;
@@ -57,73 +64,67 @@
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 5px;
+            transition: background-color 0.3s ease;
         }
         .logout-form input[type="submit"]:hover {
             background-color: #d32f2f;
         }
+
+        .links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+        }
+
     </style>
 </head>
 <body>
-<h2>Home Page</h2>
-<hr>
-<p>
-    Welcome to the home page!
-</p>
-<hr>
-<!-- display user name and role -->
-<p>
-    User: <span sec:authentication="principal.username"></span>
-    <br><br>
-    Role(s): <span sec:authentication="principal.authorities"></span>
-</p>
 
-<div sec:authorize="hasRole('MANAGER')">
-    <!-- Add a link to point to/leaders ... this is for the managers -->
+<header>
+    <h2>Home Page</h2>
+</header>
+<div class="content">
+    <p>Welcome to the home page!</p>
+    <hr>
+
     <p>
-        <a th:href="@{leaders}">Leadership Meeting</a>
-        (Only for Manager peeps)
+        User: <span sec:authentication="principal.username"></span><br>
+        Role(s): <span sec:authentication="principal.authorities"></span>
     </p>
+
+    <div sec:authorize="hasRole('MANAGER')">
+        <p>
+            <a th:href="@{leaders}">Leadership Meeting</a> (Only for Manager peeps)
+        </p>
+    </div>
+    <div sec:authorize="hasRole('ADMIN')">
+        <p>
+            <a th:href="@{systems}">IT Systems Meeting</a> (Only for Admin peeps)
+        </p>
+    </div>
+
+    <hr>
+    <div class="links">
+        <h1>Welcome to the Home Page!</h1>
+        <a href="/itemSells">Go to Item Sells</a>
+        <a href="/addBook">Go to Add Book</a>
+        <a href="/bookList">Go to Books List</a>
+        <a href="/customersList">Go to Customers List</a>
+        <a href="/orderList">Go to Orders List</a>
+        <a href="/myOrderList">Go to My Orders List</a>
+    </div>
+
+    <hr>
+    
+    <div class="logout-form">
+        <form action="#" th:action="@{/logout}" method="POST">
+            <input type="submit" value="Logout" />
+        </form>
+    </div>
 </div>
-
-<div sec:authorize="hasRole('ADMIN')">
-    <!-- Add a link to point to/systems ... this is for the admins -->
-    <p>
-        <a th:href="@{systems}">IT Systems Meeting</a>
-        (Only for Admin peeps)
-    </p>
-</div>
-
-<h1>Welcome to the Home Page!</h1><br> <br>
-
-<!-- <a href="/register"> Go to Registration</a> <br> -->
-
-<!-- <a href="/showMyLoginPage"> Go to Login</a><br> <br> -->
-<hr>
-<a href="/itemSells"> Go to Item Sells</a><br> <br>
-<!-- <a href="/itemSells2"> Go to Item Sells 2</a><br> <br> -->
-
-<hr>
-<a href="/addBook">Go to Add book</a><br>
-<!--<a th:href="@{/addBook}">Add-Book in @</a><br>-->
-<a href="/bookList">Go to Books List</a><br>
-
-<hr>
-<a href="/customersList">Go to Customers List</a><br>
-
-
-<hr>
-<a href="/orderList">Go to Orders List</a><br>
-
-<hr>
-<a href="/myOrderList">Go to My Orders List</a><br>
-
-<hr>
-<!-- Add a logout button -->
-<form action="#" th:action="@{/logout}" method="POST">
-
-    <input type="submit" value="Logout" />
-
-</form>
 
 </body>
 </html>
