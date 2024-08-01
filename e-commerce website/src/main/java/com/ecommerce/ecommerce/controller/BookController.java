@@ -90,6 +90,10 @@ public class BookController {
 
         List<Book> allBooks = bookService.getBooks();
         model.addAttribute("allBooks", allBooks);
+        /*
+        model.addAttribute("message", "Book added to cart successfully!");
+        System.out.println("=================================================================");
+         */
 
         return "itemSells";
     }
@@ -122,45 +126,34 @@ public class BookController {
                                 @AuthenticationPrincipal Authentication authentication,
                                             RedirectAttributes redirectAttributes) {
 
-        System.out.println("------------in addItemToCart--------------------------------------------------");
-        //System.out.println("id: " + id );
-        User currentUser = (User) session.getAttribute("user");
-        if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
+        // Check if the book is available in the inventory
+        boolean isAvailable = bookService.isBookAvailable(id);
+
+        if (isAvailable) {
+            System.out.println("------------in addItemToCart--------------------------------------------------");
+            //System.out.println("id: " + id );
+            User currentUser = (User) session.getAttribute("user");
+            if (currentUser == null) {
+                throw new RuntimeException("User not logged in");
+            }
+            //System.out.println("user : " + currentUser.toString());
+
+            cartService.addToCart(currentUser,id);
+
+            // Set a feedback message
+            redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+
         }
-        //System.out.println("user : " + currentUser.toString());
-
-        cartService.addToCart(currentUser,id);
-        //redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
-
-        model.addAttribute("message", "Book added to cart successfully!");
-        System.out.println("=================================================================");
+        else {
+            // Set an error message for out-of-stock
+            redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
+        }
 
 
-        //return "redirect:/itemSells"; // Redirect back to the items sell page
-        //return "/itemSells"; // Redirect back to the items sell page
         return "redirect:/itemSells";
     }
 
-
-/*
-    @PostMapping("/itemSells/{id}/addToCart")
-    public String addToCart(@PathVariable Long id,HttpSession session, RedirectAttributes redirectAttributes) {
-
-        // Logic to add the book to the cart
-        User currentUser = (User) session.getAttribute("user");
-        if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        cartService.addToCart(currentUser, id);
-
-        // Add a flash attribute for feedback
-        redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
-
-        // Redirect to the itemSells page
-        return "redirect:/itemSells/" + id;
-    }
- */
+    
 
 
     @PostMapping("bookDetails/itemSells/{id}")

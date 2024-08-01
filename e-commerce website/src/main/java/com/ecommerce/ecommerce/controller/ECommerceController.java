@@ -2,25 +2,43 @@ package com.ecommerce.ecommerce.controller;
 
 
 import com.ecommerce.ecommerce.ServiceController;
+import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.service.BookService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 
 @Controller
 public class ECommerceController {
 
+    @Autowired
+    private BookService bookService;
 
     @Autowired
     private ServiceController customerService;
 
     @GetMapping("/")
-    public String getIndexPage() {
+    public String getLandingPage(Model model) {
+        List<Book> allBooks = bookService.getBooks();
+        model.addAttribute("books", allBooks);
         return "landing";
     }
 
     @GetMapping("/home")
-    public String getHomePage() {
+    public String getHomePage(Model model , HttpSession session) {
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        System.out.println("===currentUser.getFirstName()========================= : " +currentUser.toString());
+
+        model.addAttribute("user", currentUser);
         return "home";
     }
 

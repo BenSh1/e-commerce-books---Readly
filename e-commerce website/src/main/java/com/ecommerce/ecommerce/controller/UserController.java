@@ -44,13 +44,12 @@ public class UserController {
     public String editCustomer(@PathVariable Long id,
                                Model model) {
         //WebUser webUser = userService.getCustomer(id);
+        System.out.println("--------------------------------------------------------");
         User user = userService.getUser(id);
         model.addAttribute("user", user);
 
         // add the list of languages to the model
         model.addAttribute("roles",roles);
-
-
 
         return "editCustomer";
     }

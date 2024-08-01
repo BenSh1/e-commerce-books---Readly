@@ -61,6 +61,8 @@ public class CartController {
     }
 
 
+
+
     @PostMapping("/remove/{id}")
     public String removeBookInCart(@PathVariable Integer id,
                                    HttpSession session ,
@@ -116,12 +118,6 @@ public class CartController {
 
  */
 
-    @PostMapping("/page1")
-    public String addToCart(Model model)
-    {
-        //System.out.println("bookId : " + bookId);
-        return "page1";
-    }
 
 
 /*
