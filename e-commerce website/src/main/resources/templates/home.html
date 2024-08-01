@@ -115,10 +115,13 @@
         <a href="/customersList">Go to Customers List</a>
         <a href="/orderList">Go to Orders List</a>
         <a href="/myOrderList">Go to My Orders List</a>
+        <a th:action="@{myOrderList}"> </a>
+        <a th:href="@{/editCustomer/{id}(id=${user.id})}">Edit Profile</a>
+
     </div>
 
     <hr>
-    
+
     <div class="logout-form">
         <form action="#" th:action="@{/logout}" method="POST">
             <input type="submit" value="Logout" />

@@ -103,55 +103,118 @@
         #cart-message button:hover {
             background-color: #0056b3;
         }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade-in transition */
+
+        }
+
+
+        .alert.show {
+            opacity: 1; /* Show alert */
+        }
+/*
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 0.75rem 1.25rem;
+            color: inherit;
+        }
+
+ */
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem; /* Make it larger for easier clicking */
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .alert.alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+
     </style>
 
-    <!--
     <script>
-        function addToCart(bookId) {
-            fetch(`/cart/add/${bookId}`, { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        alert('Book added to cart!');
-                    } else {
-                        alert('Failed to add book to cart.');
-
-                    }
-                });
-        }
-    </script>
-    -->
-    <!--
-    <script>
-        function hideMessage() {
-            console.log("hideMessage function called");
-            const messageDiv = document.getElementById('message');
-            if (messageDiv) {
-                console.log("Message div found");
-                setTimeout(() => {
-                    console.log("Hiding message div");
-                    messageDiv.style.display = 'none';
-                }, 3000); // Hide after 3 seconds
-            } else {
-                console.log("Message div not found");
-            }
-        }
-
-        window.onload = hideMessage;
-    </script>
-    -->
-
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var feedbackMessage = document.getElementById("feedbackMessage");
-            if (feedbackMessage) {
+        document.addEventListener('DOMContentLoaded', function() {
+            var messageContainer = document.getElementById('messageContainer');
+            if (messageContainer) {
+                // Show the message with fade-in effect
                 setTimeout(function() {
-                    feedbackMessage.style.display = 'none';
-                }, 5000); // Hide after 5 seconds
+                    messageContainer.classList.add('show');
+                    messageContainer.classList.remove('hide');
+                }, 100);
+
+                // Automatically hide the message after 5 seconds
+                setTimeout(function() {
+                    messageContainer.classList.remove('show');
+                    messageContainer.classList.remove('show');
+                }, 5000);
             }
+
+            var errorContainer = document.getElementById('errorContainer');
+            if (errorContainer) {
+                setTimeout(function() {
+                    errorContainer.classList.add('show');
+                    errorContainer.classList.remove('hide');
+                }, 100);
+                setTimeout(function() {
+                    errorContainer.classList.add('hide');
+                    errorContainer.classList.remove('show');
+                }, 5000);
+            }
+
+
+            var closeButton = document.querySelector('.alert .close');
+
+            if (closeButton) {
+                closeButton.addEventListener('click', function() {
+                    var alert = this.parentElement;
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 500); // Duration should match CSS transition
+                });
+            }
+
+
+
+            closeButtons.forEach(function(button) {
+                button.addEventListener('click', function() {
+                    var alert = this.parentElement;
+                    alert.style.opacity = '0';
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 500);
+                });
+            });
         });
     </script>
-
 
 </head>
 
@@ -192,7 +255,24 @@
 
 <h2>Items for Sale</h2>
 
+<!--
 <div id="feedbackMessage" th:if="${message}" th:text="${message}" class="alert alert-success"></div>
+-->
+
+<div id="messageContainer" th:if="${message}" class="alert alert-success alert-dismissible hide" role="alert">
+    <strong>Success!</strong> <span th:text="${message}"></span>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div id="errorContainer" th:if="${errorMessage}" class="alert alert-danger alert-dismissible hide" role="alert">
+    <strong>Error!</strong> <span th:text="${errorMessage}"></span>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
 
 <div class="item-list">
     <div class="item" th:each="book : ${allBooks} ">
