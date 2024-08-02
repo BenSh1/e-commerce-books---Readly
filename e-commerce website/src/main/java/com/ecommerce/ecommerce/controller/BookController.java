@@ -90,18 +90,32 @@ public class BookController {
 
         List<Book> allBooks = bookService.getBooks();
         model.addAttribute("allBooks", allBooks);
-        /*
-        model.addAttribute("message", "Book added to cart successfully!");
-        System.out.println("=================================================================");
-         */
+        model.addAttribute("subjects", bookService.getAllSubjects());
+
 
         return "itemSells";
     }
 
+    @GetMapping("/filterBooks")
+    public String filterBooks(@RequestParam("subject") String subject, Model model) {
+        List<Book> filteredBooks;
+        if (subject != null && !(subject.equals("all")) ) {
+            filteredBooks = bookService.getBooksBySubject(subject);
+        } else {
+            filteredBooks = bookService.getBooks();
+        }
+        model.addAttribute("allBooks", filteredBooks);
+        model.addAttribute("subjects", bookService.getAllSubjects());
+
+        return "itemSells"; // Return the view name where books are displayed
+    }
+
+
     @GetMapping("/search")
     public String searchBooks(@RequestParam("query") String query, Model model) {
         List<Book> books = bookService.searchBooks(query);
-        model.addAttribute("books", books);
+        //model.addAttribute("books", books);
+        model.addAttribute("allBooks", books);
         return "itemSells";
     }
 
@@ -153,7 +167,7 @@ public class BookController {
         return "redirect:/itemSells";
     }
 
-    
+
 
 
     @PostMapping("bookDetails/itemSells/{id}")
@@ -283,193 +297,20 @@ public class BookController {
         //return "redirect:/editBook";
         return "editBook";
     }
-/*
-    @GetMapping("/search")
-    public String searchBooks(@RequestParam("query") String query, Model model) {
-        System.out.println("==============================================================");
-        System.out.println("Search query: " + query);
-        List<Book> books = bookService.searchBooks(query);
-        model.addAttribute("books", books);
-        return "search";
-    }
-
- */
 
 
 
-/*
-    @GetMapping("/bookImage/{id}")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable Long id) {
-
-        TypedQuery<Book> query = entityManager.createQuery("SELECT b FROM Book b WHERE b.id = :id", Book.class);
-        query.setParameter("id", id);
-        Book book = query.getSingleResult();
-
-        if (book != null && book.getImage() != null) {
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpHeaders.CONTENT_TYPE, "image/jpeg");
-            return new ResponseEntity<>(book.getImage(), headers, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
- */
-
-/*
-    @GetMapping("/bookImage/{id}")
-    public ResponseEntity<byte[]> getBookImage(@PathVariable Long id) {
-        Book book = bookService.getBook(id);
-        System.out.println("bookService.getBook(id) : " + bookService.getBook(id));
-
-        System.out.println(book.getImageBase64());
-        if (book != null && book.getImage() != null) {
-            System.out.println("checking inside ");
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.set(HttpHeaders.CONTENT_TYPE, "image/png");
-            return new ResponseEntity<>(book.getImage(), headers, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
- */
-
-    /*
-    @PostMapping("/addBook")
-    public String addBook(@RequestParam("title") String title,
-                          @RequestParam("author") String author,
-                          @RequestParam("description") String description,
-                          @RequestParam("category") String category,
-                          @RequestParam("price") String price,
-                          @RequestParam("stock") String stock,
-                          @RequestParam("image") MultipartFile image,
-                          Model model) {
-        System.out.println("title : " + title);
-
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthorName(author);
-        book.setDescription(description);
-        try {
-            book.setImage(image.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        bookService.addBook(book);
-
-        model.addAttribute("books", bookService.getBooks());
-        return "bookList"; // Show the updated book list
-    }
-
-     */
-
-
-    /*
-    @PostMapping("/addBook")
-    public String addBook(@RequestParam("title") String title,
-                          @RequestParam("author") String author,
-                          @RequestParam("description") String description,
-                          @RequestParam("image") MultipartFile image,
-                          Model model) {
-
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthor(author);
-        book.setDescription(description);
-        try {
-            book.setImage(image.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        bookService.addBook(book);
-
-        model.addAttribute("books", bookService.getBooks());
-        return "bookList"; // Show the updated book list
-    }
-
-     */
 
 
 
-/*
-    @PostMapping("/addBook")
-    public String addBook(@RequestParam("title") String title,
-                          @RequestParam("author") String author,
-                          @RequestParam("description") String description,
-                          @RequestParam("image") MultipartFile image,
-                          Model model) {
-
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthorName(author);
-        book.setDescription(description);
-        try {
-            book.setImage(image.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        bookService.addBook(book);
-
-        model.addAttribute("books", bookService.getBooks());
-        return "bookList"; // Show the updated book list
-    }
-
- */
-
-/*
-    @GetMapping("/book/image/{id}")
-    @ResponseBody
-    public byte[] getBookImage(@PathVariable Long id) {
-        Book book = bookService.findBookById(id);
-        return book != null ? book.getImage() : null;
-    }
-
- */
 
 
-/*
-    @PostMapping("/addBook")
-    public String addBook(@RequestParam("title") String title,
-                          @RequestParam("author") String author,
-                          @RequestParam("description") String description,
-                          @RequestParam("image") MultipartFile image,
-                          Model model) {
 
-        // Save the image
-        //String imageUrl = saveImage(image);
 
-        // Create a new book and add it to the service
-        Book book = new Book();
-        book.setTitle(title);
-        book.setAuthorName(author);
-        //book.setDescription(description);
-        //book.setImageUrl(imageUrl);
-        bookService.addBook(book);
 
-        model.addAttribute("books", bookService.getBooks());
-        return "bookList"; // Show the updated book list
-    }
-*/
 
-/*
-    private String saveImage(MultipartFile image) {
-        if (image.isEmpty()) {
-            return null;
-        }
 
-        try {
-            byte[] bytes = image.getBytes();
-            Path path = Paths.get(UPLOADED_FOLDER + image.getOriginalFilename());
-            Files.write(path, bytes);
-            return "/images/" + image.getOriginalFilename();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
 
- */
+
 
 }

@@ -46,12 +46,7 @@ public class BookService {
 
     public List<Book> getBooks() {
         List<Book> books = bookDao.findAll();
-        /*
-        for (Book book : books) {
-            book.setImageBase64(book.getImageBase64());
-        }
 
-         */
         return books;
     }
 
@@ -108,5 +103,14 @@ public class BookService {
         return existingBook.getStock() != 0;
     }
 
+
+    public List<Book> getBooksBySubject(String subject) {
+        return bookRepository.findByCategory(subject);
+
+    }
+
+    public List<String> getAllSubjects() {
+        return bookRepository.findDistinctCategory();
+    }
 
 }

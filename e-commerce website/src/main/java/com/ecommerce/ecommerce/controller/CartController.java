@@ -30,13 +30,10 @@ public class CartController {
     private UserService userService;
 
 
-
-
     @GetMapping("/cart")
     public String showShoppingCart(Model model, HttpSession session ,
                                    @AuthenticationPrincipal Authentication authentication)
     {
-
         User currentUser = (User) session.getAttribute("user");
         //User user = userService.get
         if (currentUser == null) {
@@ -59,9 +56,6 @@ public class CartController {
 
         return "shooping_cart";
     }
-
-
-
 
     @PostMapping("/remove/{id}")
     public String removeBookInCart(@PathVariable Integer id,
@@ -110,13 +104,7 @@ public class CartController {
         return "access-denied";
 
     }
-/*
-    @GetMapping("/cart")
-    public ResponseEntity<List<CartItems>> getCart(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(cartService.getCartForUser(user));
-    }
 
- */
 
 
 
@@ -144,52 +132,10 @@ public class CartController {
 
 
 
-/*
-    @PostMapping("/add")
-    public ResponseEntity<Void> addToCart(@AuthenticationPrincipal User user,
-    @PathVariable Long bookId)
-    {
-        cartService.addToCart(user, bookId);
-        System.out.println("-------------------checking-------------------");
-        return ResponseEntity.ok().build();
-    }
-
- */
 
 
-    @PostMapping("/buy")
-    public ResponseEntity<Void> buy(@AuthenticationPrincipal User user) {
-        cartService.clearCart(user);
-        return ResponseEntity.ok().build();
-    }
 
-/*
-    @GetMapping
-    public ResponseEntity<List<CartItem>> getCart(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(cartService.getCartForUser(user));
-    }
 
- */
 
-/*
-    @GetMapping
-    public List<CartItems> getCartItems() {
-        return cartService.getCartItems();
-    }
 
- */
-    /*
-    @PostMapping("/{cartId}/books/{bookId}")
-    public ResponseEntity<Cart> addToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {
-        cartService.addToCart(bookId, quantity);
-        return ResponseEntity.ok(cart);
-    }
-
-    @GetMapping("/{cartId}")
-    public ResponseEntity<Cart> getCart(@PathVariable Long cartId) {
-        Cart cart = cartService.getCart(cartId);
-        return ResponseEntity.ok(cart);
-    }
-
-     */
 }
