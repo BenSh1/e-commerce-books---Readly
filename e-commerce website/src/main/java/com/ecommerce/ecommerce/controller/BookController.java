@@ -245,6 +245,7 @@ public class BookController {
 
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        System.out.println("==================================================");
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/bookList";

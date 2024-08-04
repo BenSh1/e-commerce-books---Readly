@@ -11,9 +11,14 @@ import com.ecommerce.ecommerce.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -32,6 +37,25 @@ public class DataSeeder implements ApplicationRunner {
     private UserRoleDao userRoleDaoDao;
 
  */
+
+    //private BCryptPasswordEncoder passwordEncoder;
+
+/*
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
+
+ */
+/*
+    private final PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public DataSeeder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
+*/
+
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -101,15 +125,51 @@ public class DataSeeder implements ApplicationRunner {
             System.out.println("Role's table already has data");
         }
 
+        if (userDao.count() == 4) {
+            //the password is 123
+            User firstUser = new User("israel",
+                    "$2a$10$Wor6K0NPS6z2m55ur9PakOh6lgtrdantPus8fwOuVZ3Cl9OQXeDkq",
+                    "israel",
+                    true,
+                    "israeli",
+                    "0521234567",
+                    "ben@gmail.com",
+                    "Israel",
+                    "haifa",
+                    "ramat almogi",
+                    "12",
+                    "12312",
+                    "123456789",
+                    "visa",
+                    12,
+                    2030
+                    );
+
+
+            firstUser.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_ADMIN")));
+
+            userDao.save(firstUser);
+            System.out.println("Initial data saved to User's Table");
+
+        }
+        else{
+            System.out.println("User's table already has data");
+        }
+
+
+
 /*
         if (userDao.count() == 0) {
+
+
+
+
             List<String> usersList = new ArrayList<>();
             User user = new User();
             user.setUserName("ben");
             user.setLastName("Sharabi");
             user.setEmail("ben@gmail.com");
             user.setPassword("ben@gmail.com");
-
 
 
             for (int i = 0; i < desiredNumberOfRowsInRoleTable; i++) {
@@ -124,8 +184,10 @@ public class DataSeeder implements ApplicationRunner {
             System.out.println("Role's table already has data");
         }
 
-
  */
+
+
+
 
 
 

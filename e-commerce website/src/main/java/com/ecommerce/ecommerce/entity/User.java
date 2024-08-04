@@ -51,7 +51,7 @@ public class User {
 
     @Column(name = "zipCode")
     private String zipCode;
-
+/*
     @Column(name = "creditCardNumber")
     private String creditCardNumber;
 
@@ -63,6 +63,8 @@ public class User {
 
     @Column(name = "cardExpiryYear")
     private int cardExpiryYear;
+
+ */
 
 
 
@@ -123,6 +125,27 @@ public class User {
         this.password = password;
         this.enabled = enabled;
         this.roles = roles;
+    }
+
+
+    public User(String userName, String password, String firstName, boolean enabled,
+                String lastName, String phone, String email, String country, String city,
+                String streetAddress, String apartmentNumber, String zipCode,
+                String creditCardNumber, String creditCardCompany, int cardExpiryMonth,
+                int cardExpiryYear) {
+        this.userName = userName;
+        this.password = password;
+        this.firstName = firstName;
+        this.enabled = enabled;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.country = country;
+        this.city = city;
+        this.streetAddress = streetAddress;
+        this.apartmentNumber = apartmentNumber;
+        this.zipCode = zipCode;
+
     }
 
     public Long getId() {
@@ -228,7 +251,7 @@ public class User {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-
+/*
     public String getCreditCardNumber() {
         return creditCardNumber;
     }
@@ -261,6 +284,8 @@ public class User {
         this.cardExpiryYear = cardExpiryYear;
     }
 
+ */
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -285,10 +310,6 @@ public class User {
                 ", streetAddress='" + streetAddress + '\'' +
                 ", apartmentNumber='" + apartmentNumber + '\'' +
                 ", zipCode='" + zipCode + '\'' +
-                ", creditCardNumber='" + creditCardNumber + '\'' +
-                ", creditCardCompany='" + creditCardCompany + '\'' +
-                ", cardExpiryMonth=" + cardExpiryMonth +
-                ", cardExpiryYear=" + cardExpiryYear +
                 ", password='" + password + '\'' +
                 '}';
     }

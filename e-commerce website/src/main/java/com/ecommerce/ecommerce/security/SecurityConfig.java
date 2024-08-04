@@ -45,9 +45,14 @@ public class SecurityConfig {
                                         , "/addBook","/bookList", "/bookList/**",
                                         "/bookList2","/cart/**" ,"/bookDetails/{id}").permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
-                                .requestMatchers("/home/**", "/cart", "/shooping_cart").hasRole("CUSTOMER")
-                                .requestMatchers("/leaders/**").hasRole("MANAGER")
-                                .requestMatchers("/systems/**").hasRole("ADMIN")
+                                .requestMatchers("/home/**","/home", "/cart", "/shooping_cart").hasRole("CUSTOMER")
+
+                                .requestMatchers("/home/**" , "/addBook","/bookList"
+                                        ,"/bookDetails/{id}","/leaders/**").hasRole("MANAGER")
+
+                                .requestMatchers("/home/**", "/addBook","/bookList"
+                                        ,"/bookDetails/{id}","/systems/**").hasRole("ADMIN")
+
                                 .anyRequest().authenticated()
                 )
                 .formLogin(form ->
