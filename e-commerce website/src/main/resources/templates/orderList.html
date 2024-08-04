@@ -110,7 +110,10 @@
         <td th:text="${order.user.userName}" class="vertical-line"></td>
         <td class="vertical-line">
             <ul>
-                <li th:each="orderDetail : ${order.orderDetails}" th:text="${orderDetail.book.title}">Book</li>
+                <li th:each="orderDetail : ${order.orderDetails}">
+                    <span th:text="${orderDetail.book.title}"></span> (quantity:
+                    <span th:text="${orderDetail.quantity}"></span>)
+                </li>
             </ul>
         </td>
 

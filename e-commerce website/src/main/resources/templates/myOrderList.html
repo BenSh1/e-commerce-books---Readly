@@ -92,13 +92,15 @@
 <hr>
 
 <h1 th:text="${title}">Default Message</h1>
+
+
 <table>
 
     <tr>
         <th>ID</th>
         <th>Date</th>
-        <th>Total Amount</th>
         <th>Username</th>
+        <th>Total Amount</th>
         <th>books</th>
         <th>Order status</th>
         <th>Action</th>
@@ -106,13 +108,21 @@
     <tr th:each="order : ${orders}">
         <td th:text="${order.orderId} " ></td>
         <td th:text="${order.orderDate} " class="vertical-line"></td>
-        <td th:text="${order.totalAmount}" class="vertical-line"></td>
         <td th:text="${order.user.userName}" class="vertical-line"></td>
+
+        <td th:text="${order.totalAmount}" class="vertical-line"></td>
         <td class="vertical-line">
             <ul>
-                <li th:each="orderDetail : ${order.orderDetails}" th:text="${orderDetail.book.title}">Book</li>
+                <!--
+                <li th:each="orderDetail : ${order.orderDetails}" th:text="${orderDetail.book.title}"></li>
+                -->
+                <li th:each="orderDetail : ${order.orderDetails}">
+                    <span th:text="${orderDetail.book.title}"></span> (quantity:
+                    <span th:text="${orderDetail.quantity}"></span>)
+                </li>
             </ul>
         </td>
+
 
         <!--
     <td class="vertical-line" style="white-space:nowrap">
