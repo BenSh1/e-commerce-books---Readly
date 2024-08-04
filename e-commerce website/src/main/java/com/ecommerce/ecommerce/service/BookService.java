@@ -99,7 +99,6 @@ public class BookService {
 
     public boolean isBookAvailable(Long id){
         Book existingBook = bookDao.findById(id);
-
         return existingBook.getStock() != 0;
     }
 

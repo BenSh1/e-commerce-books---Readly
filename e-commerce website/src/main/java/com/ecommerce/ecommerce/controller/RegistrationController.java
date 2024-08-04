@@ -50,6 +50,18 @@ public class RegistrationController {
         return "register/registration-form";
     }
 
+    @GetMapping("/showRegistrationForm2")
+    public String showMyRegisterPage2(
+            @Valid @ModelAttribute("webUser") WebUser theWebUser,
+            BindingResult theBindingResult,
+            HttpSession session, Model theModel)
+    {
+
+        theModel.addAttribute("webUser", new WebUser());
+
+        return "register/registration-form2";
+    }
+
 
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(

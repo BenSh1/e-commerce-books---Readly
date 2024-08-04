@@ -52,6 +52,21 @@ public class User {
     @Column(name = "zipCode")
     private String zipCode;
 
+    @Column(name = "creditCardNumber")
+    private String creditCardNumber;
+
+    @Column(name = "creditCardCompany")
+    private String creditCardCompany;
+
+    @Column(name = "cardExpiryMonth")
+    private int cardExpiryMonth;
+
+    @Column(name = "cardExpiryYear")
+    private int cardExpiryYear;
+
+
+
+
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
@@ -214,6 +229,38 @@ public class User {
         this.zipCode = zipCode;
     }
 
+    public String getCreditCardNumber() {
+        return creditCardNumber;
+    }
+
+    public void setCreditCardNumber(String creditCardNumber) {
+        this.creditCardNumber = creditCardNumber;
+    }
+
+    public String getCreditCardCompany() {
+        return creditCardCompany;
+    }
+
+    public void setCreditCardCompany(String creditCardCompany) {
+        this.creditCardCompany = creditCardCompany;
+    }
+
+    public int getCardExpiryMonth() {
+        return cardExpiryMonth;
+    }
+
+    public void setCardExpiryMonth(int cardExpiryMonth) {
+        this.cardExpiryMonth = cardExpiryMonth;
+    }
+
+    public int getCardExpiryYear() {
+        return cardExpiryYear;
+    }
+
+    public void setCardExpiryYear(int cardExpiryYear) {
+        this.cardExpiryYear = cardExpiryYear;
+    }
+
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -221,6 +268,7 @@ public class User {
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
     }
+
 
     @Override
     public String toString() {
@@ -230,8 +278,18 @@ public class User {
                 ", enabled=" + enabled +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
-                ", roles=" + roles +
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", streetAddress='" + streetAddress + '\'' +
+                ", apartmentNumber='" + apartmentNumber + '\'' +
+                ", zipCode='" + zipCode + '\'' +
+                ", creditCardNumber='" + creditCardNumber + '\'' +
+                ", creditCardCompany='" + creditCardCompany + '\'' +
+                ", cardExpiryMonth=" + cardExpiryMonth +
+                ", cardExpiryYear=" + cardExpiryYear +
+                ", password='" + password + '\'' +
                 '}';
     }
 }

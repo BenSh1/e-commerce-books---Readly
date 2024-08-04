@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -92,7 +93,6 @@ public class BookController {
         model.addAttribute("allBooks", allBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
 
-
         return "itemSells";
     }
 
@@ -119,26 +119,13 @@ public class BookController {
         return "itemSells";
     }
 
-
-/*
-    @GetMapping("/itemSells/{id}")
-    public String getItemSells(@PathVariable Long id, Model model) {
-        // Get the list of books on sale
-        //List<Book> books = bookService.getAllBooksOnSale();
-        List<Book> books = bookService.getBooks();
-        model.addAttribute("books", books);
-
-        // Add the item ID to the model (if needed for further logic)
-        model.addAttribute("itemId", id);
-
-        return "itemSells";
-    }
-    */
-
+    @Transactional
     @PostMapping("/itemSells/{id}")
     public String addItemToCart(Model model, HttpSession session ,@PathVariable Long id,
                                 @AuthenticationPrincipal Authentication authentication,
                                             RedirectAttributes redirectAttributes) {
+
+        boolean isExistTheBookId = false;
 
         // Check if the book is available in the inventory
         boolean isAvailable = bookService.isBookAvailable(id);
@@ -150,19 +137,33 @@ public class BookController {
             if (currentUser == null) {
                 throw new RuntimeException("User not logged in");
             }
-            //System.out.println("user : " + currentUser.toString());
 
-            cartService.addToCart(currentUser,id);
 
-            // Set a feedback message
-            redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+            List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
+
+            for(CartItems tempItem : cartItemsList) {
+                if (tempItem.getBook().getBookId() == id) {
+                    isExistTheBookId = true;
+                    break;
+                }
+            }
+
+
+            if (isExistTheBookId) {
+                // Set a feedback message
+                redirectAttributes.addFlashAttribute("warningMessage", "Book is already in the cart!");
+            }
+            else{
+                cartService.addToCart(currentUser,id);
+                // Set a feedback message
+                redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+            }
 
         }
         else {
             // Set an error message for out-of-stock
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
         }
-
 
         return "redirect:/itemSells";
     }
@@ -175,39 +176,46 @@ public class BookController {
                                               HttpSession session ,
                                               @PathVariable Long id,
                                 @AuthenticationPrincipal Authentication authentication,
+                                              @RequestParam("quantity") int quantity,
                                 RedirectAttributes redirectAttributes) {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        System.out.println("user : " + currentUser.toString());
 
-        cartService.addToCart(currentUser,id);
-        redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+        boolean isExistTheBookId = false;
+
+        // Check if the book is available in the inventory
+        boolean isAvailable = bookService.isBookAvailable(id);
+
+
+        if (isAvailable) {
+
+            List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
+
+            for(CartItems tempItem : cartItemsList) {
+                if (tempItem.getBook().getBookId() == id) {
+                    isExistTheBookId = true;
+                    break;
+                }
+            }
+            if (isExistTheBookId) {
+                redirectAttributes.addFlashAttribute("warningMessage", "Book is already in the cart!");
+            }
+            else{
+                cartService.addToCart(currentUser,id);
+                //cartService.addToCartWithQuantity(currentUser,id,quantity);
+                redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+            }
+        }
+        else{
+            redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
+        }
+
 
         return "redirect:/bookDetails/{id}"; // Redirect back to the items sell page
     }
-    /*
-    @PostMapping("/bookDetails/{id}")
-    public String addBook(@PathVariable Long id, Model model, HttpSession session ,) {
-
-        User currentUser = (User) session.getAttribute("user");
-        //User user = userService.get
-        if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
-
-        List<CartItems> cartItems = cartService.getCartForUser(currentUser);
-
-        cartService.addToCart(currentUser,id,  quantity);
-
-        return "bookDetails";
-    }
-
-     */
-
 
     @GetMapping("/bookDetails/{id}")
     public String bookDetails(@PathVariable Long id, Model model) {
@@ -242,33 +250,6 @@ public class BookController {
         return "redirect:/bookList";
     }
 
-    //@PostMapping("/{cartId}/books/{bookId}")
-    @PostMapping("/cart/add")
-    public String addBookToCart(@PathVariable Long cartId, @PathVariable Long bookId, @RequestParam int quantity) {
-        /*
-        try {
-            cartService.addToCart(cartId, bookId, quantity);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding book to cart");
-        }
-
-         */
-
-        //cartService.addToCart(cartId, bookId ,quantity);
-
-        /*
-        Book book = bookService.findById(bookId);
-        if (book != null) {
-            cartService.addToCart2(book, quantity);
-        }
-
-         */
-
-        // Redirect to cart view or display confirmation message (optional)
-        return "redirect:/cart";
-    }
-
     @GetMapping("/editBook")
     public String showEditBookPage(Model model, @RequestParam long id) {
 
@@ -294,7 +275,6 @@ public class BookController {
 
         }
 
-        //return "redirect:/editBook";
         return "editBook";
     }
 

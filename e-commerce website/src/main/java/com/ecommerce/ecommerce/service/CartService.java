@@ -46,6 +46,7 @@ public class CartService {
 
     @Transactional
     public void addToCart(User user, Long bookId) {
+
         int isExistTheBookId = 0;
         System.out.println("in addToCart");
         System.out.println("user : " + user.toString());
@@ -57,15 +58,6 @@ public class CartService {
         System.out.println("userDao.findByUserName : " + currentUser.toString());
 
         List<CartItems> cartItemsList = this.getCartForUser(currentUser);
-
-        //List<Book> booksOfUserInCart = new ArrayList<Book>();
-
-/*
-        if(cartItemsList.contains(cartItems)){
-
-        }
-
- */
 
 
         for(CartItems tempItem : cartItemsList) {
@@ -96,6 +88,24 @@ public class CartService {
 
     }
 
+    @Transactional
+    public void addToCartWithQuantity(User user, Long bookId, int quantity) {
+        Book book = bookDao.findById(bookId);
+
+        User currentUser = userDao.findByUserName(user.getUserName());
+
+        CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
+                .orElseGet(CartItems::new);
+
+        cartItems.setUser(currentUser);
+        cartItems.setBook(book);
+        cartItems.setPrice(book.getPrice());
+        cartItems.setQuantity(quantity);
+
+        cartItemsRepository.save(cartItems);
+    }
+
+
     public void removeBookFromCart(Integer id , User user) {
         System.out.println("----------------------------------id: "+ id );
 
@@ -125,87 +135,14 @@ public class CartService {
     }
 
 
-/*
-    public void addToCart(User user , Long bookId, int quantity) {
-
-        //Book book = bookDao.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-
-        Book book = bookDao.findById(bookId);
-        //CartItem cartItem = new CartItem();
-        CartItem cartItem = cartItemsRepository.findByUserAndBook(user, book)
-                .orElseGet(() -> new CartItem());
-        cartItem.setBook(book);
-        cartItem.setQuantity(quantity);
-        cartItem.setPrice(quantity*book.getPrice());
-
-        cartItemsRepository.save(cartItem);
-
+    public void updateQuantity(User user, Long bookId, int quantity) {
+        CartItems cartItem = cartItemsRepository.findByUserAndBookId(user, bookId);
+        if (cartItem != null) {
+            cartItem.setQuantity(quantity);
+            cartItemsRepository.save(cartItem);
+        }
     }
 
- */
-    /*
-    public List<CartItem> getCartForUser(User user) {
-        return cartItemsRepository.findByUser(user);
-    }
-
-     */
-
-    /*
-    public void clearCart() {
-        cartItemRepository.deleteAll();
-    }
-
-     */
-
-/*
-    public Cart addToCart(Long cartId, Long bookId, int quantity) {
-        Cart cart = cartRepository.findById(cartId).orElse(new Cart());
-
-        //Book book = bookDao.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
-        Book book = bookDao.findById(bookId);
-        CartItem cartItem = new CartItem();
-        cartItem.setBook(book);
-        cartItem.setQuantity(quantity);
-        cartItem.setCart(cart);
-        cartItem.setPrice(quantity*book.getPrice());
-
-        //cartItemRepository.save(cartItem);
-        cart.getItems().add(cartItem);
-
-        cartItemRepository.save(cartItem);
-        return cartRepository.save(cart);
-    }
-
- */
-/*
-    public Cart addToCart2(Book book, int quantity) {
-
-        Cart cart = cartRepository.findById(cartId).orElse(new Cart());
-
-        CartItem cartItem = new CartItem();
-        cartItem.setBook(book);
-        cartItem.setQuantity(quantity);
-        cartItem.setCart(cart);
-        cartItem.setPrice(quantity*book.getPrice());
-
-        //cartItemRepository.save(cartItem);
-        cart.getItems().add(cartItem);
-
-        cartItemRepository.save(cartItem);
-        return cartRepository.save(cart);
-    }
-
- */
-/*
-    public Cart getCart(Long cartId) {
-        return cartRepository.findById(cartId).orElseThrow(() -> new RuntimeException("Cart not found"));
-    }
-
-    public List<CartItem> getCartItems() {
-        return cartItemRepository.findAll();
-    }
-
- */
 
 
 }

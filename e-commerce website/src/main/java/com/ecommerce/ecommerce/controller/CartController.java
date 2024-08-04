@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -48,7 +49,6 @@ public class CartController {
                 .mapToDouble(item -> item.getBook().getPrice() * item.getQuantity())
                 .sum();
 
-
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("pageTitle", "Shopping Cart");
         model.addAttribute("totalAmount",totalAmount);
@@ -78,64 +78,37 @@ public class CartController {
 
 
 
-    @GetMapping("/cart2")
-    public String showShoppingCart2(/*
-    @AuthenticationPrincipal UserDetails userDetails,*/
-            @AuthenticationPrincipal Authentication authentication,
-                                   Model model) {
+    @PostMapping("/updateQuantity")
+    public String updateQuantity(@RequestParam("bookId") Long bookId,
+                                 @RequestParam("quantity") int quantity,
+                                 HttpSession session ,
+                                 Principal principal,
+                                 Model model) {
 
-        //Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //userService.getCurrentCustomerUsername();
-/*
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-            User user = userService.findByUserName(username);
-            List<CartItems> cartItems = cartService.getCartForUser(user);
+        // Get the current user
+        User currentUser = getCurrentUser(session);
 
-            model.addAttribute("cartItems", cartItems);
-            model.addAttribute("pageTitle", "Shopping Cart");
+        // Update the quantity in the cart
+        cartService.updateQuantity(currentUser, bookId, quantity);
 
-            return "shoppingCart";
+        // Reload the cart view
+        List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
+        model.addAttribute("cartItems", cartItemsList);
+        double totalAmount = cartItemsList.stream().mapToDouble(item -> item.getBook().getPrice() * item.getQuantity()).sum();
+        model.addAttribute("totalAmount", totalAmount);
 
-        }
-
- */
-        return "access-denied";
-
+        return "shooping_cart";
     }
 
-
-
-
-/*
-    //@RequestParam("bookId") Long bookId
-    @PostMapping("/cart/add/{bookId}")
-    public String addToCart( Model model,@PathVariable Long bookId)
-    {
-
-        Book book = bookDao.findById(bookId);
-        CartItems cartItems = (CartItems) model.getAttribute("cartItems");
-        if (cartItems == null) {
-            cartItems = new CartItems();
-            model.addAttribute("cartItems", cartItems);
+    private User getCurrentUser(HttpSession session) {
+        // Get the current user
+        User currentUser = (User) session.getAttribute("user");
+        //User user = userService.get
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
         }
-
-        //cartService.addToCart();
-        cartItems.addBook(book);
-        return "redirect:/cart";
+        return currentUser;
     }
-
- */
-
-
-
-
-
-
-
-
-
 
 
 }
