@@ -279,13 +279,13 @@
 <body>
 
 <div class="nav-links">
-    <div sec:authorize="!hasRole('CUSTOMER')">
+    <div sec:authorize="!hasRole('CUSTOMER') and !hasRole('MANAGER') and !hasRole('ADMIN')"  >
         <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
         <br><br>
         <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
     </div>
 
-    <div sec:authorize="hasRole('CUSTOMER')">
+    <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
 
         <a th:href="@{/home}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Home</a>
         <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
@@ -372,7 +372,8 @@
             <button class="details" type="submit">Details</button>
         </form>
 
-        <div sec:authorize="hasRole('CUSTOMER')">
+
+        <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
 
             <!-- Add to Cart Button -->
             <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post">
