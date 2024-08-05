@@ -176,6 +176,47 @@
                         </div>
                     </div>
 
+                    <!-- Credit Card Number  -->
+                    <div class="form-group">
+                        <input type="text" th:field="*{creditCardNumber}" placeholder="Credit Card Number (*)" class="form-control" />
+                        <div th:if="${#fields.hasErrors('creditCardNumber')}" class="text-danger">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('creditCardNumber')}" th:text="'creditCardNumber ' + ${err}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Credit Card Company  -->
+                    <div class="form-group">
+                        <input type="text" th:field="*{creditCardCompany}" placeholder="Credit Card Company (*)" class="form-control" />
+                        <div th:if="${#fields.hasErrors('creditCardCompany')}" class="text-danger">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('creditCardCompany')}" th:text="'creditCardCompany ' + ${err}" />
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- card Expiry Month -->
+                    <div class="form-group">
+                        <input type="text" th:field="*{cardExpiryMonth}" placeholder="Card expiry month (*)" class="form-control" />
+                        <div th:if="${#fields.hasErrors('cardExpiryMonth')}" class="text-danger">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('cardExpiryMonth')}" th:text="'cardExpiryMonth ' + ${err}" />
+                            </ul>
+                        </div>
+                    </div>
+
+
+                    <!-- card Expiry Year -->
+                    <div class="form-group">
+                        <input type="text" th:field="*{cardExpiryYear}" placeholder="Card expiry month (*)" class="form-control" />
+                        <div th:if="${#fields.hasErrors('cardExpiryYear')}" class="text-danger">
+                            <ul>
+                                <li th:each="err : ${#fields.errors('cardExpiryYear')}" th:text="'cardExpiryYear ' + ${err}" />
+                            </ul>
+                        </div>
+                    </div>
+
                     <!-- Registration Button -->
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">Register</button>

@@ -8,7 +8,12 @@
     <title>Items for Sale</title>
 
     <style>
-
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
@@ -17,11 +22,12 @@
         }
         h2 {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
         .nav-links {
             text-align: center;
             margin-bottom: 20px;
+            margin-top: 20px;
         }
         .nav-links a {
             color: #007bff;
@@ -206,77 +212,13 @@
         }
 
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var messageContainer = document.getElementById('messageContainer');
-            if (messageContainer) {
-                // Show the message with fade-in effect
-                setTimeout(function() {
-                    messageContainer.classList.add('show');
-                    messageContainer.classList.remove('hide');
-                }, 100);
-
-                // Automatically hide the message after 5 seconds
-                setTimeout(function() {
-                    messageContainer.classList.remove('show');
-                    messageContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var errorContainer = document.getElementById('errorContainer');
-            if (errorContainer) {
-                setTimeout(function() {
-                    errorContainer.classList.add('show');
-                    errorContainer.classList.remove('hide');
-                }, 100);
-                setTimeout(function() {
-                    errorContainer.classList.add('hide');
-                    errorContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var warningContainer = document.getElementById('warningContainer');
-            if (warningContainer) {
-                setTimeout(function() {
-                    warningContainer.classList.add('show');
-                    warningContainer.classList.remove('hide');
-                }, 100);
-                setTimeout(function() {
-                    warningContainer.classList.add('hide');
-                    warningContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var closeButton = document.querySelector('.alert .close');
-
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    var alert = this.parentElement;
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500); // Duration should match CSS transition
-                });
-            }
-
-
-
-            closeButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var alert = this.parentElement;
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
-                });
-            });
-        });
-    </script>
-
 </head>
 
 <body>
+<header>
+    <h2>Items for Sale</h2>
+</header>
+
 
 <div class="nav-links">
     <div sec:authorize="!hasRole('CUSTOMER') and !hasRole('MANAGER') and !hasRole('ADMIN')"  >
@@ -385,6 +327,71 @@
     </div>
 </div>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageContainer = document.getElementById('messageContainer');
+        if (messageContainer) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                messageContainer.classList.add('show');
+                messageContainer.classList.remove('hide');
+            }, 100);
 
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                messageContainer.classList.remove('show');
+                messageContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var errorContainer = document.getElementById('errorContainer');
+        if (errorContainer) {
+            setTimeout(function() {
+                errorContainer.classList.add('show');
+                errorContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                errorContainer.classList.add('hide');
+                errorContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var warningContainer = document.getElementById('warningContainer');
+        if (warningContainer) {
+            setTimeout(function() {
+                warningContainer.classList.add('show');
+                warningContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                warningContainer.classList.add('hide');
+                warningContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+
+
+
+        closeButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500);
+            });
+        });
+    });
+</script>
 </body>
 </html>

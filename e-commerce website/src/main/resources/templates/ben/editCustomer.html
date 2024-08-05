@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<form th:action="@{/editCustomer/{id}(id=${user.id})}" th:object="${user}" method="post">
+
+    <label for="id">ID:</label>
+    <input readonly id="id" name="id" class="form-control-plaintext" type="text" th:value="*{id}" placeholder="Id Name" required />
+
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name" required />
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" name="lastName" th:field="*{lastName}"  required />
+
+
+    <label >Roles:</label>
+    <!--<input type="text" id="role" name="role"  required />-->
+
+    <div class="role-container">
+        <input type="radio" id="role" name="role"
+               th:each="tempRole : ${roles}"
+               th:value="${tempRole}" th:text="${tempRole}"/>
+
+    </div>
+
+
+
+
+    <!--
+    <input type="radio" th:field="${user.setRoles()}"
+           th:each="tempRole : ${roles}"
+           th:value="${tempRole}" th:text="${tempRole}"/>
+           -->
+
+
+    <button type="submit">Edit Customer</button>
+</form>
+<a href="/home">Go to Home</a><br>
+<a href="/customersList">Go to Customers List</a><br>
+
+
+</body>
+</html>

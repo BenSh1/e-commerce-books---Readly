@@ -5,6 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book List</title>
     <style>
+
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: white;
+            text-align: center;
+
+        }
+
         body {
             font-family: Arial, sans-serif;
         }
@@ -88,10 +105,14 @@
     </style>
 </head>
 <body>
+<header>
+    <h2  th:text="${title}">Default Message </h2>
+</header>
+
+
 <a href="/home">Go to Home</a><br><br>
 <hr>
 
-<h1 th:text="${title}">Default Message</h1>
 <table>
 
     <tr>

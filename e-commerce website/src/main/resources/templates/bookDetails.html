@@ -251,7 +251,7 @@
         </div>
     </div>
 
-    <div sec:authorize="hasRole('CUSTOMER')">
+    <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
 
         <!-- Add the form for selecting quantity and adding to cart -->
         <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post" class="buy-form">

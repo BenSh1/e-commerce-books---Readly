@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<form th:action="@{/addBook}" th:object="${book}" method="post" >
+    <input type="text" th:field="*{title}" placeholder="Book Name" required />
+    <input type="text" id="author" name="author" th:field="*{authorName}" placeholder="Author Name" required />
+    <input type="text" id="category" name="category" th:field="*{category}" placeholder="Category" required />
+
+    <textarea th:field="*{description}" placeholder="Description" required></textarea>
+    <label for="price">Price:</label>
+    <input type="number" step="0.01" id="price" name="price" th:field="*{price}" placeholder="Price" required />
+    <label for="stock">Stock:</label>
+    <input type="text" id="stock" name="stock" th:field="*{stock}" placeholder="Stock" required>
+    <!--
+    <input type="text" th:field="*{imageUrl}" placeholder="Image URL" required />
+    -->
+    <!--
+    <img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" />
+    -->
+
+
+    <label>Image:</label>
+    <!--
+    <input type="file" id="image" th:field="*{image}" accept="image/*" required><br><br>
+    -->
+    <input type="file" th:field="*{image}" id="image" name="image" accept="image/*" required><br/>
+
+    <!--
+    <input type="file" name="image" accept="image/*" /><br/>
+    -->
+
+    <button type="submit">Add Book</button>
+</form>
+
+
+</body>
+</html>
