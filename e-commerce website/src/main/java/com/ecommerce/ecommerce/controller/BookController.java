@@ -67,14 +67,6 @@ public class BookController {
         return "redirect:/bookList";
     }
 
-    // checking the images
-    @GetMapping("/books/{id}/image")
-    public String showImage (@PathVariable Long id, Model model) {
-        Book book = bookService.getBook(id);
-        model.addAttribute("book", book);
-        return "checking";
-    }
-
     @GetMapping("/bookList")
     public String listBooks(Model model) {
         //List<Book> books = bookService.getBooks();
@@ -84,6 +76,16 @@ public class BookController {
 
         return "bookList"; // Return the view to display the books
     }
+
+    // checking the images
+    @GetMapping("/books/{id}/image")
+    public String showImage (@PathVariable Long id, Model model) {
+        Book book = bookService.getBook(id);
+        model.addAttribute("book", book);
+        return "checking";
+    }
+
+
 
     @GetMapping("/itemSells")
     public String getItems(Model model) {

@@ -42,16 +42,17 @@ public class SecurityConfig {
                         configurer
                                 .requestMatchers("/","/static/**", "/images/**", "/register/**"
                                         , "/showMyLoginPage","/itemSells"
-                                        , "/addBook","/bookList", "/bookList/**",
-                                        "/bookList2","/cart/**" ,"/bookDetails/{id}").permitAll()  // Allow access to URLs starting with /public
+                                        , "/addBook","/bookList", "/bookList/**","/bookDetails/**" ,
+                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" ).permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
-                                .requestMatchers("/home/**","/home", "/cart", "/shooping_cart").hasRole("CUSTOMER")
 
-                                .requestMatchers("/home/**" , "/addBook","/bookList"
-                                        ,"/bookDetails/{id}","/leaders/**").hasRole("MANAGER")
+                                .requestMatchers("/home/**","/home", "/cart",
+                                        "/shooping_cart" ,"/editCustomer", "/editCustomer/**").hasRole("CUSTOMER")
 
-                                .requestMatchers("/home/**", "/addBook","/bookList"
-                                        ,"/bookDetails/{id}","/systems/**").hasRole("ADMIN")
+                                .requestMatchers( "/addBook","/bookList"
+                                        ,"/leaders/**" , "/customersList").hasRole("MANAGER")
+
+                                .requestMatchers("/systems/**").hasRole("ADMIN")
 
                                 .anyRequest().authenticated()
                 )

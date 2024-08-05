@@ -1,9 +1,7 @@
 package com.ecommerce.ecommerce.user;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 
 public class WebUser {
 
@@ -53,6 +51,25 @@ public class WebUser {
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
 	private String zipCode;
+
+
+    @NotEmpty(message = "Credit card number is required")
+    @Pattern(regexp = "\\d{16}", message = "Credit card number must be 16 digits")
+    private String creditCardNumber;
+
+	@NotEmpty(message = "Credit card company is required")
+	private String creditCardCompany;
+
+
+	@Min(value = 1, message = "Month must be between 1 and 12")
+	@Max(value = 12, message = "Month must be between 1 and 12")
+	private int cardExpiryMonth;
+
+	@Min(value = 2023, message = "Year must be greater than or equal to the current year")
+	private int cardExpiryYear;
+
+
+
 
 	public WebUser() {
 
@@ -144,6 +161,37 @@ public class WebUser {
 
 	public void setZipCode(String zipCode) {
 		this.zipCode = zipCode;
+	}
+
+	public String getCreditCardNumber() {
+		return creditCardNumber;
+	}
+
+	public void setCreditCardNumber(String creditCardNumber) {
+		this.creditCardNumber = creditCardNumber;
+	}
+	public String getCreditCardCompany() {
+		return creditCardCompany;
+	}
+
+	public void setCreditCardCompany(String creditCardCompany) {
+		this.creditCardCompany = creditCardCompany;
+	}
+
+	public int getCardExpiryMonth() {
+		return cardExpiryMonth;
+	}
+
+	public void setCardExpiryMonth(int cardExpiryMonth) {
+		this.cardExpiryMonth = cardExpiryMonth;
+	}
+
+	public int getCardExpiryYear() {
+		return cardExpiryYear;
+	}
+
+	public void setCardExpiryYear(int cardExpiryYear) {
+		this.cardExpiryYear = cardExpiryYear;
 	}
 }
 

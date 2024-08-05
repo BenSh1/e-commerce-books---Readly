@@ -125,7 +125,7 @@ public class DataSeeder implements ApplicationRunner {
             System.out.println("Role's table already has data");
         }
 
-        if (userDao.count() == 4) {
+        if (userDao.count() == 0) {
             //the password is 123
             User firstUser = new User("israel",
                     "$2a$10$Wor6K0NPS6z2m55ur9PakOh6lgtrdantPus8fwOuVZ3Cl9OQXeDkq",
@@ -146,8 +146,12 @@ public class DataSeeder implements ApplicationRunner {
                     );
 
 
-            firstUser.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_ADMIN")));
-
+            //firstUser.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_ADMIN")));
+            firstUser.setRoles(Arrays.asList(
+                    roleDao.findRoleByName("ROLE_CUSTOMER"),
+                    roleDao.findRoleByName("ROLE_MANAGER"),
+                    roleDao.findRoleByName("ROLE_ADMIN")
+            ));
             userDao.save(firstUser);
             System.out.println("Initial data saved to User's Table");
 

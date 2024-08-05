@@ -29,6 +29,7 @@ public class UserController {
 
     @Value("${roles}")
     private List<String> roles;
+
     @Autowired
     private UserDaoImpl userDaoImpl;
 

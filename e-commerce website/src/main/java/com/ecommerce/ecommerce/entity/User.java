@@ -51,21 +51,23 @@ public class User {
 
     @Column(name = "zipCode")
     private String zipCode;
-/*
+
+
     @Column(name = "creditCardNumber")
     private String creditCardNumber;
+
+
+
+
 
     @Column(name = "creditCardCompany")
     private String creditCardCompany;
 
     @Column(name = "cardExpiryMonth")
-    private int cardExpiryMonth;
+    private Integer  cardExpiryMonth;
 
     @Column(name = "cardExpiryYear")
-    private int cardExpiryYear;
-
- */
-
+    private Integer cardExpiryYear;
 
 
 
@@ -251,7 +253,7 @@ public class User {
     public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
-/*
+
     public String getCreditCardNumber() {
         return creditCardNumber;
     }
@@ -259,6 +261,7 @@ public class User {
     public void setCreditCardNumber(String creditCardNumber) {
         this.creditCardNumber = creditCardNumber;
     }
+
 
     public String getCreditCardCompany() {
         return creditCardCompany;
@@ -268,23 +271,25 @@ public class User {
         this.creditCardCompany = creditCardCompany;
     }
 
-    public int getCardExpiryMonth() {
+    public Integer getCardExpiryMonth() {
         return cardExpiryMonth;
     }
 
-    public void setCardExpiryMonth(int cardExpiryMonth) {
+    public void setCardExpiryMonth(Integer cardExpiryMonth) {
         this.cardExpiryMonth = cardExpiryMonth;
     }
 
-    public int getCardExpiryYear() {
+    public Integer getCardExpiryYear() {
         return cardExpiryYear;
     }
 
-    public void setCardExpiryYear(int cardExpiryYear) {
+    public void setCardExpiryYear(Integer cardExpiryYear) {
         this.cardExpiryYear = cardExpiryYear;
     }
 
- */
+
+
+
 
     public Collection<Role> getRoles() {
         return roles;
@@ -295,11 +300,14 @@ public class User {
     }
 
 
+
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
@@ -310,7 +318,13 @@ public class User {
                 ", streetAddress='" + streetAddress + '\'' +
                 ", apartmentNumber='" + apartmentNumber + '\'' +
                 ", zipCode='" + zipCode + '\'' +
-                ", password='" + password + '\'' +
+                /*
+                ", creditCardNumber='" + creditCardNumber + '\'' +
+                ", creditCardCompany='" + creditCardCompany + '\'' +
+                ", cardExpiryMonth=" + cardExpiryMonth +
+                ", cardExpiryYear=" + cardExpiryYear +
+
+                 */
                 '}';
     }
 }

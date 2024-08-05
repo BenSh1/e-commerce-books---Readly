@@ -61,6 +61,10 @@ public class UserServiceImpl implements UserService {
 		user.setStreetAddress(webUser.getStreetAddress());
 		user.setApartmentNumber(webUser.getApartmentNumber());
 		user.setZipCode(webUser.getZipCode());
+		user.setCreditCardNumber(webUser.getCreditCardNumber());
+		user.setCreditCardCompany(webUser.getCreditCardCompany());
+		user.setCardExpiryMonth(webUser.getCardExpiryMonth());
+		user.setCardExpiryYear(webUser.getCardExpiryYear());
 
 		user.setEnabled(true);
 
