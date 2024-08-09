@@ -122,7 +122,6 @@
         <th>Total Amount</th>
         <th>books</th>
         <th>Order status</th>
-        <th>Action</th>
     </tr>
     <tr th:each="order : ${orders}">
         <td th:text="${order.orderId} " ></td>
@@ -141,6 +140,7 @@
                 </li>
             </ul>
         </td>
+        <td th:text="${order.status}" class="vertical-line"></td>
 
 
         <!--

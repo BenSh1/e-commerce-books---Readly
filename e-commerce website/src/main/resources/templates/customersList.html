@@ -167,14 +167,23 @@
                 <input type="hidden" name="_method" value="delete" />
                 <button type="submit">Delete</button>
             </form>
-            <!--
-            <form th:action="@{updateRankUser/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
+
+            <form th:action="@{updateRankToCustomer/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
                 <input  type="hidden" name="_method" value="update" />
-                <button type="submit" >Update</button>
+                <button type="submit" >Update To Customer</button>
             </form>
 
-            -->
+            <form th:action="@{updateRankToManager/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
+                <input  type="hidden" name="_method" value="update" />
+                <button type="submit" >Update To Manager</button>
+            </form>
 
+
+
+            <form th:action="@{updateRankToAdmin/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
+                <input  type="hidden" name="_method" value="update" />
+                <button type="submit" >Update To Admin</button>
+            </form>
 
 
         </td>

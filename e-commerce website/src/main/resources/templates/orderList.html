@@ -101,6 +101,55 @@
             background-color: #218838;
         }
 
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade-in transition */
+
+        }
+
+
+        .alert.show {
+            opacity: 1; /* Show alert */
+        }
+
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem; /* Make it larger for easier clicking */
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .alert.alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .alert.alert-warning {
+            background-color: #FFD700;
+            color: #333;
+        }
+
 
     </style>
 </head>
@@ -108,6 +157,14 @@
 <header>
     <h2  th:text="${title}">Default Message </h2>
 </header>
+
+
+<div id="SuppliedMessage" th:if="${SuppliedMessage}" class="alert alert-success alert-dismissible hide" role="alert">
+    <strong>The Order has been supplied!</strong> <span th:text="${message}"></span>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 
 
 <a href="/home">Go to Home</a><br><br>
@@ -138,20 +195,53 @@
             </ul>
         </td>
 
+        <td th:text="${order.status}" class="vertical-line"></td>
+
+        <td class="vertical-line">
             <!--
-        <td class="vertical-line" style="white-space:nowrap">
-
-            <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
-
-            <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
-                <input type="hidden" name="_method" value="delete" />
-                <button type="submit">Delete</button>
+            <a  th:href="@{updateToSupplied/{id}(id=${order.orderId})}" class="button-link">Supplied</a>
+            -->
+            <form th:action="@{/updateToSupplied/{id}(id=${order.orderId})}" method="post">
+                <input type="hidden" name="_method" value="supplied" />
+                <button type="submit">Supplied</button>
             </form>
         </td>
-        -->
 
     </tr>
 </table>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var SuppliedMessage = document.getElementById('SuppliedMessage');
+        if (SuppliedMessage) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                SuppliedMessage.classList.add('show');
+                SuppliedMessage.classList.remove('hide');
+            }, 100);
+
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                SuppliedMessage.classList.remove('show');
+                SuppliedMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+    });
+</script>
+
 
 </body>
 </html>

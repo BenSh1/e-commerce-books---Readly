@@ -3,7 +3,7 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title >Home Page </title>
+    <title >Menu Of Manager </title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -84,47 +84,28 @@
 <body>
 
 <header>
-    <h2>Home Page</h2>
+    <h2>Menu For Manager</h2>
 </header>
 <div class="content">
-    <p>Welcome to the home page!</p>
+    <p>Welcome to the Menu For Manager page!</p>
     <hr>
-
-    <p>
-        User: <span sec:authentication="principal.username"></span><br>
-        Role(s): <span sec:authentication="principal.authorities"></span>
-    </p>
-
-    <div sec:authorize="hasRole('MANAGER')">
-        <p>
-            <a th:href="@{leaders}">Leadership Meeting</a> (Only for Manager peeps)
-        </p>
-    </div>
-    <div sec:authorize="hasRole('ADMIN')">
-        <p>
-            <a th:href="@{systems}">IT Systems Meeting</a> (Only for Admin peeps)
-        </p>
-    </div>
 
     <hr>
     <div class="links">
-        <h1>Welcome to the Home Page!</h1>
-
+        <h1>Welcome to the Menu For Manager Page!</h1>
         <a href="/itemSells">Go to Item Sells</a>
-        <a href="/myOrderList">Go to My Orders List</a>
-        <a th:href="@{/editCustomer/{id}(id=${user.id})}">Edit Profile</a>
 
-        <div sec:authorize="hasRole('MANAGER')">
+        <div sec:authorize="hasRole('ADMIN')">
+
             <a href="/addBook">Go to Add Book</a>
             <a href="/bookList">Go to Books List</a>
-            <a href="/customersList">Go to Customers List</a>
             <a href="/orderList">Go to Orders List</a>
-            <a href="/menuOfManager">Go to Menu Of Manager</a>
+            <a href="/customersList">Go to Customers List</a>
+
         </div>
 
-
-
     </div>
+
     <hr>
 
     <div class="logout-form">

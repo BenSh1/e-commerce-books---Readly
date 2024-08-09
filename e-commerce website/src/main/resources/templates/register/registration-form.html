@@ -35,10 +35,60 @@
             text-align: center;
             margin-top: 20px;
         }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade-in transition */
+
+        }
+
+
+        .alert.show {
+            opacity: 1; /* Show alert */
+        }
+
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0; /* Adjust as needed */
+            right: -90px; /* Adjust as needed */
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem; /* Make it larger for easier clicking */
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .alert.alert-warning {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+
+
     </style>
 </head>
 
 <body>
+
+<div id="registrationError" th:if="${registrationError}" class="alert alert-warning alert-dismissible hide" role="alert">
+    <strong>User name Unavailable! </strong> <span th:text="${registrationError}"></span>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
 
 <div class="container">
 
@@ -198,6 +248,7 @@
 
                     <!-- card Expiry Month -->
                     <div class="form-group">
+                        <label>Card expiry month: </label>
                         <input type="text" th:field="*{cardExpiryMonth}" placeholder="Card expiry month (*)" class="form-control" />
                         <div th:if="${#fields.hasErrors('cardExpiryMonth')}" class="text-danger">
                             <ul>
@@ -209,6 +260,7 @@
 
                     <!-- card Expiry Year -->
                     <div class="form-group">
+                        <label>Card expiry year: </label>
                         <input type="text" th:field="*{cardExpiryYear}" placeholder="Card expiry month (*)" class="form-control" />
                         <div th:if="${#fields.hasErrors('cardExpiryYear')}" class="text-danger">
                             <ul>
@@ -235,6 +287,39 @@
     </div>
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var registrationError = document.getElementById('registrationError');
+        if (registrationError) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                registrationError.classList.add('show');
+                registrationError.classList.remove('hide');
+            }, 100);
+
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                registrationError.classList.remove('show');
+                registrationError.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+
+    });
+</script>
+
 
 </body>
 </html>
