@@ -2,12 +2,14 @@ package com.ecommerce.ecommerce.dao;
 
 
 import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.entity.Order;
 import com.ecommerce.ecommerce.entity.OrderDetails;
+import com.ecommerce.ecommerce.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +23,21 @@ public class OrderDaoImpl implements OrderDao {
     public OrderDaoImpl(EntityManager theEntityManager) {
         entityManager = theEntityManager;
     }
+
+
+    @Override
+    @Transactional
+    public void save(Order theOrder ) {
+        //entityManager.persist(theUser);
+        // create the user
+        entityManager.merge(theOrder);
+
+    }
+
+    public Order findOrderById(Long id) {
+        return entityManager.find(Order.class, id);
+    }
+
 
 
     @Override

@@ -2,6 +2,8 @@ package com.ecommerce.ecommerce.entity;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -16,56 +18,127 @@ public class User {
     @Column(name = "id")
     private Long id;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "username")
     private String userName;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "password")
     private String password;
 
     @Column(name = "enabled")
     private boolean enabled;
 
+
+/*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+ */
     @Column(name = "first_name")
     private String firstName;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "phone")
-    private String phone;
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+    @Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
 
+     */
     @Column(name = "email")
     private String email;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 10, message = "Please enter a valid phone number. Valid formats of phone numbers include at least 10 digits ")
+    @Pattern(regexp="^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$" , message = "Please enter a valid phone number. Valid formats include (123) 456-7890, 123.456.7890, or 123 456 7890.")
+    */
+    @Column(name = "phone")
+    private String phone;
+
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "country")
     private String country;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "city")
     private String city;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "streetAddress")
     private String streetAddress;
 
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "apartmentNumber")
     private String apartmentNumber;
 
+
+    /*
+    @NotNull(message = "is required")
+    @Size(min = 1, message = "is required")
+
+     */
     @Column(name = "zipCode")
     private String zipCode;
 
+    /*
+    @NotEmpty(message = "Credit card number is required")
+    @Pattern(regexp = "\\d{16}", message = "Credit card number must be 16 digits")
 
+     */
     @Column(name = "creditCardNumber")
     private String creditCardNumber;
 
+    /*
+    @NotEmpty(message = "Credit card company is required")
 
-
-
-
+     */
     @Column(name = "creditCardCompany")
     private String creditCardCompany;
 
+    /*
+    @Min(value = 1, message = "Month must be between 1 and 12")
+    @Max(value = 12, message = "Month must be between 1 and 12")
+
+     */
     @Column(name = "cardExpiryMonth")
     private Integer  cardExpiryMonth;
 
+    /*
+    @Min(value = 2023, message = "Year must be greater than or equal to the current year")
+
+     */
     @Column(name = "cardExpiryYear")
     private Integer cardExpiryYear;
 
@@ -318,6 +391,8 @@ public class User {
                 ", streetAddress='" + streetAddress + '\'' +
                 ", apartmentNumber='" + apartmentNumber + '\'' +
                 ", zipCode='" + zipCode + '\'' +
+                ", roles='" + roles + '\'' +
+                '}';
                 /*
                 ", creditCardNumber='" + creditCardNumber + '\'' +
                 ", creditCardCompany='" + creditCardCompany + '\'' +
@@ -325,7 +400,7 @@ public class User {
                 ", cardExpiryYear=" + cardExpiryYear +
 
                  */
-                '}';
+
     }
 }
 

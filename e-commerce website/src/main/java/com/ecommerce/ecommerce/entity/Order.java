@@ -21,6 +21,9 @@ public class Order {
     @Column(name="totalAmount")
     private Double totalAmount;
 
+    @Column(name="status")
+    private String status;
+
     /*
     @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
             CascadeType.DETACH, CascadeType.MERGE})
@@ -70,6 +73,13 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
     public User getUser() {
         return user;

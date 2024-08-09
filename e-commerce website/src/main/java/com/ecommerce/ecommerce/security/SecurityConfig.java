@@ -43,14 +43,14 @@ public class SecurityConfig {
                                 .requestMatchers("/","/static/**", "/images/**", "/register/**"
                                         , "/showMyLoginPage","/itemSells"
                                         , "/addBook","/bookList", "/bookList/**","/bookDetails/**" ,
-                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" ).permitAll()  // Allow access to URLs starting with /public
+                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" , "/search", "/filterBooks" ).permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
 
                                 .requestMatchers("/home/**","/home", "/cart",
                                         "/shooping_cart" ,"/editCustomer", "/editCustomer/**").hasRole("CUSTOMER")
 
                                 .requestMatchers( "/addBook","/bookList"
-                                        ,"/leaders/**" , "/customersList").hasRole("MANAGER")
+                                        ,"/leaders/**" , "/customersList", "/orderList", "/menuOfManager").hasRole("MANAGER")
 
                                 .requestMatchers("/systems/**").hasRole("ADMIN")
 
@@ -71,6 +71,7 @@ public class SecurityConfig {
                 )
                 .exceptionHandling(configurer ->
                         configurer.accessDeniedPage("/access-denied")
+
                 );
 
         return http.build();

@@ -69,6 +69,7 @@ public class OrderService {
         double totalAmount = orderDetailsList.stream().mapToDouble(detail -> detail.getPrice() * detail.getQuantity()).sum();
         order.setTotalAmount(totalAmount);
         order.setUser(currentUser);
+        order.setStatus("Pending");
 
         order = orderRepository.save(order);
 

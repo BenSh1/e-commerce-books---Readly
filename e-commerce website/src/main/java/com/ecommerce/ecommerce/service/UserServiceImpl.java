@@ -45,6 +45,7 @@ public class UserServiceImpl implements UserService {
 		this.passwordEncoder = passwordEncoder;
 
 	}
+	@Transactional
 	@Override
 	public void save(WebUser webUser) {
 		User user = new User();
@@ -134,6 +135,18 @@ public class UserServiceImpl implements UserService {
 
 		existingUser.setFirstName(theUser.getFirstName());
 		existingUser.setLastName(theUser.getLastName());
+		existingUser.setPhone(theUser.getPhone());
+		existingUser.setCountry(theUser.getCountry());
+		existingUser.setCity(theUser.getCity());
+		existingUser.setStreetAddress(theUser.getStreetAddress());
+		existingUser.setApartmentNumber(theUser.getApartmentNumber());
+		existingUser.setZipCode(theUser.getZipCode());
+		existingUser.setCreditCardNumber(theUser.getCreditCardNumber());
+		existingUser.setCreditCardCompany(theUser.getCreditCardCompany());
+		existingUser.setCardExpiryMonth(theUser.getCardExpiryMonth());
+		existingUser.setCardExpiryYear(theUser.getCardExpiryYear());
+		existingUser.setEnabled(true);
+
 		/*
 		// give user default role of "customer"
 		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
@@ -170,79 +183,46 @@ public class UserServiceImpl implements UserService {
 			existingUser.setRoles(userRoles);
 		}
 
+		userDao.save(existingUser);
+	}
 
 
-		//List<Role> userRoles = existingUser.getRoles() != null ? new ArrayList<>(existingUser.getRoles()) : new ArrayList<>(); // Create a copy or new list
-		//List<Role> userRoles =  new ArrayList<>(); // Create a copy or new list
-/*
-		Collection<Role> userRoles = existingUser.getRoles();
-		userRoles.contains({2,"ROLE_MANAGER"});
+	@Override
+	public void update(Long id, User theUser) {
 
- */
-/*
+		User existingUser = userDao.findById(id);
+		System.out.println("==================in update in user service================");
+		existingUser.setFirstName(theUser.getFirstName());
+		existingUser.setLastName(theUser.getLastName());
+		existingUser.setPhone(theUser.getPhone());
+		existingUser.setCountry(theUser.getCountry());
+		existingUser.setCity(theUser.getCity());
+		existingUser.setStreetAddress(theUser.getStreetAddress());
+		existingUser.setApartmentNumber(theUser.getApartmentNumber());
+		existingUser.setZipCode(theUser.getZipCode());
+		existingUser.setCreditCardNumber(theUser.getCreditCardNumber());
+		existingUser.setCreditCardCompany(theUser.getCreditCardCompany());
+		existingUser.setCardExpiryMonth(theUser.getCardExpiryMonth());
+		existingUser.setCardExpiryYear(theUser.getCardExpiryYear());
+		existingUser.setEnabled(true);
+
+		//Role newRole = roleDao.findRoleByName(role);
+		existingUser.setRoles(new ArrayList<Role>());
 		List<Role> userRoles = new ArrayList<>();
-
-		if(role.equals("ROLE_CUSTOMER") )
-		{
-			existingUser.setRoles(new ArrayList<Role>() );
-		}
-		else{
-			existingUser.setRoles(new ArrayList<Role>() );
-			if(role.equals("ROLE_MANAGER")){
-				userRoles.add()
-			}
-
-
-			if(role.equals("ROLE_ADMIN")){
-				Collection<Role> collection = existingUser.getRoles();
-				for(Role tempRole : collection)
-				{
-					if(tempRole.equals("ROLE_MANAGER"))
-					{
-
-					}
-				}
-			}
-			userRoles = new ArrayList<>(existingUser.getRoles());
-		}
-		System.out.println("=======================checking========================= ");
-
-		userRoles.add(newRole);
+		List<Role> r = roleDao.getAllRoles();
+		userRoles.add(r.getFirst());
 		existingUser.setRoles(userRoles);
 
-*/
+		/*
+		// give user default role of "customer"
+		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
 
-
-/*
-		Role newRole = roleDao.findRoleByName(role);
-		List<Role> userRoles = existingUser.getRoles() != null ? new ArrayList<>(existingUser.getRoles()) : new ArrayList<>(); // Create a copy or new list
-		userRoles.add(newRole);
-		existingUser.setRoles(userRoles);
-
- */
-
+ 		*/
 
 		userDao.save(existingUser);
 	}
-/*
-	@Override
-	public void save(WebUser webUser) {
-		User user = new User();
-
-		// assign user details to the user object
-		user.setUserName(webUser.getUserName());
-		user.setPassword(passwordEncoder.encode(webUser.getPassword()));
-		user.setFirstName(webUser.getFirstName());
-		user.setLastName(webUser.getLastName());
-		user.setEmail(webUser.getEmail());
-		user.setEnabled(true);
 
 
-		// save user in the database
-		userDao.save(user);
-	}
-
- */
 
 	@Override
 	@Transactional

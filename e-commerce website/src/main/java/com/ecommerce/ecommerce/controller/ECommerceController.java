@@ -42,6 +42,21 @@ public class ECommerceController {
         return "home";
     }
 
+    // add a request mapping for /managers
+    @GetMapping("/menuOfManager")
+    public String showMenuOfManager() {
+        System.out.println("==================================");
+        return "menuOfManager";
+    }
+/*
+    @GetMapping("/access-denied")
+    public String getAccessDeniedPage() {
+        return "access-denied";
+    }
+
+ */
+
+
     @GetMapping("/page1")
     public String getPage1(){
         return "page1";
@@ -72,6 +87,7 @@ public class ECommerceController {
     }
 
      */
+
 
 
 

@@ -90,7 +90,6 @@ public class BookService {
 
     }
 
-
     public List<Book> searchBooks(String query) {
         return bookRepository.findByTitleContainingIgnoreCase(query);
     }

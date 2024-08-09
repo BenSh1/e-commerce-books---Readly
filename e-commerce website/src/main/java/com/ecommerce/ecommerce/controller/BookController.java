@@ -87,9 +87,25 @@ public class BookController {
 
 
 
-    @GetMapping("/itemSells")
-    public String getItems(Model model) {
-        //List<Book> books = bookRepository.findAll();
+    @GetMapping("/itemSells" )
+    public String getItems(Model model , HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+        }
+
+        /*
+        User currentUser = getCurrentUser(session);
+        model.addAttribute("currentUser",currentUser);
+
+        //System.out.println("==========currentUser======" + currentUser.getUserName());
+ */
 
         List<Book> allBooks = bookService.getBooks();
         model.addAttribute("allBooks", allBooks);
@@ -99,7 +115,14 @@ public class BookController {
     }
 
     @GetMapping("/filterBooks")
-    public String filterBooks(@RequestParam("subject") String subject, Model model) {
+    public String filterBooks(@RequestParam("subject") String subject,
+                              Model model, HttpSession session) {
+        System.out.println("==================inside filterBooks==========");
+
+        User currentUser = getCurrentUser(session);
+        model.addAttribute("currentUser",currentUser);
+
+
         List<Book> filteredBooks;
         if (subject != null && !(subject.equals("all")) ) {
             filteredBooks = bookService.getBooksBySubject(subject);
@@ -114,9 +137,13 @@ public class BookController {
 
 
     @GetMapping("/search")
-    public String searchBooks(@RequestParam("query") String query, Model model) {
+    public String searchBooks(@RequestParam("query") String query,
+                              Model model,HttpSession session) {
+
+        User currentUser = getCurrentUser(session);
+        model.addAttribute("currentUser",currentUser);
+
         List<Book> books = bookService.searchBooks(query);
-        //model.addAttribute("books", books);
         model.addAttribute("allBooks", books);
         return "itemSells";
     }
@@ -280,8 +307,25 @@ public class BookController {
 
         return "editBook";
     }
+/*
+    private User getCurrentUser(HttpSession session){
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+        return currentUser;
+    }
 
+ */
 
+    private User getCurrentUser(HttpSession session) {
+        try {
+            return (User) session.getAttribute("currentUser");
+        } catch (Exception e) {
+            // Return null if no user is logged in
+            return null;
+        }
+    }
 
 
 
