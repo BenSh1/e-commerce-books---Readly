@@ -136,6 +136,7 @@
         <th>Category</th>
         <th>Price</th>
         <th>Stock</th>
+        <th>Active/Inactive</th>
         <th>Image</th>
         <th>Action</th>
 
@@ -148,6 +149,8 @@
         <td th:text="${book.category}" class="vertical-line"></td>
         <td th:text="${book.price}" class="vertical-line"></td>
         <td th:text="${book.stock}" class="vertical-line"></td>
+        <td th:text="${book.isActive}" class="vertical-line"></td>
+
         <!--
         <td class="vertical-line"><img th:src="${book.image}"  alt="Item Image"></td>
         -->
@@ -186,6 +189,15 @@
                 <button type="submit">Delete</button>
             </form>
 
+            <form th:action="@{toActive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit">Active</button>
+            </form>
+
+            <form th:action="@{toInactive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                <input type="hidden" name="_method" value="delete" />
+                <button type="submit">Inactive</button>
+            </form>
 
         </td>
 

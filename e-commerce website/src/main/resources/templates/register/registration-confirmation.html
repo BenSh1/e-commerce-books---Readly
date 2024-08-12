@@ -2,25 +2,92 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Registration Confirmation</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			height: 100vh;
+		}
+
+		.confirmation-container {
+			background-color: white;
+			padding: 30px;
+			border-radius: 10px;
+			box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+			text-align: center;
+			max-width: 400px;
+			width: 100%;
+		}
+
+		h2 {
+			color: #28a745;
+			margin-bottom: 20px;
+		}
+
+		ul {
+			list-style-type: none;
+			padding: 0;
+			margin-bottom: 20px;
+		}
+
+		li {
+			background-color: #f8f9fa;
+			margin: 10px 0;
+			padding: 10px;
+			border-radius: 5px;
+			font-size: 16px;
+			color: #333;
+		}
+
+		a {
+			display: inline-block;
+			padding: 10px 20px;
+			background-color: #007bff;
+			color: white;
+			text-decoration: none;
+			border-radius: 5px;
+			transition: background-color 0.3s;
+		}
+
+		a:hover {
+			background-color: #0056b3;
+		}
+
+		hr {
+			border: 0;
+			height: 1px;
+			background: #ddd;
+			margin: 20px 0;
+		}
+	</style>
 </head>
 
 <body>
 
-	<h2>User registered successfully!</h2>
+<div class="confirmation-container">
+	<h2>User Registered Successfully!</h2>
 
-	<!-- display first name, last name and email -->
+	<!-- Display first name, last name, and email -->
 	<ul>
-		<li th:text="'User name: ' + ${webUser.userName}"></li>
-		<li th:text="'First name: ' + ${webUser.firstName}"></li>
-		<li th:text="'Last name: ' + ${webUser.lastName}"></li>
-		<li th:text="'Email name: ' + ${webUser.email}"></li>
+		<li th:text="'User Name: ' + ${webUser.userName}"></li>
+		<li th:text="'First Name: ' + ${webUser.firstName}"></li>
+		<li th:text="'Last Name: ' + ${webUser.lastName}"></li>
+		<li th:text="'Email: ' + ${webUser.email}"></li>
 	</ul>
 
 	<hr>
-	
-	<a th:href="@{/showMyLoginPage}">Login with new user name</a>
-	
+
+	<a th:href="@{/showMyLoginPage}">Login with New Username</a>
+</div>
+
 </body>
 
 </html>

@@ -231,6 +231,42 @@
             justify-content: space-between;
             gap: 10px;
         }
+
+        strong, .user-name {
+            font-family: Arial, sans-serif; /* Choose your desired font */
+            font-size: 20px; /* Adjust font size as needed */
+            font-weight: bold; /* Optional, if you want to override strong's default bold */
+            color: #333; /* Adjust text color */
+        }
+
+        /*================================*/
+        /* Flex container for the buttons */
+        .button-container {
+            display: flex;
+            justify-content: center; /* Center align the buttons */
+            gap: 15px; /* Space between the buttons */
+            margin-bottom: 20px;
+        }
+
+        /* Group navigation buttons */
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Group action buttons */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Styling for individual buttons */
+        .button-container button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
     </style>
 </head>
 
@@ -239,44 +275,47 @@
     <h2>Items for Sale</h2>
 </header>
 
-<div th:if="${currentUser != null}">
-    Hello <span class="user-name" th:text="${currentUser.userName}"></span>
-    <a th:href="@{/editCustomer/{id}(id=${currentUser.id})}" class="edit-link">Edit Profile</a>
 
-    <a href="#" class="logout-link">Log Out</a>
-</div>
-<div th:if="${currentUser == null}">
-    Welcome, Guest!
-</div>
 
 
 <div class="nav-links">
-    <div sec:authorize="!hasRole('CUSTOMER') and !hasRole('MANAGER') and !hasRole('ADMIN')"  >
-        <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
-        <br><br>
-        <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
+
+    <div th:if="${currentUser != null}">
+        <strong> Hello <span class="user-name" th:text="${currentUser.userName}"></span> </strong>
+
+        <div class="button-container">
+            <div class="action-buttons">
+                <a th:href="@{/editCustomer/{id}(id=${currentUser.id})}" class="btn btn-primary">Edit Profile</a>
+                <a th:href="@{/myOrderList}" class="btn btn-primary">My Order List</a>
+                <div sec:authorize="hasRole('MANAGER') or hasRole('ADMIN')">
+                    <a th:href="@{/menuForManager}" class="btn btn-primary">Menu For Manager</a>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="button-container">
+            <div class="nav-buttons">
+                <a th:href="@{/home}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Home</a>
+                <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
+                <a th:href="@{cart}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Go to Cart</a>
+            </div>
+        </div>
+
+        <form action="#" th:action="@{/logout}" method="POST" class="logout-form">
+            <input type="submit" value="Logout" class="btn btn-danger" />
+        </form>
     </div>
 
-
-
-    <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
-
-        <a th:href="@{/home}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Home</a>
-        <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
-        <a th:href="@{cart}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Go to Cart</a>
-
-        <!-- ========================================= -->
-
-        <div class="logout-form">
-            <form action="#" th:action="@{/logout}" method="POST" >
-                <input type="submit" value="Logout" />
-            </form>
-        </div>
+    <div th:if="${currentUser == null}">
+        Welcome, Guest!
+        <br>
+        <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
+        <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
     </div>
 </div>
 
 <hr>
-
 <div class="form-container">
     <!-- Dropdown for subject selection -->
     <form th:action="@{/filterBooks}" method="get" class="form-group">
@@ -317,7 +356,7 @@
 </div>
 
 
-
+<br>
 
 <div class="item-list">
     <div class="item" th:each="book : ${allBooks} ">
@@ -346,8 +385,10 @@
         </form>
 
 
+        <!--
         <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
-
+        -->
+        <div th:if="${currentUser != null}">
             <!-- Add to Cart Button -->
             <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post">
                 <input type="hidden" th:name="bookId" th:value="${book.bookId}" />

@@ -251,8 +251,10 @@
         </div>
     </div>
 
+    <!--
     <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
-
+    -->
+    <div th:if="${currentUser != null}">
         <!-- Add the form for selecting quantity and adding to cart -->
         <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post" class="buy-form">
             <input type="hidden" name="bookId" th:value="${book.bookId}"/>
