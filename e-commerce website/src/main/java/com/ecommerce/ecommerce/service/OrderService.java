@@ -30,7 +30,7 @@ public class OrderService {
 
     @Transactional
     public List<Order> getAllMyOrdersWithDetails(User user) {
-        
+
         //the error is in here i must to exchange it to addDao and write jdbc query
         List<Order> orders = orderRepository.findAll();
         // Ensure orderDetails are initialized

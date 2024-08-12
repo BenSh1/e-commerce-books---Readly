@@ -1,29 +1,24 @@
-package com.ecommerce.ecommerce.service;
+package com.ecommerce.ecommerce.ben;
 
 import com.ecommerce.ecommerce.dao.RoleDao;
 import com.ecommerce.ecommerce.dao.UserDao;
-import com.ecommerce.ecommerce.entity.Book;
-import com.ecommerce.ecommerce.entity.Customer;
+import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.service.UserService;
 import com.ecommerce.ecommerce.user.WebUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -36,7 +31,12 @@ public class UserServiceImpl implements UserService {
 
 	private RoleDao roleDao;
 
-    private BCryptPasswordEncoder passwordEncoder;
+	private BCryptPasswordEncoder passwordEncoder;
+/*
+	@Autowired
+	private JavaMailSender mailSender;
+
+ */
 
 	@Autowired
 	public UserServiceImpl(UserDao userDao, RoleDao roleDao , BCryptPasswordEncoder passwordEncoder) {
@@ -190,6 +190,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void update(Long id, User theUser) {
 
+		//=================
+
 		User existingUser = userDao.findById(id);
 		System.out.println("==================in update in user service================");
 		existingUser.setFirstName(theUser.getFirstName());
@@ -242,9 +244,32 @@ public class UserServiceImpl implements UserService {
 		}
 
  */
-
-
 	}
+
+	public boolean changeUserPassword(String username, PasswordChangeDto passwordChangeDto) {
+		//User user = userRepository.findByUsername(username);
+		User user = userDao.findByUserName(username);
+
+
+		// Check if current password matches
+		if (!passwordEncoder.matches(passwordChangeDto.getCurrentPassword(), user.getPassword())) {
+			return false; // Current password doesn't match
+		}
+
+		// Check if new password and confirm password match
+		if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getConfirmPassword())) {
+			return false; // New password and confirm password don't match
+		}
+
+		// Encode and set the new password
+		user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+		//userRepository.save(user);
+		userDao.save(user);
+
+		return true;
+	}
+
+
 /*
 	public String getCurrentCustomerUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -288,6 +313,9 @@ public class UserServiceImpl implements UserService {
     }
 
 	 */
+
+
+
 
 
 }

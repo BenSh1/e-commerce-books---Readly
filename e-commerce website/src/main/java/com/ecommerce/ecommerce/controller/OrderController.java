@@ -1,13 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
-import com.ecommerce.ecommerce.dao.OrderDao;
-import com.ecommerce.ecommerce.dao.OrderDetailsRepository;
-import com.ecommerce.ecommerce.dao.OrderRepository;
-import com.ecommerce.ecommerce.dao.UserDao;
-import com.ecommerce.ecommerce.entity.CartItems;
-import com.ecommerce.ecommerce.entity.Order;
-import com.ecommerce.ecommerce.entity.OrderDetails;
-import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.dao.*;
+import com.ecommerce.ecommerce.entity.*;
 import com.ecommerce.ecommerce.service.CartService;
 import com.ecommerce.ecommerce.service.OrderService;
 import jakarta.servlet.http.HttpSession;
@@ -45,6 +39,8 @@ public class OrderController {
     @Autowired
     private UserDao userDao;
 
+    @Autowired
+    private BookDao bookDao;
 
     @Autowired
     private OrderDao orderDao;
@@ -123,6 +119,13 @@ public class OrderController {
 
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
+
+        //update the stock for each book in the cartItems
+        for(CartItems cartItem : cartItems) {
+            Book book = bookDao.findById((long)cartItem.getBook().getBookId());
+            book.setStock(book.getStock() - cartItem.getQuantity());
+            bookDao.save(book);
+        }
 
         List<OrderDetails> orderDetails = cartItems.stream().map(cartItem -> {
             OrderDetails orderDetail = new OrderDetails();

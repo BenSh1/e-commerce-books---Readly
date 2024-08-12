@@ -9,6 +9,7 @@ import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
+import com.ecommerce.ecommerce.service.OrderService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.servlet.http.HttpSession;
@@ -28,17 +29,7 @@ public class BookController {
 
     @Autowired
     private BookService bookService;
-/*
-    @Autowired
-    private BookRepository bookRepository;
 
- */
-
-    @Autowired
-    @PersistenceContext
-    private EntityManager entityManager;
-
-    private static String UPLOADED_FOLDER = "src/main/resources/static/images/";
 
     @Autowired
     private BookDao bookDao;
@@ -46,31 +37,25 @@ public class BookController {
     @Autowired
     private CartService cartService;
 
+    @Autowired
+    private OrderService orderService;
+
     @GetMapping("/addBook")
-    public String addBookForm(Model model) {
+    public String getAddBookForm(Model model) {
         model.addAttribute("book",new Book());
         System.out.println("addBookForm");
         return "addBook";
     }
     @PostMapping("/addBook")
-    public String addBook(@ModelAttribute Book theBook) {
-        /*
-        try{
-            bookService.addBook(theBook);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-         */
+    public String addBookForm(@ModelAttribute Book theBook) {
+        theBook.setIsActive("active");
         bookService.addBook(theBook);
-        //bookRepository.save(theBook);
         return "redirect:/bookList";
     }
 
     @GetMapping("/bookList")
     public String listBooks(Model model) {
-        //List<Book> books = bookService.getBooks();
-        //List<Book> books = bookRepository.findAll();
+
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
 
@@ -100,14 +85,9 @@ public class BookController {
             model.addAttribute("currentUser",currentUser);
         }
 
-        /*
-        User currentUser = getCurrentUser(session);
-        model.addAttribute("currentUser",currentUser);
+        //List<Book> allBooks = bookService.getBooks();
+        List<Book> allBooks = bookService.getBooksExceptInactive();
 
-        //System.out.println("==========currentUser======" + currentUser.getUserName());
- */
-
-        List<Book> allBooks = bookService.getBooks();
         model.addAttribute("allBooks", allBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
 
@@ -119,9 +99,15 @@ public class BookController {
                               Model model, HttpSession session) {
         System.out.println("==================inside filterBooks==========");
 
-        User currentUser = getCurrentUser(session);
-        model.addAttribute("currentUser",currentUser);
-
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+        }
 
         List<Book> filteredBooks;
         if (subject != null && !(subject.equals("all")) ) {
@@ -140,8 +126,15 @@ public class BookController {
     public String searchBooks(@RequestParam("query") String query,
                               Model model,HttpSession session) {
 
-        User currentUser = getCurrentUser(session);
-        model.addAttribute("currentUser",currentUser);
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+        }
 
         List<Book> books = bookService.searchBooks(query);
         model.addAttribute("allBooks", books);
@@ -160,13 +153,10 @@ public class BookController {
         boolean isAvailable = bookService.isBookAvailable(id);
 
         if (isAvailable) {
-            System.out.println("------------in addItemToCart--------------------------------------------------");
-            //System.out.println("id: " + id );
             User currentUser = (User) session.getAttribute("user");
             if (currentUser == null) {
                 throw new RuntimeException("User not logged in");
             }
-
 
             List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
 
@@ -198,8 +188,6 @@ public class BookController {
     }
 
 
-
-
     @PostMapping("bookDetails/itemSells/{id}")
     public String addItemToCartFromDetailBook(Model model,
                                               HttpSession session ,
@@ -210,44 +198,59 @@ public class BookController {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-
-        boolean isExistTheBookId = false;
-
-        // Check if the book is available in the inventory
-        boolean isAvailable = bookService.isBookAvailable(id);
-
-
-        if (isAvailable) {
-
-            List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
-
-            for(CartItems tempItem : cartItemsList) {
-                if (tempItem.getBook().getBookId() == id) {
-                    isExistTheBookId = true;
-                    break;
-                }
-            }
-            if (isExistTheBookId) {
-                redirectAttributes.addFlashAttribute("warningMessage", "Book is already in the cart!");
-            }
-            else{
-                cartService.addToCart(currentUser,id);
-                //cartService.addToCartWithQuantity(currentUser,id,quantity);
-                redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
-            }
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
         }
         else{
-            redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+
+            boolean isExistTheBookId = false;
+
+            // Check if the book is available in the inventory
+            boolean isAvailable = bookService.isBookAvailable(id);
+
+
+            if (isAvailable) {
+
+                List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
+
+                for(CartItems tempItem : cartItemsList) {
+                    if (tempItem.getBook().getBookId() == id) {
+                        isExistTheBookId = true;
+                        break;
+                    }
+                }
+                if (isExistTheBookId) {
+                    redirectAttributes.addFlashAttribute("warningMessage", "Book is already in the cart!");
+                }
+                else{
+                    cartService.addToCart(currentUser,id);
+                    //cartService.addToCartWithQuantity(currentUser,id,quantity);
+                    redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
+                }
+            }
+            else{
+                redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
+            }
         }
-
-
         return "redirect:/bookDetails/{id}"; // Redirect back to the items sell page
     }
 
     @GetMapping("/bookDetails/{id}")
-    public String bookDetails(@PathVariable Long id, Model model) {
+    public String bookDetails(@PathVariable Long id, Model model,
+                              HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser", currentUser);
+        }
+
         Book book = bookService.getBook(id);
         model.addAttribute("book", book);
         return "bookDetails";
@@ -265,8 +268,7 @@ public class BookController {
                              @ModelAttribute Book theBook,
                              RedirectAttributes redirectAttributes) {
 
-        /*Book book = bookService.getBook(id);
-        model.addAttribute("book", book);*/
+
         bookService.update(id, theBook);
         redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
         return "redirect:/bookList";
@@ -274,9 +276,28 @@ public class BookController {
 
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        System.out.println("==================================================");
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
+        return "redirect:/bookList";
+    }
+
+    @PostMapping("/toActive/{id}")
+    public String changeBookToActive(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Book book = bookService.getBook(id);
+        book.setIsActive("active");
+        bookDao.save(book);
+        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+
+        return "redirect:/bookList";
+    }
+
+    @PostMapping("/toInactive/{id}")
+    public String changeBookToInactive(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Book book = bookService.getBook(id);
+        book.setIsActive("inactive");
+        bookDao.save(book);
+        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+
         return "redirect:/bookList";
     }
 

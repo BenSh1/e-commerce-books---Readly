@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -45,7 +46,29 @@ public class BookService {
  */
 
     public List<Book> getBooks() {
+
+        return bookDao.findAll();
+    }
+
+
+    public List<Book> getBooksExceptInactive() {
         List<Book> books = bookDao.findAll();
+/*
+        for(Book book : books){
+            if(!book.getIsActive().equals("active")){
+                books.remove(book);
+            }
+        }
+
+ */
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (!book.getIsActive().equals("active")) {
+                iterator.remove(); // Safe removal
+            }
+        }
+
 
         return books;
     }

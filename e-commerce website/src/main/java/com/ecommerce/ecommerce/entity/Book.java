@@ -46,6 +46,9 @@ public class Book {
     private String image;
 
 
+    @Column(name="isActive")
+    private String isActive;
+
     public Book() {
 
     }
@@ -177,6 +180,15 @@ public class Book {
 
     public void setStock(int stock) {
         this.stock = stock;
+    }
+
+
+    public String getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(String isActive) {
+        this.isActive = isActive;
     }
 
     @Override

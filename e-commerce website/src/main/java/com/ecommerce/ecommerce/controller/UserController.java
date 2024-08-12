@@ -4,7 +4,7 @@ package com.ecommerce.ecommerce.controller;
 import com.ecommerce.ecommerce.dao.RoleDao;
 import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.dao.UserDaoImpl;
-import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.UserService;
@@ -22,15 +22,21 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 public class UserController {
 
     final int SECOND_ITEM_IN_ROLES_LIST  = 1;
     final int THIRD_ITEM_IN_ROLES_LIST  = 2;
+
+    private Logger logger = Logger.getLogger(getClass().getName());
+
+
 
     @Autowired
     private UserService userService;
@@ -72,12 +78,14 @@ public class UserController {
 
     @GetMapping("/editCustomer/{id}")
     public String editCustomer(@PathVariable Long id,
+                               /*@Valid @ModelAttribute("user") User theUser,*/
                                Model model,
                                HttpSession session) {
         //WebUser webUser = userService.getCustomer(id);
         System.out.println("--------------------------------------------------------");
         User user = userService.getUser(id);
         model.addAttribute("user", user);
+        //model.addAttribute("user", user);
 
         User currentUser = getCurrentUser(session);
         //System.out.println("===========in editCustomer ===========");
@@ -119,6 +127,7 @@ public class UserController {
     /*
         edit with the same role of the member of the site.
      */
+
     @Transactional
     @PostMapping("/editCustomer/{id}")
     public String updateCustomer(Model model , @PathVariable Long id,
@@ -143,6 +152,31 @@ public class UserController {
     }
 
 
+/*
+    @PostMapping("/editCustomer/{id}")
+    public String updateCustomer2(@Valid @ModelAttribute("user") User user,
+                                  BindingResult theBindingResult,
+                                  @PathVariable Long id,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+
+        System.out.println("==================in updateCustomer2 ===========");
+
+        if (theBindingResult.hasErrors()) {
+            System.out.println("==================in hasErrors ===========");
+            model.addAttribute("user", user);
+            //return "editCustomerForm"; // Replace with your form view name
+            return "redirect:/editCustomer/" + id;
+        }
+
+        userService.update(id, user);
+        redirectAttributes.addFlashAttribute("updateMessage", "The User has been updated successfully!");
+        return "redirect:/editCustomer/" + id;
+    }
+
+ */
+
+
 
 /*
     @InitBinder
@@ -155,32 +189,34 @@ public class UserController {
 
  */
 
-
-
-    @PostMapping("/editCustomer2/{id}")
+/*
+    @PostMapping("/editCustomer/{id}")
     public String updateCustomer2(Model model , @PathVariable Long id,
-                                 /*@ModelAttribute User theUser,*/
-                                 RedirectAttributes redirectAttributes
-                                 /*BindingResult theBindingResult,*/
-                                 /*@Valid @ModelAttribute("user") User user*/) {
+                                 RedirectAttributes redirectAttributes,
+                                @Valid @ModelAttribute("user") User user,
+                                BindingResult theBindingResult) {
 
         System.out.println("==================in editCustomer ===========");
 
+        // Handle form data
+        String userName = user.getUserName();
+        logger.info("Processing EDIT form for: " + userName);
+
+        User tempUser = userService.getUser(id);
+        logger.info("Processing EDIT form for: " + tempUser.getUserName());
+
+
         // form validation
-        /*
         if (theBindingResult.hasErrors()){
             System.out.println("==================in hasErrors ===========");
-
-            User user = userService.getUser(id);
-            model.addAttribute("user", user);
-            return "redirect:/home";
-            //return "redirect:/editCustomer/" + id;
+            User currentUser = userService.getUser(id);
+            model.addAttribute("user", currentUser);
+            //return "redirect:/home";
+            return "redirect:/editCustomer/" + id;
         }
 
-         */
-
         //userService.update(id, theUser);
-        User user = userService.getUser(id);
+        User currentUser = userService.getUser(id);
         userService.update(id, user);
 
         redirectAttributes.addFlashAttribute("updateMessage", "The User has been updated successfully!");
@@ -189,6 +225,8 @@ public class UserController {
         return "redirect:/editCustomer/" + id;
 
     }
+
+ */
 
     @PostMapping("/updateRankToCustomer/{id}")
     public String updateRankToCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -255,7 +293,72 @@ public class UserController {
     }
 
 
+    @GetMapping("/changePassword")
+    public String changePassword(  Model model) {
 
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto();
+        model.addAttribute("passwordChangeDto",passwordChangeDto);
+
+        return "changePassword";
+    }
+
+
+    @PostMapping("/changePassword")
+    public String changePassword(@ModelAttribute PasswordChangeDto passwordChangeDto, Principal principal, Model model) {
+        String username = principal.getName();
+        boolean success = userService.changeUserPassword(username, passwordChangeDto);
+        System.out.println("=======in changePassword=======================");
+        System.out.println("username : " + username);
+
+        if (success) {
+            model.addAttribute("message", "Password changed successfully.");
+            System.out.println("==========successfully============");
+        } else {
+            model.addAttribute("error", "Password change failed. Please try again.");
+            System.out.println("============failed============");
+
+        }
+
+        return "changePassword";
+    }
+/*
+    @GetMapping("/forgetPassword")
+    public String getForgotPassword() {
+
+        return "forgetPassword";
+    }
+
+ */
+/*
+    @PostMapping("/forgotPassword")
+    public String processForgotPassword(Model model, String email) {
+        // Find user by email
+        User user = userService.findUserByEmail(email);
+
+        if (user == null) {
+            model.addAttribute("error", "No account found with that email.");
+            return "forgotPassword";
+        }
+
+        // Generate reset token
+        String token = UUID.randomUUID().toString();
+        userService.createPasswordResetTokenForUser(user, token);
+
+        // Create the email
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Password Reset Request");
+        mailMessage.setText("To reset your password, click the link below:\n"
+                + "http://localhost:8080/resetPassword?token=" + token);
+
+        // Send the email
+        mailSender.send(mailMessage);
+
+        model.addAttribute("message", "Password reset link sent to your email.");
+        return "forgotPassword";
+    }
+
+ */
 
 
 

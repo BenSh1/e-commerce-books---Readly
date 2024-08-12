@@ -6,7 +6,6 @@ import com.ecommerce.ecommerce.service.CartService;
 import com.ecommerce.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -36,11 +35,9 @@ public class CartController {
                                    @AuthenticationPrincipal Authentication authentication)
     {
         User currentUser = (User) session.getAttribute("user");
-        //User user = userService.get
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
@@ -53,8 +50,10 @@ public class CartController {
         model.addAttribute("pageTitle", "Shopping Cart");
         model.addAttribute("totalAmount",totalAmount);
 
+        String title = currentUser.getUserName() + "'s Cart List";
+        model.addAttribute("title", title);
 
-        return "shooping_cart";
+        return "shopping_cart";
     }
 
     @PostMapping("/remove/{id}")
@@ -63,12 +62,9 @@ public class CartController {
                                    RedirectAttributes redirectAttributes) {
 
         User currentUser = (User) session.getAttribute("user");
-        //User user = userService.get
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
-
 
         cartService.removeBookFromCart(id, currentUser);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
@@ -91,19 +87,20 @@ public class CartController {
         // Update the quantity in the cart
         cartService.updateQuantity(currentUser, bookId, quantity);
 
+
         // Reload the cart view
         List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
         model.addAttribute("cartItems", cartItemsList);
         double totalAmount = cartItemsList.stream().mapToDouble(item -> item.getBook().getPrice() * item.getQuantity()).sum();
         model.addAttribute("totalAmount", totalAmount);
 
-        return "shooping_cart";
+        return "shopping_cart";
     }
 
     private User getCurrentUser(HttpSession session) {
         // Get the current user
         User currentUser = (User) session.getAttribute("user");
-        //User user = userService.get
+
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }

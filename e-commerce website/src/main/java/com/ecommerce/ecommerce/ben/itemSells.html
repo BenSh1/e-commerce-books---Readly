@@ -266,6 +266,30 @@
             </form>
         </div>
     </div>
+
+    <!--
+    <div sec:authorize="!hasRole('CUSTOMER') and !hasRole('MANAGER') and !hasRole('ADMIN')"  >
+        <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
+        <br><br>
+        <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
+    </div>
+    -->
+
+    <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
+        <!--
+        <a th:href="@{/home}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Home</a>
+        <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
+        <a th:href="@{cart}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Go to Cart</a>
+        -->
+        <!-- ========================================= -->
+        <!--
+        <div class="logout-form">
+            <form action="#" th:action="@{/logout}" method="POST" >
+                <input type="submit" value="Logout" />
+            </form>
+        </div>
+        -->
+    </div>
 </div>
 
 <hr>

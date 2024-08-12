@@ -1,9 +1,8 @@
-package com.ecommerce.ecommerce.service;
-
+package com.ecommerce.ecommerce.ben;
+/*
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.user.WebUser;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
@@ -32,6 +31,8 @@ public interface UserService extends UserDetailsService {
 	boolean changeUserPassword(String username, PasswordChangeDto passwordChangeDto);
 
 }
+
+ */
 
 
 

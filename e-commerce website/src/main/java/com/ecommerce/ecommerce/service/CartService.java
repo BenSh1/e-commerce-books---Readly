@@ -134,13 +134,19 @@ public class CartService {
         cartItemsRepository.deleteAll(cartItems);
     }
 
-
+    @Transactional
     public void updateQuantity(User user, Long bookId, int quantity) {
-        CartItems cartItem = cartItemsRepository.findByUserAndBookId(user, bookId);
-        if (cartItem != null) {
-            cartItem.setQuantity(quantity);
-            cartItemsRepository.save(cartItem);
+        Book book = bookDao.findById(bookId);
+
+        if(book.getStock() - quantity >= 0)
+        {
+            CartItems cartItem = cartItemsRepository.findByUserAndBookId(user, bookId);
+            if (cartItem != null) {
+                cartItem.setQuantity(quantity);
+                cartItemsRepository.save(cartItem);
+            }
         }
+
     }
 
 

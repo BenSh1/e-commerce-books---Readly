@@ -43,7 +43,8 @@ public class SecurityConfig {
                                 .requestMatchers("/","/static/**", "/images/**", "/register/**"
                                         , "/showMyLoginPage","/itemSells"
                                         , "/addBook","/bookList", "/bookList/**","/bookDetails/**" ,
-                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" , "/search", "/filterBooks" ).permitAll()  // Allow access to URLs starting with /public
+                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" , "/search", "/filterBooks"
+                                ,"/forgetPassword").permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
 
                                 .requestMatchers("/home/**","/home", "/cart",
