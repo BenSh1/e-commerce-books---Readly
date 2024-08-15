@@ -27,9 +27,11 @@ public class OrderController {
 
     @Autowired
     private OrderService orderService;
+
     @Autowired
     private CartService cartService;
 
+    /*
     @Autowired
     private OrderRepository orderRepository;
 
@@ -39,6 +41,8 @@ public class OrderController {
     @Autowired
     private UserDao userDao;
 
+     */
+
     @Autowired
     private BookDao bookDao;
 
@@ -47,7 +51,7 @@ public class OrderController {
 
 
     @GetMapping("/orderList")
-    public String getOrderList(Model model) {
+    public String getOrderListPage(Model model) {
         List<Order> orders = orderService.getAllOrdersWithDetails();
         model.addAttribute("orders", orders);
 
@@ -56,8 +60,6 @@ public class OrderController {
 
         return "orderList";
     }
-
-
 
     @GetMapping("/myOrderList")
     public String getOrderListPerUser(Model model ,HttpSession session) {
@@ -75,17 +77,7 @@ public class OrderController {
 
         return "myOrderList";
     }
-    /*
-    @GetMapping("/updateToSupplied/{id}")
-    public String updateToSupplied(Model model ,
-                                   @PathVariable Long id) {
 
-
-        return "orderList";
-
-    }
-
-     */
     @Transactional
     @PostMapping("/updateToSupplied/{id}")
     public String updateToSupplied(Model model ,
@@ -103,8 +95,6 @@ public class OrderController {
 
         return "redirect:/orderList";
     }
-
-
 
     @PostMapping("/addOrder")
     public String addOrder(Model model, HttpSession session ,
@@ -135,8 +125,6 @@ public class OrderController {
 
             return orderDetail;
         }).collect(Collectors.toList());
-
-
 
         Order order = orderService.createOrder(orderDetails, currentUser);
         model.addAttribute("order", order);

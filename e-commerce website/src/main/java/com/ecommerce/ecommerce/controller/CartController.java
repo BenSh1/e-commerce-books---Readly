@@ -71,9 +71,6 @@ public class CartController {
         return "redirect:/cart";
     }
 
-
-
-
     @PostMapping("/updateQuantity")
     public String updateQuantity(@RequestParam("bookId") Long bookId,
                                  @RequestParam("quantity") int quantity,
@@ -86,7 +83,6 @@ public class CartController {
 
         // Update the quantity in the cart
         cartService.updateQuantity(currentUser, bookId, quantity);
-
 
         // Reload the cart view
         List<CartItems> cartItemsList = cartService.getCartForUser(currentUser);
@@ -106,6 +102,5 @@ public class CartController {
         }
         return currentUser;
     }
-
 
 }

@@ -49,7 +49,7 @@ public class RegistrationController {
 
         return "register/registration-form";
     }
-
+/*
     @GetMapping("/showRegistrationForm2")
     public String showMyRegisterPage2(
             @Valid @ModelAttribute("webUser") WebUser theWebUser,
@@ -61,6 +61,8 @@ public class RegistrationController {
 
         return "register/registration-form2";
     }
+
+ */
 
 
     @PostMapping("/processRegistrationForm")

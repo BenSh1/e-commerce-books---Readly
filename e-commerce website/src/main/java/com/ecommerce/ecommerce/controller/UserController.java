@@ -282,16 +282,12 @@ public class UserController {
 
     }
 
-
-
-
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         userService.deleteUser(id);
         redirectAttributes.addFlashAttribute("message", "User deleted successfully!");
         return "redirect:/customersList";
     }
-
 
     @GetMapping("/changePassword")
     public String changePassword(  Model model) {

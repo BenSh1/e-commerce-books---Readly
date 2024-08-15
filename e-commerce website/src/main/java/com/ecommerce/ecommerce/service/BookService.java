@@ -53,14 +53,7 @@ public class BookService {
 
     public List<Book> getBooksExceptInactive() {
         List<Book> books = bookDao.findAll();
-/*
-        for(Book book : books){
-            if(!book.getIsActive().equals("active")){
-                books.remove(book);
-            }
-        }
 
- */
         Iterator<Book> iterator = books.iterator();
         while (iterator.hasNext()) {
             Book book = iterator.next();
@@ -114,10 +107,19 @@ public class BookService {
     }
 
     public List<Book> searchBooks(String query) {
-        return bookRepository.findByTitleContainingIgnoreCase(query);
+        List<Book> books = bookRepository.findByTitleContainingIgnoreCase(query);
+
+        Iterator<Book> iterator = books.iterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (!book.getIsActive().equals("active")) {
+                iterator.remove(); // Safe removal
+            }
+        }
+        return books;
+
+        //return bookRepository.findByTitleContainingIgnoreCase(query);
     }
-
-
 
     public boolean isBookAvailable(Long id){
         Book existingBook = bookDao.findById(id);
@@ -126,7 +128,18 @@ public class BookService {
 
 
     public List<Book> getBooksBySubject(String subject) {
-        return bookRepository.findByCategory(subject);
+        List<Book> allBooksRelatedToSubject = bookRepository.findByCategory(subject);
+
+        Iterator<Book> iterator = allBooksRelatedToSubject.iterator();
+        while (iterator.hasNext()) {
+            Book book = iterator.next();
+            if (!book.getIsActive().equals("active")) {
+                iterator.remove(); // Safe removal
+            }
+        }
+        //return bookRepository.findByCategory(subject);
+
+        return allBooksRelatedToSubject;
 
     }
 

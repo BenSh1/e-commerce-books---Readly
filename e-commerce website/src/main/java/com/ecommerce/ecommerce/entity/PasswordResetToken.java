@@ -1,5 +1,5 @@
 package com.ecommerce.ecommerce.entity;
-
+/*
 import jakarta.persistence.*;
 
 //import javax.persistence.*;
@@ -56,3 +56,5 @@ public class PasswordResetToken {
 }
 
 
+
+ */
