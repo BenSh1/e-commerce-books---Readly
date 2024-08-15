@@ -3,124 +3,96 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menu For Manager</title>
+    <title >Menu Of Manager </title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f2f5;
+            background-color: #f4f4f4;
             color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-
         header {
-            background-color: #007bff;
+            background-color: #343a40;
             color: white;
-            padding: 15px;
+            padding: 10px 0;
             text-align: center;
-            border-radius: 8px 8px 0 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-
-        h1 {
-            color: #007bff;
+        h1{
+            color: #4CAF50;
             text-align: center;
-            font-size: 2em;
-            margin-top: 20px;
         }
 
         h2 {
             color: white;
-            margin: 0;
-            font-size: 1.5em;
-        }
-
-        .content {
-            width: 100%;
-            max-width: 600px;
-            padding: 30px;
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        p {
-            margin: 10px 0 30px;
-            padding: 0;
-            line-height: 1.6;
-            font-size: 1.1em;
             text-align: center;
         }
-
         hr {
             border: 0;
             height: 1px;
             background: #ddd;
-            margin: 30px 0;
+            margin: 20px 0;
         }
-
-        .links {
-            text-align: center;
-        }
-
-        .links a {
-            display: inline-block;
+        p {
             margin: 10px 0;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
+            padding: 0;
+            line-height: 1.5;
+        }
+        .content {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
             border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        a {
+            color: #4CAF50;
             text-decoration: none;
             font-weight: bold;
-            transition: background-color 0.3s ease;
         }
-
-        .links a:hover {
-            background-color: #0056b3;
+        a:hover {
+            text-decoration: underline;
         }
-
         .logout-form {
             text-align: center;
-            margin-top: 20px;
+            margin: 20px 0;
         }
-
         .logout-form input[type="submit"] {
-            background-color: #dc3545;
+            background-color: #f44336;
             color: white;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 5px;
-            font-size: 1em;
             transition: background-color 0.3s ease;
         }
-
         .logout-form input[type="submit"]:hover {
-            background-color: #c82333;
+            background-color: #d32f2f;
+        }
+
+        .links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
         }
 
     </style>
 </head>
 <body>
 
-<!--
 <header>
     <h2>Menu For Manager</h2>
 </header>
--->
-
-
 <div class="content">
-    <h1>Welcome to the Menu For Manager Page!</h1>
-    <p>Manage your books, orders, and customers from here.</p>
+    <p>Welcome to the Menu For Manager page!</p>
     <hr>
 
+    <hr>
     <div class="links">
+        <h1>Welcome to the Menu For Manager Page!</h1>
         <a href="/itemSells">Go to Item Sells</a>
 
         <div sec:authorize="hasRole('MANAGER')">
@@ -132,7 +104,8 @@
         <div sec:authorize="hasRole('ADMIN')">
             <a href="/customersList">Go to Customers List</a>
         </div>
-    </div>
+
+        </div>
 
     <hr>
 

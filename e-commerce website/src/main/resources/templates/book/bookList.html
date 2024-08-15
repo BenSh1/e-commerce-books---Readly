@@ -119,9 +119,8 @@
     <h2>Book List</h2>
 </header>
 
-<a href="/addBook">Add book</a>
-<a href="/menuForManager">Menu for Managers</a>
-
+<a href="/addBook">Go to Add book</a>
+<a href="/home">Go to Home</a><br><br>
 <hr>
 
 
@@ -184,12 +183,12 @@
         <td class="vertical-line" style="white-space:nowrap">
 
             <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
-<!--
+
             <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
                 <input type="hidden" name="_method" value="delete" />
                 <button type="submit">Delete</button>
             </form>
--->
+
             <form th:action="@{toActive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
                 <input type="hidden" name="_method" value="delete" />
                 <button type="submit">Active</button>

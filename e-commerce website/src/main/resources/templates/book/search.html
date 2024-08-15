@@ -1,0 +1,23 @@
+<!-- search.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search Books</title>
+</head>
+<body>
+<form th:action="@{/search}" method="get">
+    <input type="text" name="query" placeholder="Search for books...">
+    <button type="submit">Search</button>
+</form>
+
+<div th:if="${books != null}">
+    <h2>Search Results:</h2>
+    <ul>
+        <li th:each="book : ${books}">
+            <span th:text="${book.title}">Book Title</span> -
+            <span th:text="${book.author}">Author</span>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

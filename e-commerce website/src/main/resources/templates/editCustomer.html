@@ -321,6 +321,11 @@
         </div>
 
         <div class="form-group">
+            <label for="streetAddress">Apartment Number :</label>
+            <input type="text" id="apartmentNumber" name="apartmentNumber" th:field="*{apartmentNumber}"  required />
+        </div>
+
+        <div class="form-group">
             <label for="zipCode">Zip Code:</label>
             <input type="text" id="zipCode" name="zipCode" th:field="*{zipCode}"  required />
         </div>
@@ -347,8 +352,8 @@
 
         <button type="submit">Edit </button>
     </form>
-    <a th:href="@{/home}">Go to Home</a>
-    <a th:href="@{/customersList}">Go to Customers List</a>
+    <a th:href="@{/itemSells}">Item for Sale</a>
+
 </div>
 
 
