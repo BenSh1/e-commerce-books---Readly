@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        h2 {
+            color: white;
+            text-align: center;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+
+         .vertical-line {
+             border-left: 2px solid black; /* Border on the left side */
+             height: 200px; /* Specify the height */
+             margin: 20px; /* Optional margin */
+         }
+
+        .vertical-line {
+            border-left: 2px solid black; /* Add left border */
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            margin-top: 100px;
+        }
+
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #c82333;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px; /* Space between buttons */
+            flex-wrap: wrap; /* Allow buttons to wrap if the container is too small */
+            flex-direction: column;
+
+        }
+        .action-buttons button {
+            width: 100%;
+        }
+
+
+        /* Change the color of the Delete button to red */
+        button.delete {
+            background-color: #e74c3c; /* Red color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button.delete:hover {
+            background-color: #c0392b; /* Darker red on hover */
+        }
+
+        /* Change the color of the Active button to green */
+        button.active {
+            background-color: #2ecc71; /* Green color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button.active:hover {
+            background-color: #27ae60; /* Darker green on hover */
+        }
+
+        /* Change the color of the Inactive button to gray */
+        button.inactive {
+            background-color: #95a5a6; /* Gray color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button.inactive:hover {
+            background-color: #7f8c8d; /* Darker gray on hover */
+        }
+
+        /* Change the color of the Edit button to blue */
+        button.edit {
+            background-color: #3498db; /* Blue color */
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        button.edit:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        .add-book-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-book-link:hover {
+            background-color: #218838;
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <h2>Book List</h2>
+</header>
+
+<a href="/addBook">Go to Add book</a>
+<a href="/menuForManager">Menu For Managers</a><br><br>
+
+<hr>
+
+
+<table>
+
+
+
+    <tr>
+        <th>ID</th>
+        <th>Title</th>
+        <th>Author</th>
+        <!--<th>Description</th>-->
+        <th>Category</th>
+        <th>Price</th>
+        <th>Stock</th>
+        <th>Active/Inactive</th>
+        <th>Image</th>
+        <th>Action</th>
+
+    </tr>
+    <tr th:each="book : ${books}">
+        <td th:text="${book.bookId} " ></td>
+        <td th:text="${book.title} " class="vertical-line"></td>
+        <td th:text="${book.authorName}" class="vertical-line"></td>
+        <!--<td th:text="${book.description}" class="vertical-line"></td>-->
+        <td th:text="${book.category}" class="vertical-line"></td>
+        <td th:text="${book.price}" class="vertical-line"></td>
+        <td th:text="${book.stock}" class="vertical-line"></td>
+        <td th:text="${book.isActive}" class="vertical-line"></td>
+
+        <!--
+        <td class="vertical-line"><img th:src="${book.image}"  alt="Item Image"></td>
+        -->
+        <!--
+        <td class="vertical-line"><img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" /></td>
+        -->
+
+        <td class="vertical-line"><img th:src="@{'/images/' + ${book.image}}" alt="Book Image"/></td>
+
+        <!--
+        <td class="vertical-line"><img  th:src="@{/images/}" th:src-append="${book.bookId}" alt="Book Image" /></td>
+        -->
+        <!--
+        <td class="vertical-line">
+            <img th:src="${'data:image/jpg;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>
+        </td>
+        -->
+        <!--
+        <td class="vertical-line" th:src="@{'/images/' + ${book.imageBase64}}" > </td>
+        -->
+
+
+
+        <!--
+        <td class="vertical-line">
+            <img  th:src="'data:image/jpeg;base64,' + ${book.imageBase64}" alt="Book Image"/>
+        </td>
+        -->
+
+        <td class="vertical-line" style="white-space:nowrap">
+            <div class="action-buttons">
+
+
+                <form th:action="@{editBook/{id}(id=${book.bookId})}" method="get" style="display:inline;">
+                    <button type="submit" class="edit">Edit</button>
+                </form>
+                <!--
+                <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
+
+                 -->
+
+                <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit" class="delete">Delete</button>
+                </form>
+
+                <form  th:action="@{toActive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit" class="active">Active</button>
+                </form>
+
+                <form th:action="@{toInactive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="_method" value="delete" />
+                    <button type="submit" class="inactive">Inactive</button>
+                </form>
+
+            </div>
+
+        </td>
+
+    </tr>
+</table>
+
+</body>
+</html>
