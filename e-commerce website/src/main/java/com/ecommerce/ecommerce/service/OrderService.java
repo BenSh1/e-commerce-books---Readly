@@ -4,7 +4,6 @@ import com.ecommerce.ecommerce.dao.CartItemsRepository;
 import com.ecommerce.ecommerce.dao.OrderDetailsRepository;
 import com.ecommerce.ecommerce.dao.OrderRepository;
 import com.ecommerce.ecommerce.dao.UserDao;
-import com.ecommerce.ecommerce.entity.Customer;
 import com.ecommerce.ecommerce.entity.Order;
 import com.ecommerce.ecommerce.entity.OrderDetails;
 import com.ecommerce.ecommerce.entity.User;

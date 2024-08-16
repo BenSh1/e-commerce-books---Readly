@@ -54,13 +54,14 @@ public class Book {
     }
 
     public Book(String title, String author, String description,
-                String category, int price, int stock, String image) {
+                String category, int price, int stock,String isActive, String image) {
         this.title = title;
         this.author = author;
         this.description = description;
         this.category = category;
         this.price = price;
         this.stock = stock;
+        this.isActive = isActive;
         this.image = image;
     }
 

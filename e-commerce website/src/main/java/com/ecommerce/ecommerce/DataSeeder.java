@@ -96,6 +96,7 @@ public class DataSeeder implements ApplicationRunner {
                     "Personal Development",
                     20,
                     10,
+                    "active",
                     "Everything Is Fcked.jpg"
                     );
             bookDao.save(firstBook);
@@ -106,6 +107,7 @@ public class DataSeeder implements ApplicationRunner {
                     "Personal Development",
                     25,
                     10,
+                    "active",
                     "The Subtle Art of Not Giving a Fck.jpg");
             bookDao.save(secondBook);
 
@@ -115,6 +117,7 @@ public class DataSeeder implements ApplicationRunner {
                     "Self-help , psychology , philosophy",
                     25,
                     10,
+                    "active",
                     "12 Rules for Life.jpg");
             bookDao.save(thirdBook);
 

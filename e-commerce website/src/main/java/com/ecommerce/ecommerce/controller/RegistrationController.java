@@ -1,7 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
 
-import com.ecommerce.ecommerce.entity.Customer;
+
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.UserService;
 import com.ecommerce.ecommerce.user.WebUser;

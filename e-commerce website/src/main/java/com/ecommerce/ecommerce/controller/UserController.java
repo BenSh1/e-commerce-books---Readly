@@ -8,17 +8,12 @@ import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.UserService;
-import com.ecommerce.ecommerce.user.WebUser;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.propertyeditors.StringTrimmerEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -63,7 +58,9 @@ public class UserController {
         List<User> users = userService.getUsers();
         //List<WebUser> users = userService.getUsers();
         model.addAttribute("customers", users);
-        return "customersList"; // Return the view to display the books
+        //return "customersList"; // Return the view to display the books
+        return "user/customersList";
+
     }
 
     private User getCurrentUser(HttpSession session) {
@@ -104,7 +101,9 @@ public class UserController {
         // add the list of languages to the model
         model.addAttribute("roles",roles);
 
-        return "editCustomer";
+        //return "editCustomer";
+        return "user/editCustomer";
+
     }
 
 /*
@@ -148,7 +147,6 @@ public class UserController {
         redirectAttributes.addFlashAttribute("updateMessage", "user updated successfully!");
 
         return "redirect:/editCustomer/{id}";
-
     }
 
 
@@ -295,7 +293,9 @@ public class UserController {
         PasswordChangeDto passwordChangeDto = new PasswordChangeDto();
         model.addAttribute("passwordChangeDto",passwordChangeDto);
 
-        return "changePassword";
+        //return "changePassword";
+        return "user/changePassword";
+
     }
 
 
@@ -314,14 +314,13 @@ public class UserController {
             System.out.println("============failed============");
 
         }
-
-        return "changePassword";
+        return "user/changePassword";
     }
 /*
     @GetMapping("/forgetPassword")
     public String getForgotPassword() {
 
-        return "forgetPassword";
+        return "user/forgetPassword";
     }
 
  */
@@ -351,7 +350,7 @@ public class UserController {
         mailSender.send(mailMessage);
 
         model.addAttribute("message", "Password reset link sent to your email.");
-        return "forgotPassword";
+        return "user/forgotPassword";
     }
 
  */

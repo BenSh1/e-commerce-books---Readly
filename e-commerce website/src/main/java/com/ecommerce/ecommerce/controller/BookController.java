@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -40,7 +41,7 @@ public class BookController {
     public String getAddBookForm(Model model) {
         model.addAttribute("book",new Book());
         System.out.println("addBookForm");
-        return "addBook";
+        return "books/addBook";
     }
 
     @PostMapping("/addBook")
@@ -56,7 +57,7 @@ public class BookController {
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
 
-        return "bookList"; // Return the view to display the books
+        return "books/bookList"; // Return the view to display the books
     }
 
     @GetMapping("/itemSells" )
@@ -79,7 +80,7 @@ public class BookController {
         model.addAttribute("allBooks", allBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
 
-        return "itemSells";
+        return "books/itemSells";
         //return "itemsForSell";
 
     }
@@ -132,7 +133,7 @@ public class BookController {
 
     @GetMapping("/filterBooks")
     public String filterForBooks(@RequestParam("subject") String subject,
-                              Model model, HttpSession session) {
+                                 Model model, HttpSession session) {
         //System.out.println("==================inside filterBooks==========");
 
         User currentUser = (User) session.getAttribute("user");
@@ -164,12 +165,12 @@ public class BookController {
 
  */
 
-        return "itemSells"; // Return the view name where books are displayed
+        return "books/itemSells"; // Return the view name where books are displayed
     }
 
     @GetMapping("/search")
     public String searchForBooks(@RequestParam("query") String query,
-                              Model model,HttpSession session) {
+                                 Model model,HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
@@ -183,16 +184,16 @@ public class BookController {
 
         List<Book> books = bookService.searchBooks(query);
         model.addAttribute("allBooks", books);
-        return "itemSells";
+        return "books/itemSells";
     }
 
     @PostMapping("bookDetails/itemSells/{id}")
     public String addItemToCartFromDetailBook(Model model,
                                               HttpSession session ,
                                               @PathVariable Long id,
-                                @AuthenticationPrincipal Authentication authentication,
+                                              @AuthenticationPrincipal Authentication authentication,
                                               @RequestParam("quantity") int quantity,
-                                RedirectAttributes redirectAttributes) {
+                                              RedirectAttributes redirectAttributes) {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
@@ -232,12 +233,14 @@ public class BookController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
             }
         }
+        //return "redirect:books/bookDetails/{id}"; // Redirect back to the items sell page
         return "redirect:/bookDetails/{id}"; // Redirect back to the items sell page
+
     }
 
     @GetMapping("/bookDetails/{id}")
     public String getBookDetailsPage(@PathVariable Long id, Model model,
-                              HttpSession session) {
+                                     HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
@@ -251,56 +254,86 @@ public class BookController {
 
         Book book = bookService.getBook(id);
         model.addAttribute("book", book);
-        return "bookDetails";
+        return "books/bookDetails";
     }
 
     @GetMapping("/editBook/{id}")
     public String editBook(@PathVariable Long id, Model model) {
         Book book = bookService.getBook(id);
         model.addAttribute("book", book);
-        return "editBook";
+        return "books/editBook";
     }
 
     @PostMapping("/editBook/{id}")
     public String updateBook(Model model ,
                              @PathVariable Long id,
                              @ModelAttribute Book theBook,
+                             @RequestParam("imageFile") MultipartFile imageFile,
                              RedirectAttributes redirectAttributes) {
 
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
+
+        // Handle file upload and update the book's image field as needed
+        if (!imageFile.isEmpty()) {
+            String fileName = imageFile.getOriginalFilename();
+            // Save the file and update book's image field
+            theBook.setImage(fileName);
+        }
 
         bookService.update(id, theBook);
         redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
+        System.out.println("==============================");
+
         return "redirect:/bookList";
+        //return "books/editBook";
+        //return "editBook";
+
+    }
+
+    @PostMapping("/toActive/{id}")
+    public String changeBookToActive(Model model,@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Book book = bookService.getBook(id);
+        book.setIsActive("active");
+        bookDao.save(book);
+        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+        //return "books/bookList";
+
+        return "redirect:/bookList";
+
+
+    }
+
+    @PostMapping("/toInactive/{id}")
+    public String changeBookToInactive(Model model,@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        Book book = bookService.getBook(id);
+        book.setIsActive("inactive");
+        bookDao.save(book);
+        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+
+        List<Book> books = bookService.getBooks();
+        model.addAttribute("books", books);
+
+
+        //return "redirect:books/bookList";
+        return "redirect:/bookList";
+
     }
 
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
-        return "redirect:/bookList";
+        return "redirect:books/bookList";
     }
-
-    @PostMapping("/toActive/{id}")
-    public String changeBookToActive(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        Book book = bookService.getBook(id);
-        book.setIsActive("active");
-        bookDao.save(book);
-        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
-
-        return "redirect:/bookList";
-    }
-
-    @PostMapping("/toInactive/{id}")
-    public String changeBookToInactive(@PathVariable Long id, RedirectAttributes redirectAttributes) {
-        Book book = bookService.getBook(id);
-        book.setIsActive("inactive");
-        bookDao.save(book);
-        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
-
-        return "redirect:/bookList";
-    }
-
-
 
     // checking the images
     /*

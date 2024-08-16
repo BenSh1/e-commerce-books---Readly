@@ -1,5 +1,6 @@
 package com.ecommerce.ecommerce.entity;
 
+/*
 import jakarta.persistence.*;
 
 @Entity
@@ -7,12 +8,12 @@ import jakarta.persistence.*;
 public class Customer {
 
     // define fields
-    /*
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private int id;
-     */
+
 
     @Column(name="customerId")
     private int customerId;
@@ -215,3 +216,4 @@ public class Customer {
                 '}';
     }
 }
+*/

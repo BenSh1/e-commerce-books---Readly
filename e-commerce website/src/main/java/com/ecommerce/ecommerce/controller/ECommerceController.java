@@ -22,7 +22,19 @@ public class ECommerceController {
     private BookService bookService;
 
     @GetMapping("/")
-    public String getLandingPage(Model model) {
+    public String getLandingPage(Model model, HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+        }
+
+
         List<Book> allBooks = bookService.getBooks();
         List<Book> firstFourBooks = allBooks.stream()
                 .limit(4)

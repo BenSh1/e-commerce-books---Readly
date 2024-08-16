@@ -31,18 +31,6 @@ public class OrderController {
     @Autowired
     private CartService cartService;
 
-    /*
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private OrderDetailsRepository orderDetailsRepository;
-
-    @Autowired
-    private UserDao userDao;
-
-     */
-
     @Autowired
     private BookDao bookDao;
 
@@ -58,7 +46,9 @@ public class OrderController {
         String title = " Order List";
         model.addAttribute("title", title);
 
-        return "orderList";
+        //return "orderList";
+        return "order/orderList";
+
     }
 
     @GetMapping("/myOrderList")
@@ -75,7 +65,9 @@ public class OrderController {
         String title = currentUser.getUserName() + "'s Order List";
         model.addAttribute("title", title);
 
-        return "myOrderList";
+        //return "myOrderList";
+        return "order/myOrderList";
+
     }
 
     @Transactional
@@ -131,7 +123,8 @@ public class OrderController {
 
         cartService.clearCart(currentUser);
 
-        return "orderConfirmation";
+        //return "orderConfirmation";
+        return "order/orderConfirmation";
     }
 
 

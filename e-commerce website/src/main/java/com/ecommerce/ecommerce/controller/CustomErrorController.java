@@ -10,11 +10,13 @@ public class CustomErrorController implements ErrorController {
     @RequestMapping("/error")
     public String handleError() {
         // You can use request attributes or model to pass additional information
-        return "error"; // Generic error page
+        //return "error"; // Generic error page
+        return "error";
     }
 
     @RequestMapping("/access-denied")
     public String accessDenied() {
+        //return "access-denied"; // Custom 403 error page
         return "access-denied"; // Custom 403 error page
     }
 

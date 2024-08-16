@@ -53,7 +53,9 @@ public class CartController {
         String title = currentUser.getUserName() + "'s Cart List";
         model.addAttribute("title", title);
 
-        return "shopping_cart";
+        //return "shopping_cart";
+        return "cart/shopping_cart";
+
     }
 
     @PostMapping("/remove/{id}")
@@ -69,6 +71,7 @@ public class CartController {
         cartService.removeBookFromCart(id, currentUser);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
         return "redirect:/cart";
+
     }
 
     @PostMapping("/updateQuantity")
@@ -90,7 +93,9 @@ public class CartController {
         double totalAmount = cartItemsList.stream().mapToDouble(item -> item.getBook().getPrice() * item.getQuantity()).sum();
         model.addAttribute("totalAmount", totalAmount);
 
-        return "shopping_cart";
+        //return "shopping_cart";
+        return "cart/shopping_cart";
+
     }
 
     private User getCurrentUser(HttpSession session) {

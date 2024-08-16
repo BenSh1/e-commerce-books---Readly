@@ -40,6 +40,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         // forward to home page
         //response.sendRedirect(request.getContextPath() + "/home");
         response.sendRedirect(request.getContextPath() + "/itemSells");
+        //response.sendRedirect(request.getContextPath() + "books/itemSells");
 
     }
 
