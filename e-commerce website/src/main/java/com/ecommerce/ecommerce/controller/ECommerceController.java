@@ -58,7 +58,18 @@ public class ECommerceController {
 
     // add a request mapping for /managers
     @GetMapping("/menuForManager")
-    public String showMenuOfManager() {
+    public String showMenuOfManager(Model model , HttpSession session){
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            //throw new RuntimeException("User not logged in");
+            System.out.println("===User not logged in=======================");
+        }
+        else{
+            System.out.println("==========currentUser======" + currentUser.getUserName());
+            model.addAttribute("currentUser",currentUser);
+        }
+
         return "menuForManager";
     }
 

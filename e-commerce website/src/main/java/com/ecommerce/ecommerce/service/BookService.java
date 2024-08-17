@@ -1,9 +1,9 @@
 package com.ecommerce.ecommerce.service;
 
-import com.ecommerce.ecommerce.dao.BookDao;
-import com.ecommerce.ecommerce.dao.BookRepository;
-import com.ecommerce.ecommerce.dao.UserDao;
+import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.entity.Book;
+import com.ecommerce.ecommerce.entity.Order;
+import com.ecommerce.ecommerce.entity.OrderDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +22,15 @@ public class BookService {
 
     @Autowired
     private BookRepository bookRepository;
+
+    @Autowired
+    private OrderDao orderDao;
+
+    @Autowired
+    private OrderDetailsRepository orderDetailsRepository;
+
+    @Autowired
+    private CartItemsRepository cartItemsRepository;
 
     private final List<Book> books = new ArrayList<>();
 
@@ -97,6 +106,29 @@ public class BookService {
     @Transactional
     public void delete(Long id) {
         Book existingBook = bookDao.findById(id);
+
+        System.out.println("===============in delete in book service=======================");
+
+        cartItemsRepository.deleteByBook(existingBook);
+        System.out.println("===============delete book in carts=======================");
+
+        //List<Order> orders = orderDao.findOrdersByIdOfBook(((long)existingBook.getBookId()));
+
+        List<OrderDetails> orderDetails = orderDetailsRepository.findOrderDetailsByBook(existingBook);
+
+        List<Order> orders = new ArrayList<>();
+        for(OrderDetails o : orderDetails){
+            if(!orders.contains(o.getOrder()))
+            {
+                orders.add(o.getOrder());
+            }
+            //Order temp = o.getOrder();
+            orderDetailsRepository.deleteDistinctByOrderDetailID(o.getOrderDetailID());
+            //orderDao.deleteOrderById(temp.getOrderId());
+        }
+        for(Order o : orders){
+            orderDao.deleteOrderById(o.getOrderId());
+        }
 
         if (existingBook != null) {
             // Mark for deletion

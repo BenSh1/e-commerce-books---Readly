@@ -1,10 +1,8 @@
-package com.ecommerce.ecommerce.ben;
+package com.ecommerce.ecommerce.service;
 
-import com.ecommerce.ecommerce.dao.RoleDao;
-import com.ecommerce.ecommerce.dao.UserDao;
+import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
-import com.ecommerce.ecommerce.entity.Role;
-import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.entity.*;
 import com.ecommerce.ecommerce.service.UserService;
 import com.ecommerce.ecommerce.user.WebUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +25,28 @@ public class UserServiceImpl implements UserService {
 	final int SECOND_ITEM_IN_ROLES_LIST  = 1;
 	final int THIRD_ITEM_IN_ROLES_LIST  = 2;
 
+
+
+	@Autowired
 	private UserDao userDao;
 
+	@Autowired
 	private RoleDao roleDao;
 
+	@Autowired
+	private OrderDao orderDao;
+
+	@Autowired
+	private final OrderDetailsRepository orderDetailsRepository;
+
+	@Autowired
+	private CartItemsRepository cartItemsRepository;
+
+
 	private BCryptPasswordEncoder passwordEncoder;
+
+
+
 /*
 	@Autowired
 	private JavaMailSender mailSender;
@@ -39,15 +54,16 @@ public class UserServiceImpl implements UserService {
  */
 
 	@Autowired
-	public UserServiceImpl(UserDao userDao, RoleDao roleDao , BCryptPasswordEncoder passwordEncoder) {
+	public UserServiceImpl(UserDao userDao, RoleDao roleDao , BCryptPasswordEncoder passwordEncoder, OrderDetailsRepository orderDetailsRepository) {
 		this.userDao = userDao;
 		this.roleDao = roleDao;
 		this.passwordEncoder = passwordEncoder;
-
+		this.orderDetailsRepository = orderDetailsRepository;
 	}
 	@Transactional
 	@Override
 	public void save(WebUser webUser) {
+
 		User user = new User();
 
 		// assign user details to the user object
@@ -69,8 +85,7 @@ public class UserServiceImpl implements UserService {
 
 		user.setEnabled(true);
 
-		// give user default role of "employee"
-		//user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_EMPLOYEE")));
+		// give user default role of "customer"
 		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_CUSTOMER")));
 
 		// save user in the database
@@ -131,6 +146,41 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void update(Long id, User theUser , String role) {
 
+		User existingUser = updateParametersForUser(id,theUser);
+
+		Role newRole = roleDao.findRoleByName(role);
+
+		existingUser.setRoles(new ArrayList<Role>());
+		List<Role> userRoles = new ArrayList<>();
+
+		List<Role> r = roleDao.getAllRoles();
+
+		if(role.equals("ROLE_CUSTOMER") )
+		{
+			userRoles.add(r.getFirst());
+			//existingUser.setRoles(userRoles);
+		}
+		else if(role.equals("ROLE_MANAGER") )
+		{
+			userRoles.add(r.getFirst());
+			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
+			//existingUser.setRoles(userRoles);
+		}
+		else
+		{
+			userRoles.add(r.getFirst());
+			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
+			userRoles.add(r.get(THIRD_ITEM_IN_ROLES_LIST));
+			//existingUser.setRoles(userRoles);
+		}
+		existingUser.setRoles(userRoles);
+
+		userDao.save(existingUser);
+	}
+
+
+	public User updateParametersForUser(Long id,User theUser){
+
 		User existingUser = userDao.findById(id);
 
 		existingUser.setFirstName(theUser.getFirstName());
@@ -147,44 +197,10 @@ public class UserServiceImpl implements UserService {
 		existingUser.setCardExpiryYear(theUser.getCardExpiryYear());
 		existingUser.setEnabled(true);
 
-		/*
-		// give user default role of "customer"
-		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
-
- 		*/
-		System.out.println("========================role=================== : "+ role);
-
-		Role newRole = roleDao.findRoleByName(role);
-		System.out.println("========================newRole=================== : "+ newRole);
-
-		System.out.println("========================roleDAO.getALlRoles========= : "+ roleDao.getAllRoles());
-
-		existingUser.setRoles(new ArrayList<Role>());
-		List<Role> userRoles = new ArrayList<>();
-
-		List<Role> r = roleDao.getAllRoles();
-
-		if(role.equals("ROLE_CUSTOMER") )
-		{
-			userRoles.add(r.getFirst());
-			existingUser.setRoles(userRoles);
-		}
-		else if(role.equals("ROLE_MANAGER") )
-		{
-			userRoles.add(r.getFirst());
-			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
-			existingUser.setRoles(userRoles);
-		}
-		else
-		{
-			userRoles.add(r.getFirst());
-			userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
-			userRoles.add(r.get(THIRD_ITEM_IN_ROLES_LIST));
-			existingUser.setRoles(userRoles);
-		}
-
-		userDao.save(existingUser);
+		return existingUser;
 	}
+
+
 
 
 	@Override
@@ -229,21 +245,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional
 	public void deleteUser(Long id) {
+
 		User existingUser = userDao.findById(id);
+
+		cartItemsRepository.deleteByUser(existingUser);
+
+		List<Order> orders = orderDao.findOrdersByIdOfCustomer(existingUser.getId());
+
+		for(Order order : orders){
+			orderDetailsRepository.deleteOrderDetailsByOrder(order);
+			orderDao.deleteOrderById(order.getOrderId());
+		}
 
 		// Remove the associations in the user_role table
 		existingUser.getRoles().clear();
 
 		// Now delete the user
 		userDao.deleteUserById(id);
-/*
-		if (existingUser != null) {
-			// Mark for deletion
-			//entityManager.remove(entity);
-			userDao.deleteUserById(id);
-		}
 
- */
 	}
 
 	public boolean changeUserPassword(String username, PasswordChangeDto passwordChangeDto) {

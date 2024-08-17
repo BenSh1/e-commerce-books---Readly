@@ -34,9 +34,6 @@ public class BookController {
     @Autowired
     private CartService cartService;
 
-    @Autowired
-    private OrderService orderService;
-
     @GetMapping("/addBook")
     public String getAddBookForm(Model model) {
         model.addAttribute("book",new Book());
@@ -332,7 +329,7 @@ public class BookController {
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
-        return "redirect:books/bookList";
+        return "redirect:/bookList";
     }
 
     // checking the images
