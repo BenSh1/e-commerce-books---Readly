@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+            xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -165,7 +166,7 @@
 <header>
     <h2>Book List</h2>
 </header>
-
+<br>
 <a href="/addBook">Go to Add book</a>
 <a href="/menuForManager">Menu For Managers</a><br><br>
 
@@ -173,8 +174,6 @@
 
 
 <table>
-
-
 
     <tr>
         <th>ID</th>
@@ -239,11 +238,14 @@
                 <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
 
                  -->
+                <div sec:authorize="hasRole('ADMIN')">
+                    <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
+                        <input type="hidden" name="_method" value="delete" />
+                        <button type="submit" class="delete">Delete</button>
+                    </form>
+                </div>
 
-                <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
-                    <input type="hidden" name="_method" value="delete" />
-                    <button type="submit" class="delete">Delete</button>
-                </form>
+
 
                 <form  th:action="@{toActive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
                     <input type="hidden" name="_method" value="delete" />

@@ -113,7 +113,7 @@
 
 
 <div class="container">
-    <div th:if="${currentUser != null}">
+    <div th:if="${currentUser != null}" style="text-align: center;">
         <strong> Hello <span class="user-name" th:text="${currentUser.userName}"></span> </strong>
         <form th:action="@{/logout}" method="POST" class="logout-form">
             <input type="submit" value="Logout" class="btn btn-danger" />

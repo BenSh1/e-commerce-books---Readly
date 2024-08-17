@@ -117,6 +117,11 @@
 
 <div class="content">
     <h1>Welcome to the Menu For Manager Page!</h1>
+
+    <div th:if="${currentUser != null}" style="text-align: center;">
+        <strong> Hello <span class="user-name" th:text="${currentUser.userName}"></span> </strong>
+    </div>
+
     <p>Manage your books, orders, and customers from here.</p>
     <hr>
 

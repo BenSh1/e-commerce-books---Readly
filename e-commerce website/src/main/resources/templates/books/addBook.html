@@ -9,8 +9,28 @@
             background-color: #343a40;
             color: white;
             padding: 10px 0;
+            width: 100%;
             text-align: center;
         }
+        /*
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            margin-top: 100px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+
+         */
         h2 {
             text-align: center;
             margin-bottom: 10px;
@@ -56,16 +76,7 @@
             justify-content: center;
             height: 100vh;
         }
-        header {
-            background-color: #343a40;
-            color: white;
-            padding: 20px 0;
-            width: 100%;
-            text-align: center;
-            margin-bottom: 20px;
-            margin-top: 100px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+
         h2 {
             color: white;
             text-align: center;
@@ -137,10 +148,10 @@
     <label for="image">Image:</label>
     <input type="file" th:field="*{image}" id="image" name="image" accept="image/*" required>
     <button type="submit">Add Book</button>
+    <a href="/menuForManager" class="back-link">Menu for Managers</a>
+
 </form>
 
-
-<a href="/home">Go to Home</a><br>
 
 </body>
 </html>

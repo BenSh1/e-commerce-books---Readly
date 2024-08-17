@@ -184,6 +184,7 @@
 </header>
 
 <a href="/menuForManager">Menu for Managers</a><br><br>
+
 <hr>
 
 
@@ -223,7 +224,7 @@
                     <button type="submit" class="edit">Edit</button>
                 </form>
 
-                <form th:action="@{deleteUser/{id}(id=${customer.id})}" method="post" style="display:inline;">
+                <form th:action="@{/deleteUser/{id}(id=${customer.id})}" method="post" style="display:inline;">
                     <input type="hidden" name="_method" value="delete" />
                     <button class="delete" type="submit">Delete</button>
                 </form>

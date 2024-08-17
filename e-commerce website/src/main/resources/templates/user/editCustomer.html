@@ -192,7 +192,7 @@
 
         <!-- First Name -->
         <div class="form-group">
-            <label for="firstName">First Name: With checking</label>
+            <label for="firstName">First Name:</label>
             <!--
             <input type="text" th:field="*{firstName}" placeholder="First name (*)" class="form-control" />
             -->
@@ -353,6 +353,9 @@
         <button type="submit">Edit </button>
     </form>
     <a th:href="@{/itemSells}">Item for Sale</a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/customersList}">back to customer list</a>
+    </div>
 
 </div>
 
