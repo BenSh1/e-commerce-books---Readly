@@ -30,6 +30,12 @@ public class RegistrationController {
 		this.userService = userService;
 	}
 
+    /**
+     * This method is called automatically whenever the controller receives web requests.
+     * The @InitBinder annotation tells Spring to register a custom editor (StringTrimmerEditor)
+     * for all String fields in the model. The StringTrimmerEditor will trim leading and trailing
+     * whitespace from input Strings. If the input is empty after trimming, it will be converted to null.
+     */
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
 		
@@ -38,6 +44,12 @@ public class RegistrationController {
 		dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
 	}
 
+    /**
+     * Displays the registration form to the user.
+     * This method is mapped to the "/showRegistrationForm" URL and is triggered by a GET request.
+     * It adds a new WebUser object to the model, which will be used to bind form data.
+     * The registration form view is then returned.
+     */
     @GetMapping("/showRegistrationForm")
     public String showMyRegisterPage(
             @Valid @ModelAttribute("webUser") WebUser theWebUser,
@@ -49,22 +61,15 @@ public class RegistrationController {
 
         return "register/registration-form";
     }
-/*
-    @GetMapping("/showRegistrationForm2")
-    public String showMyRegisterPage2(
-            @Valid @ModelAttribute("webUser") WebUser theWebUser,
-            BindingResult theBindingResult,
-            HttpSession session, Model theModel)
-    {
-
-        theModel.addAttribute("webUser", new WebUser());
-
-        return "register/registration-form2";
-    }
-
- */
 
 
+    /**
+     * Processes the registration form submitted by the user.
+     * This method is mapped to the "/processRegistrationForm" URL and is triggered by a POST request.
+     * It validates the form data, checks if the username already exists in the database, and
+     * creates a new user account if validation passes. If there are errors, the registration
+     * form is redisplayed with appropriate error messages.
+     */
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(
             @Valid @ModelAttribute("webUser") WebUser theWebUser,
@@ -97,9 +102,6 @@ public class RegistrationController {
 
         // place user in the web http session for later use
         session.setAttribute("user", theWebUser);
-
-
-
 
         return "register/registration-confirmation";
     }

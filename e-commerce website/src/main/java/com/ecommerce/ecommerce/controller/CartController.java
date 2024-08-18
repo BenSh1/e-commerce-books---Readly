@@ -1,7 +1,6 @@
 package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.entity.*;
-import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
 import com.ecommerce.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -17,21 +16,21 @@ import java.security.Principal;
 import java.util.List;
 
 @Controller
-//@RequestMapping("/cart")
 public class CartController {
 
     @Autowired
     private CartService cartService;
 
     @Autowired
-    private BookService bookService;
-/*
-    @Autowired
     private UserService userService;
 
- */
-
-
+    /**
+     * Handles the request to display the user's shopping cart.
+     * This method is mapped to the "/cart" URL and is triggered by a GET request.
+     * It retrieves the current user's cart items, calculates the total amount, and
+     * adds the necessary attributes to the model for displaying the cart view.
+     * If the user is not logged in, it throws an exception.
+     */
     @GetMapping("/cart")
     public String showShoppingCart(Model model, HttpSession session ,
                                    @AuthenticationPrincipal Authentication authentication)
@@ -55,11 +54,15 @@ public class CartController {
         String title = currentUser.getUserName() + "'s Cart List";
         model.addAttribute("title", title);
 
-        //return "shopping_cart";
         return "cart/shopping_cart";
-
     }
 
+    /**
+     * Handles the request to remove a book from the user's cart.
+     * This method is mapped to the "/remove/{id}" URL and is triggered by a POST request.
+     * It removes the book from the current user's cart by its ID and sets a success message.
+     * If the user is not logged in, it throws an exception. After removing the book, it redirects to the cart page.
+     */
     @PostMapping("/remove/{id}")
     public String removeBookInCart(@PathVariable Integer id,
                                    HttpSession session ,
@@ -72,10 +75,16 @@ public class CartController {
 
         cartService.removeBookFromCart(id, currentUser);
         redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
-        return "redirect:/cart";
 
+        return "redirect:/cart";
     }
 
+    /**
+     * Handles the request to update the quantity of a book in the user's cart.
+     * This method is mapped to the "/updateQuantity" URL and is triggered by a POST request.
+     * It updates the quantity of the specified book in the current user's cart and reloads the cart view
+     * with the updated total amount. If the user is not logged in, it retrieves the current user from the session.
+     */
     @PostMapping("/updateQuantity")
     public String updateQuantity(@RequestParam("bookId") Long bookId,
                                  @RequestParam("quantity") int quantity,
@@ -84,7 +93,7 @@ public class CartController {
                                  Model model) {
 
         // Get the current user
-        User currentUser = getCurrentUser(session);
+        User currentUser = userService.getCurrentUser(session);
 
         // Update the quantity in the cart
         cartService.updateQuantity(currentUser, bookId, quantity);
@@ -95,19 +104,6 @@ public class CartController {
         double totalAmount = cartItemsList.stream().mapToDouble(item -> item.getBook().getPrice() * item.getQuantity()).sum();
         model.addAttribute("totalAmount", totalAmount);
 
-        //return "shopping_cart";
         return "cart/shopping_cart";
-
     }
-
-    private User getCurrentUser(HttpSession session) {
-        // Get the current user
-        User currentUser = (User) session.getAttribute("user");
-
-        if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        return currentUser;
-    }
-
 }

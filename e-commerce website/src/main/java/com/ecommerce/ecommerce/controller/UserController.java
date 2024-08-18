@@ -3,7 +3,6 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dao.RoleDao;
 import com.ecommerce.ecommerce.dao.UserDao;
-import com.ecommerce.ecommerce.dao.UserDaoImpl;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
@@ -50,41 +49,40 @@ public class UserController {
     @Value("${roles}")
     private List<String> roles;
 
-    @Autowired
-    private UserDaoImpl userDaoImpl;
 
+
+    /**
+     * Displays the list of customers.
+     * This method is mapped to the "/customersList" URL and is triggered by a GET request.
+     * It retrieves the list of users from the userService and adds it to the model.
+     * The view to display the customers is then returned.
+     */
     @GetMapping("/customersList")
     public String customersList(Model model) {
         List<User> users = userService.getUsers();
-        //List<WebUser> users = userService.getUsers();
         model.addAttribute("customers", users);
-        //return "customersList"; // Return the view to display the books
-        return "user/customersList";
 
+        return "user/customersList";// Return the view to display the books
     }
 
-    private User getCurrentUser(HttpSession session) {
-        // Get the current user
-        User currentUser = (User) session.getAttribute("user");
-        //User user = userService.get
-        if (currentUser == null) {
-            throw new RuntimeException("User not logged in");
-        }
-        return currentUser;
-    }
 
+    /**
+     * Displays the edit customer page for a specific user.
+     * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a GET request.
+     * It retrieves the user by the provided ID and adds it to the model for editing.
+     * The current user's role is also determined and added to the model for use in the view.
+     */
     @GetMapping("/editCustomer/{id}")
     public String editCustomer(@PathVariable Long id,
                                /*@Valid @ModelAttribute("user") User theUser,*/
                                Model model,
                                HttpSession session) {
         //WebUser webUser = userService.getCustomer(id);
-        System.out.println("--------------------------------------------------------");
         User user = userService.getUser(id);
         model.addAttribute("user", user);
-        //model.addAttribute("user", user);
 
-        User currentUser = getCurrentUser(session);
+        User currentUser = userService.getCurrentUser(session);
+
         //System.out.println("===========in editCustomer ===========");
         //System.out.println(currentUser.toString());
         //System.out.println("currentUser.getRoles().size() = "+ currentUser.getRoles().size());
@@ -101,9 +99,7 @@ public class UserController {
         // add the list of languages to the model
         model.addAttribute("roles",roles);
 
-        //return "editCustomer";
         return "user/editCustomer";
-
     }
 
 /*
@@ -127,6 +123,11 @@ public class UserController {
         edit with the same role of the member of the site.
      */
 
+    /**
+     * Updates the customer information.
+     * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a POST request.
+     * It updates the user's information and their role, then redirects back to the edit page.
+     */
     @Transactional
     @PostMapping("/editCustomer/{id}")
     public String updateCustomer(Model model , @PathVariable Long id,
@@ -226,6 +227,11 @@ public class UserController {
 
  */
 
+    /**
+     * Updates the user's role to "Customer".
+     * This method is mapped to the "/updateRankToCustomer/{id}" URL and is triggered by a POST request.
+     * It assigns the "Customer" role to the user and saves the changes in the database.
+     */
     @PostMapping("/updateRankToCustomer/{id}")
     public String updateRankToCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
@@ -240,10 +246,13 @@ public class UserController {
 
         userDao.save(theUser);
         return "redirect:/customersList";
-
     }
 
-
+    /**
+     * Updates the user's role to "Manager".
+     * This method is mapped to the "/updateRankToManager/{id}" URL and is triggered by a POST request.
+     * It assigns the "Manager" role to the user and saves the changes in the database.
+     */
     @PostMapping("/updateRankToManager/{id}")
     public String updateRankToManager(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
@@ -261,6 +270,11 @@ public class UserController {
 
     }
 
+    /**
+     * Updates the user's role to "Admin".
+     * This method is mapped to the "/updateRankToAdmin/{id}" URL and is triggered by a POST request.
+     * It assigns the "Admin" role to the user and saves the changes in the database.
+     */
     @PostMapping("/updateRankToAdmin/{id}")
     public String updateRankToAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
 
@@ -280,6 +294,11 @@ public class UserController {
 
     }
 
+    /**
+     * Deletes a user by ID.
+     * This method is mapped to the "/deleteUser/{id}" URL and is triggered by a POST request.
+     * It deletes the user from the database and redirects to the customers list page with a success message.
+     */
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         userService.deleteUser(id);
@@ -287,6 +306,11 @@ public class UserController {
         return "redirect:/customersList";
     }
 
+    /**
+     * Displays the change password page.
+     * This method is mapped to the "/changePassword" URL and is triggered by a GET request.
+     * It initializes a PasswordChangeDto object and adds it to the model, then returns the view to display the change password form.
+     */
     @GetMapping("/changePassword")
     public String changePassword(  Model model) {
 
@@ -298,7 +322,11 @@ public class UserController {
 
     }
 
-
+    /**
+     * Handles the password change process.
+     * This method is mapped to the "/changePassword" URL and is triggered by a POST request.
+     * It takes the password change details from the form, attempts to change the user's password, and returns the appropriate view with a success or error message.
+     */
     @PostMapping("/changePassword")
     public String changePassword(@ModelAttribute PasswordChangeDto passwordChangeDto, Principal principal, Model model) {
         String username = principal.getName();
@@ -316,6 +344,7 @@ public class UserController {
         }
         return "user/changePassword";
     }
+
 /*
     @GetMapping("/forgetPassword")
     public String getForgotPassword() {
