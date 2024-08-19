@@ -3,6 +3,7 @@ package com.ecommerce.ecommerce.dao;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class BookDaoImpl implements BookDao{
@@ -71,5 +73,10 @@ public class BookDaoImpl implements BookDao{
         return totalEntities;
     }
 
+    @Override
+    public Optional<Book> findByIdWithLock(Long bookId) {
+        Book book = entityManager.find(Book.class, bookId, LockModeType.PESSIMISTIC_WRITE);
+        return Optional.ofNullable(book);
+    }
 
 }

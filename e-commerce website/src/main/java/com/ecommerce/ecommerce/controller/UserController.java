@@ -1,11 +1,9 @@
 package com.ecommerce.ecommerce.controller;
 
-
-import com.ecommerce.ecommerce.dao.RoleDao;
-import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
+import com.ecommerce.ecommerce.service.RoleService;
 import com.ecommerce.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,28 +26,20 @@ public class UserController {
     final int SECOND_ITEM_IN_ROLES_LIST  = 1;
     final int THIRD_ITEM_IN_ROLES_LIST  = 2;
 
-    private Logger logger = Logger.getLogger(getClass().getName());
-
-
-
     @Autowired
     private UserService userService;
-    /*
-    public RegistrationController(UserService userService) {
-        this.userService = userService;
-    }
-
-     */
-    @Autowired
-    private RoleDao roleDao;
 
     @Autowired
-    private UserDao userDao;
+    private RoleService roleService;
 
     @Value("${roles}")
     private List<String> roles;
 
-
+    /*
+    public RegistrationController(UserService userService) {
+        this.userService = userService;
+    }
+     */
 
     /**
      * Displays the list of customers.
@@ -239,14 +229,17 @@ public class UserController {
 
         List<Role> userRoles = new ArrayList<>();
 
-        List<Role> r = roleDao.getAllRoles();
+        List<Role> r = roleService.getRoles();
 
         userRoles.add(r.getFirst());
         theUser.setRoles(userRoles);
 
-        userDao.save(theUser);
+
+        userService.addUser(theUser);
+
         return "redirect:/customersList";
     }
+
 
     /**
      * Updates the user's role to "Manager".
@@ -260,12 +253,14 @@ public class UserController {
 
         List<Role> userRoles = new ArrayList<>();
 
-        List<Role> r = roleDao.getAllRoles();
+        List<Role> r = roleService.getRoles();
 
         userRoles.add(r.getFirst());
         userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
         theUser.setRoles(userRoles);
-        userDao.save(theUser);
+
+        userService.addUser(theUser);
+
         return "redirect:/customersList";
 
     }
@@ -282,14 +277,15 @@ public class UserController {
 
         List<Role> userRoles = new ArrayList<>();
 
-        List<Role> r = roleDao.getAllRoles();
+        List<Role> r = roleService.getRoles();
 
         userRoles.add(r.getFirst());
         userRoles.add(r.get(SECOND_ITEM_IN_ROLES_LIST));
         userRoles.add(r.get(THIRD_ITEM_IN_ROLES_LIST));
 
         theUser.setRoles(userRoles);
-        userDao.save(theUser);
+        userService.addUser(theUser);
+
         return "redirect:/customersList";
 
     }

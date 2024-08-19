@@ -8,6 +8,7 @@ import com.ecommerce.ecommerce.entity.Book;
 
 import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -138,7 +139,7 @@ public class CartService {
     public void updateQuantity(User user, Long bookId, int quantity) {
         Book book = bookDao.findById(bookId);
 
-        if(book.getStock() - quantity >= 0)
+        if(book.getStock() - quantity >= 0 && quantity <= 3)
         {
             CartItems cartItem = cartItemsRepository.findByUserAndBookId(user, bookId);
             if (cartItem != null) {
@@ -148,7 +149,5 @@ public class CartService {
         }
 
     }
-
-
 
 }

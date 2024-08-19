@@ -30,10 +30,7 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     @Transactional
     public void save(Order theOrder ) {
-        //entityManager.persist(theUser);
-        // create the user
         entityManager.merge(theOrder);
-
     }
 
     @Override
@@ -47,6 +44,7 @@ public class OrderDaoImpl implements OrderDao {
         return orders;
     }
 
+/*
     @Override
     public List<Order> findOrdersByIdOfBook(Long theId) {
 
@@ -57,6 +55,8 @@ public class OrderDaoImpl implements OrderDao {
         List<Order> orders = query.getResultList();
         return orders;
     }
+
+ */
 
 
     @Override

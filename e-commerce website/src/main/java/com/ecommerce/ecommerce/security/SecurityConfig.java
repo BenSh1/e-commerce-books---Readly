@@ -44,7 +44,7 @@ public class SecurityConfig {
                                         , "/showMyLoginPage","/itemSells"
                                         , "/addBook","/bookList", "/bookList/**","/bookDetails/**" ,
                                         "/bookList2","/cart/**" ,"/bookDetails/{id}" , "/search", "/filterBooks"
-                                ,"/forgetPassword","/book/itemSells").permitAll()  // Allow access to URLs starting with /public
+                                ,"/forgetPassword","/book/itemSells","/contact").permitAll()  // Allow access to URLs starting with /public
                                 //.requestMatchers("/home/**").hasRole("EMPLOYEE")
 
                                 .requestMatchers("/home/**","/home", "/cart",

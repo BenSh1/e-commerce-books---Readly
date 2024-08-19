@@ -20,7 +20,7 @@ public interface OrderDao {
 
     void deleteOrderById(int theId);
 
-    List<Order> findOrdersByIdOfBook(Long theId);
+    //List<Order> findOrdersByIdOfBook(Long theId);
 
 
 

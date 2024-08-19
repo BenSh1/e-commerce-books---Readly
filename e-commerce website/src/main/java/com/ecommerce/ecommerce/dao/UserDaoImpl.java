@@ -45,7 +45,6 @@ public class UserDaoImpl implements UserDao {
     @Override
     @Transactional
     public void save(User theUser) {
-        //entityManager.persist(theUser);
         // create the user
         entityManager.merge(theUser);
 

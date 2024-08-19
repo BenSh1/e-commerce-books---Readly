@@ -2,6 +2,7 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.entity.*;
+import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
 import com.ecommerce.ecommerce.service.OrderService;
 import jakarta.servlet.http.HttpSession;
@@ -29,10 +30,11 @@ public class OrderController {
     private CartService cartService;
 
     @Autowired
-    private BookDao bookDao;
+    private BookService bookService;
 
     @Autowired
-    private OrderDao orderDao;
+    private BookDao bookDao;
+
 
     /**
      * Handles the request to display the list of all orders.
@@ -84,11 +86,13 @@ public class OrderController {
                                    @PathVariable Long id,
                                    RedirectAttributes redirectAttributes) {
 
-        Order theOrder = orderDao.findOrderById(id);
+        Order theOrder = orderService.getOrder(id);
+
         //theOrder.setStatus("The Order has been supplied");
         theOrder.setStatus("Supplied!");
 
-        orderDao.save(theOrder);
+        orderService.addOrder(theOrder);
+
         redirectAttributes.addFlashAttribute("SuppliedMessage", "The Order has been supplied!");
 
         return "redirect:/orderList";
@@ -102,6 +106,7 @@ public class OrderController {
      * If the user is not logged in, it throws an exception.
      */
     @PostMapping("/addOrder")
+    @Transactional
     public String addOrder(Model model, HttpSession session ,
                            @AuthenticationPrincipal Authentication authentication) {
 
@@ -111,31 +116,37 @@ public class OrderController {
         }
         System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
 
-
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
         //update the stock for each book in the cartItems
         for(CartItems cartItem : cartItems) {
-            Book book = bookDao.findById((long)cartItem.getBook().getBookId());
+
+            Book book = bookDao.findByIdWithLock((long)cartItem.getBook().getBookId())
+                    .orElseThrow(() -> new RuntimeException("Book not found"));
+
+            if (book.getStock() < cartItem.getQuantity()) {
+                if(cartItem.getQuantity() == 1){
+                    cartService.removeBookFromCart(book.getBookId(),currentUser);
+                }
+                model.addAttribute("titleOfBook", book.getTitle());
+                return "bookIsOutOfStock";
+                //throw new RuntimeException("Not enough stock for book: " + book.getTitle());
+            }
+
             book.setStock(book.getStock() - cartItem.getQuantity());
-            bookDao.save(book);
+            bookService.addBook(book);
         }
 
-        List<OrderDetails> orderDetails = cartItems.stream().map(cartItem -> {
-            OrderDetails orderDetail = new OrderDetails();
-            orderDetail.setBook(cartItem.getBook());
-            orderDetail.setQuantity(cartItem.getQuantity());
-            orderDetail.setPrice(cartItem.getBook().getPrice());
-
-            return orderDetail;
-        }).collect(Collectors.toList());
+        List<OrderDetails> orderDetails = orderService.convertToOrderDetails(cartItems);
 
         Order order = orderService.createOrder(orderDetails, currentUser);
+
         model.addAttribute("order", order);
 
         cartService.clearCart(currentUser);
 
         return "order/orderConfirmation";
     }
+
 
 }

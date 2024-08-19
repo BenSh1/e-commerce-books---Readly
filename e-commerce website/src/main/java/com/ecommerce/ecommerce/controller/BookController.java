@@ -1,13 +1,11 @@
 package com.ecommerce.ecommerce.controller;
 
 
-import com.ecommerce.ecommerce.dao.BookDao;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
-import com.ecommerce.ecommerce.service.OrderService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,8 +26,6 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @Autowired
-    private BookDao bookDao;
 
     @Autowired
     private CartService cartService;
@@ -244,7 +240,6 @@ public class BookController {
                                               HttpSession session ,
                                               @PathVariable Long id,
                                               @AuthenticationPrincipal Authentication authentication,
-                                              @RequestParam("quantity") int quantity,
                                               RedirectAttributes redirectAttributes) {
 
         User currentUser = (User) session.getAttribute("user");
@@ -364,7 +359,9 @@ public class BookController {
     public String changeBookToActive(Model model,@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Book book = bookService.getBook(id);
         book.setIsActive("active");
-        bookDao.save(book);
+
+        bookService.addBook(book);
+
         redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
 
         List<Book> books = bookService.getBooks();
@@ -386,7 +383,9 @@ public class BookController {
     public String changeBookToInactive(Model model,@PathVariable Long id, RedirectAttributes redirectAttributes) {
         Book book = bookService.getBook(id);
         book.setIsActive("inactive");
-        bookDao.save(book);
+
+        bookService.addBook(book);
+
         redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
 
         List<Book> books = bookService.getBooks();

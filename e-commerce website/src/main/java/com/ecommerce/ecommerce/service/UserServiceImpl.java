@@ -5,6 +5,7 @@ import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.*;
 import com.ecommerce.ecommerce.service.UserService;
 import com.ecommerce.ecommerce.user.WebUser;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -91,6 +92,12 @@ public class UserServiceImpl implements UserService {
 		// save user in the database
 		userDao.save(user);
 	}
+
+	@Override
+	public void addUser(User user) {
+		userDao.save(user);
+	}
+
 
 	@Override
 	public User findByUserName(String userName) {
@@ -286,6 +293,16 @@ public class UserServiceImpl implements UserService {
 		userDao.save(user);
 
 		return true;
+	}
+
+	public User getCurrentUser(HttpSession session) {
+		// Get the current user
+		User currentUser = (User) session.getAttribute("user");
+
+		if (currentUser == null) {
+			throw new RuntimeException("User not logged in");
+		}
+		return currentUser;
 	}
 
 

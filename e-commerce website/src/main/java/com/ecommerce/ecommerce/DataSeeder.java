@@ -32,40 +32,11 @@ public class DataSeeder implements ApplicationRunner {
 
     @Autowired
     private BookDao bookDao;
-/*
-    @Autowired
-    private UserRoleDao userRoleDaoDao;
-
- */
-
-    //private BCryptPasswordEncoder passwordEncoder;
-
-/*
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
- */
-/*
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public DataSeeder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
-*/
-
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         // Check if data already exists (optional)
         int desiredNumberOfRowsInRoleTable = 3;
-        int desiredNumberOfRowsInUserTable = 3;
-        int desiredNumberOfRowsInUser_RoleTable = 6;
-
-        int desiredNumberOfRowsInBookTable = 3;
-
 
         if (roleDao.count() == 0) {
             List<String> rolesList = new ArrayList<>();
@@ -80,11 +51,6 @@ public class DataSeeder implements ApplicationRunner {
                 }
             System.out.println("Initial data saved to Role's Table");
         }
-        else
-        {
-            System.out.println("Role's table already has data");
-        }
-
 
         if (bookDao.count() == 0) {
 
@@ -121,11 +87,20 @@ public class DataSeeder implements ApplicationRunner {
                     "12 Rules for Life.jpg");
             bookDao.save(thirdBook);
 
+            Book fourthBook = new Book("From Animals into Gods: A Brief History of Humankind",
+                    "Yuval Noah Harari",
+                    "In \"From Animals into Gods: A Brief History of Humankind,\" Yuval Noah Harari takes readers on an enthralling journey through the annals of history, \n" +
+                            "detailing the transformative events that catapulted Homo sapiens from mere creatures of the animal kingdom to the architects of civilizations \n" +
+                            "and masters of the planet.\n",
+                    "History, social philosophy",
+                    20,
+                    10,
+                    "active",
+                    "From Animals into Gods A Brief History of Humankind.jpg");
+            bookDao.save(thirdBook);
+
+
             System.out.println("Initial data saved to Book's Table");
-        }
-        else
-        {
-            System.out.println("Role's table already has data");
         }
 
         if (userDao.count() == 0) {
@@ -159,45 +134,6 @@ public class DataSeeder implements ApplicationRunner {
             System.out.println("Initial data saved to User's Table");
 
         }
-        else{
-            System.out.println("User's table already has data");
-        }
-
-
-
-/*
-        if (userDao.count() == 0) {
-
-
-
-
-            List<String> usersList = new ArrayList<>();
-            User user = new User();
-            user.setUserName("ben");
-            user.setLastName("Sharabi");
-            user.setEmail("ben@gmail.com");
-            user.setPassword("ben@gmail.com");
-
-
-            for (int i = 0; i < desiredNumberOfRowsInRoleTable; i++) {
-                Role role = new Role();
-                role.setName(stringList.get(i));
-                roleDao.save(role);
-            }
-            System.out.println("Initial data saved to Role's Table");
-        }
-        else
-        {
-            System.out.println("Role's table already has data");
-        }
-
- */
-
-
-
-
-
-
 
     }
 }
