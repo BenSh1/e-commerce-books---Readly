@@ -258,10 +258,6 @@
         <!-- Add the form for selecting quantity and adding to cart -->
         <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post" class="buy-form">
             <input type="hidden" name="bookId" th:value="${book.bookId}"/>
-            <label for="quantity" >Quantity:</label>
-            <input type="number" id="quantity" name="quantity" value="1" min="1" class="quantity-input"/>
-            <br><br>
-
             <button type="submit" class="buy-button">Add to Cart</button>
         </form>
 
