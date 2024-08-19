@@ -23,24 +23,50 @@ public class BookDaoImpl implements BookDao{
         entityManager = theEntityManager;
     }
 
+    /**
+     * Saves or updates a Book entity.
+     * This method merges the state of the given Book entity into the current persistence context.
+     * If the entity already exists, it updates it; otherwise, it creates a new one.
+     *
+     * @param theBook the Book entity to be saved or updated.
+     */
     @Override
     @Transactional
     public void save(Book theBook) {
-        //entityManager.persist(theBook);
         entityManager.merge(theBook);
     }
 
+    /**
+     * Retrieves all books from the database.
+     * This method executes a JPQL query to retrieve all Book entities from the database and returns them as a list.
+     *
+     * @return a List of all Book entities.
+     */
     public List<Book> findAll() {
         return entityManager.createQuery("SELECT b FROM Book b", Book.class).getResultList();
     }
 
+    /**
+     * Finds a Book entity by its ID.
+     * This method searches the database for a Book entity with the specified ID and returns it.
+     *
+     * @param id the ID of the book to be retrieved.
+     * @return the Book entity with the specified ID, or null if not found.
+     */
     @Transactional
     public Book findById(Long id) {
         return entityManager.find(Book.class, id);
     }
 
 
-
+    /**
+     * Finds a Book entity by its title.
+     * This method searches the database for a Book entity with the specified title and returns it.
+     * If no book is found, it returns null.
+     *
+     * @param theBookName the title of the book to be retrieved.
+     * @return the Book entity with the specified title, or null if not found.
+     */
     @Override
     public Book findBookByName(String theBookName) {
         // retrieve/read from database using name
@@ -58,11 +84,24 @@ public class BookDaoImpl implements BookDao{
         return theBook;
     }
 
+    /**
+     * Deletes a Book entity by its ID.
+     * This method removes the Book entity with the specified ID from the database.
+     *
+     * @param id the ID of the book to be deleted.
+     */
     public void deleteBookById(Long id) {
         Book theBook = entityManager.find(Book.class, id);
         entityManager.remove(theBook);
     }
 
+    /**
+     *
+     * Counts the total number of Book entities in the database.
+     * This method executes a JPQL query to count all Book entities and returns the total count.
+     *
+     * @return the total number of Book entities in the database.
+     */
     @Override
     public Long count() {
         String query = "SELECT COUNT(b) FROM Book b";
@@ -73,6 +112,14 @@ public class BookDaoImpl implements BookDao{
         return totalEntities;
     }
 
+    /**
+     * Finds a Book entity by its ID with a pessimistic write lock.
+     * This method retrieves a Book entity from the database with a pessimistic write lock,
+     * preventing other transactions from modifying it until the current transaction completes.
+     *
+     * @param bookId the ID of the book to be retrieved.
+     * @return an Optional containing the Book entity if found, or empty if not found.
+     */
     @Override
     public Optional<Book> findByIdWithLock(Long bookId) {
         Book book = entityManager.find(Book.class, bookId, LockModeType.PESSIMISTIC_WRITE);

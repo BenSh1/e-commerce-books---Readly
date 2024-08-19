@@ -14,17 +14,6 @@ public class CartItems {
     @Column(name="id")
     private int cartItemsId;
 
-/*
-    @Column(name="bookId")
-    private int bookId;
-
- */
-/*
-    @Column(name="customerId")
-    private int customerId;
-
- */
-
     @Column(name="quantity")
     private int quantity;
 
@@ -32,10 +21,8 @@ public class CartItems {
     private int price;
 
 
-    // it indicates that a single Cart entity can be associated with one Book entity
-    // many cart could have the same book
+    // a single cart item is related to a single user and a single book
 
-    // a single cart item is related to a single user and a single book,
     // a book can be in multiple cart items.
     @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
                                             CascadeType.DETACH, CascadeType.MERGE})
@@ -50,44 +37,10 @@ public class CartItems {
 
 
 
-    //private List<Book> books;
-
-/*
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
- */
-/*
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
-
- */
-
-
-
-    //private List<CartItems> items; // List of items in the cart
-
-
-    //private List<Book> books;
-
-    // getters and setters
-/*
-    public void addBook(Book book) {
-        this.books.add(book);
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
- */
-
+    /**
+     * Getters + Setters
+     *
+     */
     public User getUser() {
         return user;
     }
@@ -137,6 +90,11 @@ public class CartItems {
         this.price = price;
     }
 
+    /**
+     * Returns a string representation of the CartItems object.
+     *
+     * @return a string representation of the CartItems object.
+     */
     @Override
     public String toString() {
         return "CartItems{" +

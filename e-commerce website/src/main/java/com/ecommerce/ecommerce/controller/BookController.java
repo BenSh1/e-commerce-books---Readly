@@ -76,6 +76,16 @@ public class BookController {
     }
 
 
+    @GetMapping("/searchInBookList")
+    public String searchForBookInBookList(@RequestParam("query") String query,
+                                          Model model) {
+
+        List<Book> books = bookService.searchBooks(query);
+        model.addAttribute("books", books);
+
+        return "/books/bookList";
+    }
+
     /**
      * Handles the request to display the items available for sale.
      * This method is mapped to the "/itemSells" URL and is triggered by a GET request.
@@ -225,8 +235,6 @@ public class BookController {
         model.addAttribute("allBooks", books);
         return "books/itemSells";
     }
-
-
 
     /**
      * Handles the request to add an item (book) to the cart from the book details page.

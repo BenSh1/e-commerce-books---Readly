@@ -45,7 +45,7 @@ public class BookService {
     public void addBook(Book book)  {
         bookDao.save(book);
     }
-    
+
     /**
      * This function retrieves all books from the database.
      * It returns a list of all book objects found.

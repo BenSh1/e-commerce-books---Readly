@@ -11,7 +11,6 @@ public class OrderDetails {
     @Column(name="id")
     private int orderDetailID;
 
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
@@ -27,7 +26,10 @@ public class OrderDetails {
     private int price;
 
 
-
+    /**
+     * Getters + Setters
+     *
+     */
     public int getOrderDetailID() {
         return orderDetailID;
     }
@@ -68,40 +70,22 @@ public class OrderDetails {
         this.price = price;
     }
 
-    /*
-    @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-            CascadeType.DETACH, CascadeType.MERGE})
-    @Column(name="order_id")
-    private Order order;
 
-
-
-    @Column(name="orderStatus")
-    private String orderStatus;
-
-    @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-            CascadeType.DETACH, CascadeType.MERGE})
-    @JoinColumn(name = "book_id")
-    private Book book;
-
-
-    // a user can have multiple cart items
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-            CascadeType.DETACH, CascadeType.MERGE})
-    @JoinColumn(name = "user_id")
-    private User user;
-
-
-
-    public int getPrice() {
-        return price;
+    /**
+     * Returns a string representation of the OrderDetails object.
+     *
+     * @return a string representation of the OrderDetails object.
+     */
+    @Override
+    public String toString() {
+        return "OrderDetails{" +
+                "orderDetailID=" + orderDetailID +
+                ", order=" + order +
+                ", book=" + book +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                '}';
     }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
- */
 
 
 }

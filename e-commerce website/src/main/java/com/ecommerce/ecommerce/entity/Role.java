@@ -20,13 +20,28 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users = new HashSet<>();
 
+
+    /**
+     * Default constructor for the Role class.
+     * This constructor initializes a new Role object without setting any attributes.
+     */
     public Role() {
     }
 
+    /**
+     * Parameterized constructor for the Role class.
+     * This constructor initializes a new Role object with the specified attribute.
+     *
+     * @param name       the name of the role
+     */
     public Role(String name) {
         this.name = name;
     }
 
+    /**
+     * Getters + Setters
+     *
+     */
     public Long getId() {
         return id;
     }
@@ -43,6 +58,11 @@ public class Role {
         this.name = name;
     }
 
+    /**
+     * Returns a string representation of the Role object.
+     *
+     * @return a string representation of the Role object.
+     */
     @Override
     public String toString() {
         return "Role{" + "id=" + id + ", name='" + name + '\'' + '}';

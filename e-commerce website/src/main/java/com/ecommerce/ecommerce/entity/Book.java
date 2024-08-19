@@ -14,45 +14,50 @@ public class Book {
 
     @Column(name="title")
     private String title;
+
     @Column(name="author")
     private String author;
+
     @Column(name="description" , length = 10000)
     private String description;
+
     @Column(name="category")
     private String category;
+
     @Column(name="price")
     private int price;
+
     @Column(name="stock")
     private int stock;
 
-/*
     @Column(name="image")
-    @Lob
-    private byte[] image;
-
-    public byte[] getImage() {
-        return image;
-    }
-
-    public void setImage(byte[] image) {
-        this.image = image;
-    }
-
- */
-
-
-    @Column(name="image")
-    //@Lob
     private String image;
-
 
     @Column(name="isActive")
     private String isActive;
 
+    /**
+     * Default constructor for the Book class.
+     * This constructor initializes a new Book object without setting any attributes.
+     */
     public Book() {
 
     }
 
+
+    /**
+     * Parameterized constructor for the Book class.
+     * This constructor initializes a new Book object with the specified attributes.
+     *
+     * @param title       the title of the book.
+     * @param author      the author of the book.
+     * @param description a brief description of the book.
+     * @param category    the category of the book.
+     * @param price       the price of the book.
+     * @param stock       the number of copies in stock.
+     * @param isActive    a flag indicating if the book is active.
+     * @param image       the book's image.
+     */
     public Book(String title, String author, String description,
                 String category, int price, int stock,String isActive, String image) {
         this.title = title;
@@ -65,6 +70,10 @@ public class Book {
         this.image = image;
     }
 
+    /**
+     * Getters + Setters
+     *
+     */
     public String getImage() {
         return image;
     }
@@ -81,50 +90,6 @@ public class Book {
         this.author = author;
     }
 
-
-
-    /*
-    @Column(name="image")
-    private String image;
-
- */
-
-
-/*
-    @Transient
-    private String imageBase64;
-
-
-    // Add this method to convert image to Base64
-    public String getImageBase64() {
-        if (this.image != null) {
-            String base64 = java.util.Base64.getEncoder().encodeToString(this.image);
-            System.out.println("Base64 Image: " + base64);
-            return base64;
-        }
-        return null;
-    }
-
-    public void setImageBase64(String imageBase64) {
-        this.imageBase64 = imageBase64;
-    }
-
- */
-
-/*
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
- */
-
-
-
-
     public String getDescription() {
         return description;
     }
@@ -136,8 +101,6 @@ public class Book {
     public String getAuthorName() {
         return author;
     }
-
-
 
     public int getBookId() {
         return id;
@@ -183,7 +146,6 @@ public class Book {
         this.stock = stock;
     }
 
-
     public String getIsActive() {
         return isActive;
     }
@@ -192,15 +154,23 @@ public class Book {
         this.isActive = isActive;
     }
 
+    /**
+     * Returns a string representation of the Book object.
+     *
+     * @return a string representation of the Book object.
+     */
     @Override
     public String toString() {
         return "Book{" +
-                "bookId=" + id +
+                "id=" + id +
                 ", title='" + title + '\'' +
-                ", authorId=" + author +
-                ", categoryID=" + category +
+                ", author='" + author + '\'' +
+                ", description='" + description + '\'' +
+                ", category='" + category + '\'' +
                 ", price=" + price +
                 ", stock=" + stock +
+                ", image='" + image + '\'' +
+                ", isActive='" + isActive + '\'' +
                 '}';
     }
 }

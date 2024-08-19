@@ -5,9 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "user")
@@ -36,8 +35,6 @@ public class User {
 
     @Column(name = "enabled")
     private boolean enabled;
-
-
 
     @NotNull(message = "is required")
     @Size(min = 1, message = "is required")
@@ -132,7 +129,6 @@ public class User {
 
     /*
     @Min(value = 2023, message = "Year must be greater than or equal to the current year")
-
      */
     @Column(name = "cardExpiryYear")
     private Integer cardExpiryYear;
@@ -143,7 +139,6 @@ public class User {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    //private Set<Role> roles = new HashSet<>();
     private Collection<Role> roles;
 
     //a user can have multiple cart items
@@ -151,44 +146,42 @@ public class User {
             CascadeType.DETACH, CascadeType.REFRESH})
     private List<CartItems> cartItems;
 
-
+    //A user can have multiple orders on their behalf
     @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
             CascadeType.DETACH, CascadeType.REFRESH})
     private List<Order> orders;
 
-
-
-
-
-
-
-
-
-    /*
-    //a user can have multiple orders
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user", cascade = {CascadeType.PERSIST,CascadeType.MERGE,
-            CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Order> orders;
-
+    /**
+     * Default constructor for the User class.
+     * This constructor initializes a new User object without setting any attributes.
      */
-
-/*
-    @OneToOne(mappedBy = "")
-    @JoinColumn(name = "user_id")
-    private Collection<Book> booksInCart;
-
- */
-
-
     public User() {
     }
 
+    /**
+     * Parameterized constructor for the User class.
+     * This constructor initializes a new User object with the specified attributes.
+     *
+     * @param userName the username of the user
+     * @param password the password of the user
+     * @param enabled  the enabled status of the user (true if the user is enabled, false otherwise)
+     */
     public User(String userName, String password, boolean enabled) {
         this.userName = userName;
         this.password = password;
         this.enabled = enabled;
     }
 
+
+    /**
+     * Parameterized constructor for the User class.
+     * This constructor initializes a new User object with the specified attributes.
+     *
+     * @param userName the username of the user
+     * @param password the password of the user
+     * @param enabled  the enabled status of the user (true if the user is enabled, false otherwise)
+     * @param roles    the roles assigned to the user
+     */
     public User(String userName, String password, boolean enabled,
                 Collection<Role> roles) {
         this.userName = userName;
@@ -197,7 +190,27 @@ public class User {
         this.roles = roles;
     }
 
-
+    /**
+     * Parameterized constructor for the User class.
+     * This constructor initializes a new User object with the specified attributes.
+     *
+     * @param userName           the username of the user
+     * @param password           the password of the user
+     * @param firstName          the first name of the user
+     * @param enabled            the enabled status of the user (true if the user is enabled, false otherwise)
+     * @param lastName           the last name of the user
+     * @param phone              the phone number of the user
+     * @param email              the email address of the user
+     * @param country            the country of the user
+     * @param city               the city of the user
+     * @param streetAddress      the street address of the user
+     * @param apartmentNumber    the apartment number of the user
+     * @param zipCode            the zip code of the user
+     * @param creditCardNumber   the credit card number of the user
+     * @param creditCardCompany  the credit card company of the user
+     * @param cardExpiryMonth    the expiry month of the credit card
+     * @param cardExpiryYear     the expiry year of the credit card
+     */
     public User(String userName, String password, String firstName, boolean enabled,
                 String lastName, String phone, String email, String country, String city,
                 String streetAddress, String apartmentNumber, String zipCode,
@@ -215,9 +228,18 @@ public class User {
         this.streetAddress = streetAddress;
         this.apartmentNumber = apartmentNumber;
         this.zipCode = zipCode;
+        this.creditCardNumber = creditCardNumber;
+        this.creditCardCompany = creditCardCompany;
+        this.cardExpiryMonth = cardExpiryMonth;
+        this.cardExpiryYear = cardExpiryYear;
 
     }
 
+
+    /**
+     * Getters + Setters
+     *
+     */
     public Long getId() {
         return id;
     }
@@ -330,7 +352,6 @@ public class User {
         this.creditCardNumber = creditCardNumber;
     }
 
-
     public String getCreditCardCompany() {
         return creditCardCompany;
     }
@@ -355,10 +376,6 @@ public class User {
         this.cardExpiryYear = cardExpiryYear;
     }
 
-
-
-
-
     public Collection<Role> getRoles() {
         return roles;
     }
@@ -367,8 +384,11 @@ public class User {
         this.roles = roles;
     }
 
-
-
+    /**
+     * Returns a string representation of the User object.
+     *
+     * @return a string representation of the User object.
+     */
 
     @Override
     public String toString() {
@@ -379,23 +399,20 @@ public class User {
                 ", enabled=" + enabled +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
                 ", country='" + country + '\'' +
                 ", city='" + city + '\'' +
                 ", streetAddress='" + streetAddress + '\'' +
                 ", apartmentNumber='" + apartmentNumber + '\'' +
                 ", zipCode='" + zipCode + '\'' +
-                ", roles='" + roles + '\'' +
-                '}';
-                /*
                 ", creditCardNumber='" + creditCardNumber + '\'' +
                 ", creditCardCompany='" + creditCardCompany + '\'' +
                 ", cardExpiryMonth=" + cardExpiryMonth +
                 ", cardExpiryYear=" + cardExpiryYear +
-
-                 */
-
+                '}';
     }
+
+
 }
 

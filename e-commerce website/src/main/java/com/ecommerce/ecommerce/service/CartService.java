@@ -18,19 +18,6 @@ import java.util.List;
 
 @Service
 public class CartService {
-/*
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private CartItemRepository cartItemRepository;
-
- */
-/*
-
-    @Autowired
-    private BookService bookService;
- */
 
     @Autowired
     private CartItemsRepository cartItemsRepository;
@@ -41,51 +28,43 @@ public class CartService {
     @Autowired
     private UserDao userDao;
 
+    /**
+     * This function retrieves the cart items associated with a specific user.
+     * It returns a list of all cart items belonging to the given user.
+     *
+     * @param user the user whose cart items are to be retrieved.
+     * @return a list of cart items for the specified user.
+     */
     public List<CartItems> getCartForUser(User user) {
         return cartItemsRepository.findByUser(user);
     }
 
+
+    /**
+     * This function adds a book to a user's cart. it's creates a new cart item with a quantity of 1 and adds it to the cart.
+     * The function is transactional to ensure the operation's atomicity.
+     *
+     * @param user the user who is adding the book to their cart.
+     * @param bookId the ID of the book to add to the cart.
+     */
     @Transactional
     public void addToCart(User user, Long bookId) {
 
-        int isExistTheBookId = 0;
-        System.out.println("in addToCart");
-        System.out.println("user : " + user.toString());
-
         Book book = bookDao.findById(bookId);
-        System.out.println("the book : " + book.toString());
 
         User currentUser = userDao.findByUserName(user.getUserName());
-        System.out.println("userDao.findByUserName : " + currentUser.toString());
 
-        List<CartItems> cartItemsList = this.getCartForUser(currentUser);
+        CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
+                .orElseGet(CartItems::new);
 
+        cartItems.setUser(currentUser);
+        cartItems.setBook(book);
+        cartItems.setPrice(book.getPrice());
+        cartItems.setQuantity(cartItems.getQuantity() + 1);
 
-        for(CartItems tempItem : cartItemsList) {
-            if(tempItem.getBook().getBookId() == book.getBookId())
-            {
-                isExistTheBookId = 1;
-                break;
-            }
-        }
-        if(isExistTheBookId == 1)
-        {
-            System.out.println("------------------------------------------------");
-            System.out.println("the book is already exist in the cart!");
-        }
-        else{
-            CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
-                    .orElseGet(CartItems::new);
+        System.out.println("the cartItems : " + cartItems.toString());
 
-            cartItems.setUser(currentUser);
-            cartItems.setBook(book);
-            cartItems.setPrice(book.getPrice());
-            cartItems.setQuantity(cartItems.getQuantity() + 1);
-
-            System.out.println("the cartItems : " + cartItems.toString());
-
-            cartItemsRepository.save(cartItems);
-        }
+        cartItemsRepository.save(cartItems);
 
     }
 
@@ -106,35 +85,46 @@ public class CartService {
         cartItemsRepository.save(cartItems);
     }
 
-
+    /**
+     * This function removes a specific book from a user's cart.
+     * It finds the cart item that matches the book ID and user, and then deletes it from the cart.
+     *
+     * @param id the ID of the book to remove from the cart.
+     * @param user the user whose cart item is to be removed.
+     */
     public void removeBookFromCart(Integer id , User user) {
-        System.out.println("----------------------------------id: "+ id );
 
         User currentUser = userDao.findByUserName(user.getUserName());
-        System.out.println("userDao.findByUserName : " + currentUser.toString());
-
 
         List<CartItems> cartItemsList = this.getCartForUser(currentUser);
         for(CartItems tempItem : cartItemsList) {
             if(tempItem.getBook().getBookId() == id){
-                //cartItemsList.remove(tempItem);
                 cartItemsRepository.delete(tempItem);
             }
         }
-
-        /*
-        List<CartItems> cartItems = cartItemsRepository.find(id);
-        cartItemsRepository.delete(cartItems);
-
-         */
-
     }
-
+    /**
+     * This function clears all items from a user's cart.
+     * It retrieves all cart items for the user and deletes them from the database.
+     *
+     * @param user the user whose cart is to be cleared.
+     */
     public void clearCart(User user) {
         List<CartItems> cartItems = cartItemsRepository.findByUser(user);
         cartItemsRepository.deleteAll(cartItems);
     }
 
+
+    /**
+     * This function updates the quantity of a specific book in a user's cart.
+     * It checks if the requested quantity is within the allowed limits (stock >= quantity and quantity <= 3).
+     * If valid, the cart item is updated with the new quantity and saved to the database.
+     * The function is transactional to ensure the operation's atomicity.
+     *
+     * @param user the user whose cart item's quantity is to be updated.
+     * @param bookId the ID of the book whose quantity is to be updated.
+     * @param quantity the new quantity to set for the book in the cart.
+     */
     @Transactional
     public void updateQuantity(User user, Long bookId, int quantity) {
         Book book = bookDao.findById(bookId);
@@ -147,7 +137,6 @@ public class CartService {
                 cartItemsRepository.save(cartItem);
             }
         }
-
     }
 
 }

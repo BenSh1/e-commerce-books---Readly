@@ -13,13 +13,14 @@ import java.util.Optional;
 
 public interface BookDao {
     public void save(Book theBook);
-    public Book findBookByName(String theBookName);
     public Book findById(Long id);
-    //public Book findAll();
+
     public List<Book> findAll();
-    //void update(Long id, Book book);
     public void deleteBookById(Long id);
     public Long count();
+
+    public Book findBookByName(String theBookName);
+    //void update(Long id, Book book);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT b FROM Book b WHERE b.id = :bookId")

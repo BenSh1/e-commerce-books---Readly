@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
@@ -49,6 +50,17 @@ public class OrderController {
 
         String title = " Order List";
         model.addAttribute("title", title);
+
+        return "order/orderList";
+    }
+
+
+    @GetMapping("/searchInOrderList")
+    public String searchForOrderInOrdersList(@RequestParam("query") String query,
+                                              Model model) {
+
+        List<Order> orders = orderService.searchOrder(query);
+        model.addAttribute("orders", orders);
 
         return "order/orderList";
     }

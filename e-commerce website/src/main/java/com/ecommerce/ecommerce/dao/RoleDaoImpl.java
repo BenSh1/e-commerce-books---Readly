@@ -18,10 +18,24 @@ public class RoleDaoImpl implements RoleDao {
 	@Autowired
 	private EntityManager entityManager;
 
+	/**
+	 * Constructs a RoleDaoImpl instance with the given EntityManager.
+	 * This constructor initializes the RoleDaoImpl with the provided EntityManager to interact with the database.
+	 *
+	 * @param theEntityManager the EntityManager used to interact with the database.
+	 */
 	public RoleDaoImpl(EntityManager theEntityManager) {
 		entityManager = theEntityManager;
 	}
 
+	/**
+	 * Finds a Role entity by its name.
+	 * This method retrieves a Role entity from the database where the role's name matches
+	 * the provided role name.
+	 *
+	 * @param theRoleName the name of the role to be retrieved.
+	 * @return the Role entity with the specified name, or null if no such role is found.
+	 */
 	@Override
 	public Role findRoleByName(String theRoleName) {
 
@@ -40,6 +54,12 @@ public class RoleDaoImpl implements RoleDao {
 		return theRole;
 	}
 
+	/**
+	 * Counts the total number of Role entities in the database.
+	 * This method executes a query to count all Role entities and returns the total count.
+	 *
+	 * @return the total number of Role entities in the database.
+	 */
 	@Override
 	public Long count() {
 		String query = "SELECT COUNT(m) FROM Role m";
@@ -51,12 +71,25 @@ public class RoleDaoImpl implements RoleDao {
 		return totalEntities;
 	}
 
+	/**
+	 * Saves a Role entity to the database.
+	 * This method persists the given Role entity into the database. If the entity already exists,
+	 * it updates it; otherwise, it creates a new one.
+	 *
+	 * @param theRole the Role entity to be saved.
+	 */
 	@Override
 	@Transactional
 	public void save(Role theRole) {
 		entityManager.persist(theRole);
 	}
 
+	/**
+	 * Retrieves all Role entities from the database.
+	 * This method executes a query to retrieve all Role entities and returns them as a List.
+	 *
+	 * @return a List of all Role entities in the database.
+	 */
 	@Override
 	public List<Role> getAllRoles() {
 		String query = "SELECT e FROM Role e";

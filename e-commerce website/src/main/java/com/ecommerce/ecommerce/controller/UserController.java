@@ -1,6 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
+import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.RoleService;
@@ -55,6 +56,15 @@ public class UserController {
         return "user/customersList";// Return the view to display the books
     }
 
+    @GetMapping("/searchInCustomerList")
+    public String searchForCustomerInUserList(@RequestParam("query") String query,
+                                              Model model) {
+
+        List<User> customers = userService.searchUsers(query);
+        model.addAttribute("customers", customers);
+
+        return "/user/customersList";
+    }
 
     /**
      * Displays the edit customer page for a specific user.

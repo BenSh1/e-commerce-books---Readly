@@ -24,31 +24,21 @@ public class Order {
     @Column(name="status")
     private String status;
 
-    /*
-    @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-            CascadeType.DETACH, CascadeType.MERGE})
-    @Column(name="user_id")
-    private User user;
 
-     */
-/*
-    @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-            CascadeType.DETACH, CascadeType.MERGE})
-    @JoinColumn(name = "user_id" , referencedColumnName = "id")
-    private User user;
-
- */
-
-    // a user can have multiple cart items
     @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
             CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "user_id")
     private User user;
 
-
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY )
     private List<OrderDetails> orderDetails;
 
+
+
+    /**
+     * Getters + Setters
+     *
+     */
     public int getOrderId() {
         return orderId;
     }
@@ -97,6 +87,13 @@ public class Order {
         this.orderDetails = orderDetails;
     }
 
+    /**
+     * This method adds the specified {@link OrderDetails} to the list of order details for this order.
+     * If the list of order details is {@code null}, it initializes a new {@link ArrayList}.
+     * It also sets the {@link Order} reference in the {@link OrderDetails} object to this order.
+     *
+     * @param tempOrderDetails the {@link OrderDetails} to be added to the order.
+     */
     public void add(OrderDetails tempOrderDetails) {
 
         if(orderDetails == null) {
@@ -107,5 +104,23 @@ public class Order {
 
         tempOrderDetails.setOrder(this);
     }
+
+
+    /**
+     * Returns a string representation of the Order object.
+     *
+     * @return a string representation of the Order object.
+     */
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", orderDate=" + orderDate +
+                ", totalAmount=" + totalAmount +
+                ", status='" + status + '\'' +
+                '}';
+    }
+
 
 }

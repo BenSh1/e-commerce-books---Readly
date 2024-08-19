@@ -20,12 +20,25 @@ public class UserDaoImpl implements UserDao {
     private EntityManager entityManager;
 
     // inject entity manager using constructor injection
+    /**
+     * Constructs a UserDaoImpl instance with the given EntityManager.
+     * This constructor initializes the UserDaoImpl with the provided EntityManager to interact with the database.
+     *
+     * @param entityManager the EntityManager used to interact with the database.
+     */
     @Autowired
     public UserDaoImpl(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-
+    /**
+     * Finds a User entity by its username.
+     * This method retrieves a User entity from the database where the username matches
+     * the provided username and the user is enabled.
+     *
+     * @param theUserName the username of the user to be retrieved.
+     * @return the User entity with the specified username and enabled status, or null if no such user is found.
+     */
     @Override
     public User findByUserName(String theUserName) {
 
@@ -42,6 +55,13 @@ public class UserDaoImpl implements UserDao {
         return theUser;
     }
 
+    /**
+     * Saves or updates a User entity in the database.
+     * This method merges the given User entity into the database.
+     * If the entity already exists, it updates it; otherwise, it creates a new one.
+     *
+     * @param theUser the User entity to be saved or updated.
+     */
     @Override
     @Transactional
     public void save(User theUser) {
@@ -50,6 +70,12 @@ public class UserDaoImpl implements UserDao {
 
     }
 
+    /**
+     * Retrieves all User entities from the database.
+     * This method executes a JPQL query to retrieve all User entities and returns them as a List.
+     *
+     * @return a List of all User entities in the database.
+     */
     @Override
     public List<User> findAll() {
         // Create JPQL query
@@ -60,17 +86,36 @@ public class UserDaoImpl implements UserDao {
         return typedQuery.getResultList();
     }
 
+    /**
+     * Finds a User entity by its ID.
+     * This method retrieves a User entity from the database using the specified ID.
+     *
+     * @param id the ID of the user to be retrieved.
+     * @return the User entity with the specified ID, or null if no such user is found.
+     */
     @Override
     public User findById(Long id) {
         return entityManager.find(User.class, id);
     }
 
+    /**
+     * Deletes a User entity from the database by its ID.
+     * This method removes the User entity with the specified ID from the database.
+     *
+     * @param id the ID of the user to be deleted.
+     */
     @Override
     public void deleteUserById(Long id) {
         User theUser = entityManager.find(User.class, id);
         entityManager.remove(theUser);
     }
 
+    /**
+     * Counts the total number of User entities in the database.
+     * This method executes a query to count all User entities and returns the total count.
+     *
+     * @return the total number of User entities in the database.
+     */
     @Override
     public Long count() {
         String query = "SELECT COUNT(m) FROM User m";
@@ -80,6 +125,16 @@ public class UserDaoImpl implements UserDao {
         System.out.println("Total entities in MyTable: " + totalEntities);
 
         return totalEntities;
+    }
+
+    @Override
+    public List<User> findByUsernameContainingIgnoreCase(String username) {
+
+        String queryStr = "SELECT u FROM User u WHERE LOWER(u.userName) LIKE LOWER(CONCAT('%', :username, '%'))";
+        TypedQuery<User> query = entityManager.createQuery(queryStr, User.class);
+        query.setParameter("username", username);
+
+        return query.getResultList();
     }
 
 }
