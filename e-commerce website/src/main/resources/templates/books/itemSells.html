@@ -368,14 +368,6 @@
 
 <div class="item-list">
     <div class="item" th:each="book : ${allBooks} ">
-        <!--
-        <form th:action="@{bookDetails/{id}(id=${book.bookId})}">
-            <button type="submit">
-                <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" width="250" height="350" /><br/>
-                <input type="hidden" name="bookId" th:value="${book.bookId}">
-            </button>
-        </form>
-        -->
 
         <form th:action="@{bookDetails/{id}(id=${book.bookId})}">
             <button type="submit">
@@ -392,10 +384,6 @@
             <button class="details" type="submit">Details</button>
         </form>
 
-
-        <!--
-        <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
-        -->
         <div th:if="${currentUser != null}">
             <!-- Add to Cart Button -->
             <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post">

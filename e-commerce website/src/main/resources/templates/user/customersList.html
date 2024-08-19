@@ -182,11 +182,15 @@
 <header>
     <h2>Customers List</h2>
 </header>
-
+<br>
 <a href="/menuForManager">Menu for Managers</a><br><br>
 
 <hr>
 
+<form th:action="@{/searchInCustomerList}" method="get">
+    <input type="text" name="query" placeholder="Search for customers...">
+    <button type="submit">Search</button>
+</form>
 
 <table>
     <tr>

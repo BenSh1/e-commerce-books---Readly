@@ -170,8 +170,15 @@
 <a href="/addBook">Go to Add book</a>
 <a href="/menuForManager">Menu For Managers</a><br><br>
 
+
+
+
 <hr>
 
+<form th:action="@{/searchInBookList}" method="get">
+    <input type="text" name="query" placeholder="Search for books...">
+    <button type="submit">Search</button>
+</form>
 
 <table>
 
@@ -179,7 +186,6 @@
         <th>ID</th>
         <th>Title</th>
         <th>Author</th>
-        <!--<th>Description</th>-->
         <th>Category</th>
         <th>Price</th>
         <th>Stock</th>
@@ -192,60 +198,25 @@
         <td th:text="${book.bookId} " ></td>
         <td th:text="${book.title} " class="vertical-line"></td>
         <td th:text="${book.authorName}" class="vertical-line"></td>
-        <!--<td th:text="${book.description}" class="vertical-line"></td>-->
         <td th:text="${book.category}" class="vertical-line"></td>
         <td th:text="${book.price}" class="vertical-line"></td>
         <td th:text="${book.stock}" class="vertical-line"></td>
         <td th:text="${book.isActive}" class="vertical-line"></td>
 
-        <!--
-        <td class="vertical-line"><img th:src="${book.image}"  alt="Item Image"></td>
-        -->
-        <!--
-        <td class="vertical-line"><img th:src="@{/images/{id}.jpg(id=${book.bookId})}" alt="Book Image" /></td>
-        -->
-
         <td class="vertical-line"><img th:src="@{'/images/' + ${book.image}}" alt="Book Image"/></td>
-
-        <!--
-        <td class="vertical-line"><img  th:src="@{/images/}" th:src-append="${book.bookId}" alt="Book Image" /></td>
-        -->
-        <!--
-        <td class="vertical-line">
-            <img th:src="${'data:image/jpg;base64,' + book.imageBase64}" alt="Book Image" width="100" height="100"/>
-        </td>
-        -->
-        <!--
-        <td class="vertical-line" th:src="@{'/images/' + ${book.imageBase64}}" > </td>
-        -->
-
-
-
-        <!--
-        <td class="vertical-line">
-            <img  th:src="'data:image/jpeg;base64,' + ${book.imageBase64}" alt="Book Image"/>
-        </td>
-        -->
 
         <td class="vertical-line" style="white-space:nowrap">
             <div class="action-buttons">
-
-
                 <form th:action="@{editBook/{id}(id=${book.bookId})}" method="get" style="display:inline;">
                     <button type="submit" class="edit">Edit</button>
                 </form>
-                <!--
-                <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
 
-                 -->
                 <div sec:authorize="hasRole('ADMIN')">
                     <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
                         <input type="hidden" name="_method" value="delete" />
                         <button type="submit" class="delete">Delete</button>
                     </form>
                 </div>
-
-
 
                 <form  th:action="@{toActive/{id}(id=${book.bookId})}" method="post" style="display:inline;">
                     <input type="hidden" name="_method" value="delete" />
@@ -258,9 +229,7 @@
                 </form>
 
             </div>
-
         </td>
-
     </tr>
 </table>
 

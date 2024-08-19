@@ -170,6 +170,12 @@
 <a href="/menuForManager">Menu for Managers</a><br><br>
 <hr>
 
+<form th:action="@{/searchInOrderList}" method="get">
+    <input type="text" name="query" placeholder="Search for orders by username...">
+    <button type="submit">Search</button>
+</form>
+
+
 <table>
 
     <tr>
