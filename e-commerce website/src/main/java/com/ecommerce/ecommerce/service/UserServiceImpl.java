@@ -376,6 +376,24 @@ public class UserServiceImpl implements UserService {
 	}
 
 
+	public boolean changeUserPasswordByAdmin(String username, PasswordChangeDto passwordChangeDto) {
+		User user = userDao.findByUserName(username);
+
+		// Check if new password and confirm password match
+		if (!passwordChangeDto.getNewPassword().equals(passwordChangeDto.getConfirmPassword())) {
+			return false; // New password and confirm password don't match
+		}
+
+		// Encode and set the new password
+		user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
+		//userRepository.save(user);
+		userDao.save(user);
+
+		return true;
+	}
+
+
+
 	public List<User> searchUsers(String query) {
 
 		// Assuming userDao has a method to find users by username or other fields

@@ -95,6 +95,9 @@ public class CartController {
         // Get the current user
         User currentUser = userService.getCurrentUser(session);
 
+        String title = currentUser.getUserName() + "'s Cart List";
+        model.addAttribute("title", title);
+
         // Update the quantity in the cart
         cartService.updateQuantity(currentUser, bookId, quantity);
 
@@ -103,6 +106,9 @@ public class CartController {
         model.addAttribute("cartItems", cartItemsList);
         double totalAmount = cartItemsList.stream().mapToDouble(item -> item.getBook().getPrice() * item.getQuantity()).sum();
         model.addAttribute("totalAmount", totalAmount);
+
+
+
 
         return "cart/shopping_cart";
     }

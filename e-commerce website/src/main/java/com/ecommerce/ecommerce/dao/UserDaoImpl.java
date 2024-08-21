@@ -55,6 +55,21 @@ public class UserDaoImpl implements UserDao {
         return theUser;
     }
 
+    @Override
+    public User findByEmail(String email) {
+        // retrieve/read from database using username
+        TypedQuery<User> theQuery = entityManager.createQuery("from User where email=:email and enabled=true", User.class);
+        theQuery.setParameter("email", email);
+
+        User theUser = null;
+        try {
+            theUser = theQuery.getSingleResult();
+        } catch (Exception e) {
+            theUser = null;
+        }
+        return theUser;
+    }
+
     /**
      * Saves or updates a User entity in the database.
      * This method merges the given User entity into the database.

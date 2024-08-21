@@ -1,23 +1,25 @@
 package com.ecommerce.ecommerce.entity;
+
 /*
 import jakarta.persistence.*;
-
-//import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Table(name="PasswordResetToken")
 public class PasswordResetToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name="token")
     private String token;
 
     @OneToOne(targetEntity = User.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, name = "user_id")
     private User user;
 
+    @Column(name="expiryDate")
     private Date expiryDate;
 
     // Getters and setters
@@ -53,8 +55,14 @@ public class PasswordResetToken {
     public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
+
+
+    public boolean isExpired() {
+        return new Date().after(this.expiryDate);
+    }
 }
 
-
-
  */
+
+
+

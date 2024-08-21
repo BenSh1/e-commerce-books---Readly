@@ -323,7 +323,6 @@ public class UserController {
         PasswordChangeDto passwordChangeDto = new PasswordChangeDto();
         model.addAttribute("passwordChangeDto",passwordChangeDto);
 
-        //return "changePassword";
         return "user/changePassword";
 
     }
@@ -337,18 +336,49 @@ public class UserController {
     public String changePassword(@ModelAttribute PasswordChangeDto passwordChangeDto, Principal principal, Model model) {
         String username = principal.getName();
         boolean success = userService.changeUserPassword(username, passwordChangeDto);
-        System.out.println("=======in changePassword=======================");
-        System.out.println("username : " + username);
 
         if (success) {
             model.addAttribute("message", "Password changed successfully.");
-            System.out.println("==========successfully============");
         } else {
             model.addAttribute("error", "Password change failed. Please try again.");
-            System.out.println("============failed============");
-
         }
         return "user/changePassword";
+    }
+
+
+
+    @GetMapping("/changePasswordByAdmin/{id}")
+    public String changePasswordByAdmin(@PathVariable Long id,  Model model) {
+
+        User currentUser = userService.getUser(id);
+        model.addAttribute("user",currentUser);
+
+        PasswordChangeDto passwordChangeDto = new PasswordChangeDto();
+        model.addAttribute("passwordChangeDto",passwordChangeDto);
+
+        return "user/changePasswordByAdmin";
+    }
+
+    @PostMapping("/changePasswordByAdmin/{id}")
+    public String changePasswordByAdmin(@PathVariable Long id,
+                                        @ModelAttribute PasswordChangeDto passwordChangeDto,
+                                        Model model) {
+
+        User currentUser = userService.getUser(id);
+
+        boolean isSuccess = userService.changeUserPasswordByAdmin(currentUser.getUserName(), passwordChangeDto);
+
+        System.out.println("=======in changePasswordByAdmin=======================");
+        System.out.println("currentUser.getUserName() : " + currentUser.getUserName());
+
+        model.addAttribute("user",currentUser);
+
+        if (isSuccess) {
+            model.addAttribute("message", "Password changed successfully.");
+        } else {
+            model.addAttribute("error", "Password change failed. Please try again.");
+        }
+        return "user/changePasswordByAdmin";
     }
 
 /*

@@ -36,6 +36,7 @@ public interface UserService extends UserDetailsService {
 	//String getCurrentCustomerUsername();
 
 	boolean changeUserPassword(String username, PasswordChangeDto passwordChangeDto);
+	boolean changeUserPasswordByAdmin(String username, PasswordChangeDto passwordChangeDto);
 
 	User getCurrentUser(HttpSession session);
 

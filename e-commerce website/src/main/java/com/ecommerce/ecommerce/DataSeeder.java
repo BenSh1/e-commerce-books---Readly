@@ -97,7 +97,7 @@ public class DataSeeder implements ApplicationRunner {
                     10,
                     "active",
                     "From Animals into Gods A Brief History of Humankind.jpg");
-            bookDao.save(thirdBook);
+            bookDao.save(fourthBook);
 
 
             System.out.println("Initial data saved to Book's Table");

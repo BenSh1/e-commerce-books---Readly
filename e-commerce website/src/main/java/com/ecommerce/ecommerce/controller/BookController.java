@@ -41,7 +41,7 @@ public class BookController {
     @GetMapping("/addBook")
     public String getAddBookForm(Model model) {
         model.addAttribute("book",new Book());
-        System.out.println("addBookForm");
+
         return "books/addBook";
     }
 
@@ -54,10 +54,13 @@ public class BookController {
      * the user to the "/bookList" page to view the list of all books.
      */
     @PostMapping("/addBook")
-    public String addBookForm(@ModelAttribute Book theBook) {
+    public String addBookForm(@ModelAttribute Book theBook, Model model) {
         theBook.setIsActive("active");
         bookService.addBook(theBook);
-        return "redirect:/bookList";
+
+        model.addAttribute("message", "The Book has been added successfully");
+
+        return "books/addBook";
     }
 
     /**
@@ -93,7 +96,6 @@ public class BookController {
      * retrieves all active books and subjects, and returns the view "books/itemSells" to display the items.
      */
     @GetMapping("/itemSells" )
-    //@GetMapping("/itemsForSell" )
     public String getItemsForSell(Model model , HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
@@ -106,7 +108,6 @@ public class BookController {
             model.addAttribute("currentUser",currentUser);
         }
 
-        //List<Book> allBooks = bookService.getBooks();
         List<Book> allBooks = bookService.getBooksExceptInactive();
 
         model.addAttribute("allBooks", allBooks);
@@ -124,7 +125,6 @@ public class BookController {
      */
     @Transactional
     @PostMapping("/itemSells/{id}")
-    //@PostMapping("/itemsForSell/{id}")
     public String addItemToCart(Model model, HttpSession session ,@PathVariable Long id,
                                 @AuthenticationPrincipal Authentication authentication,
                                 RedirectAttributes redirectAttributes) {
@@ -177,7 +177,6 @@ public class BookController {
     @GetMapping("/filterBooks")
     public String filterForBooks(@RequestParam("subject") String subject,
                                  Model model, HttpSession session) {
-        //System.out.println("==================inside filterBooks==========");
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
@@ -194,19 +193,11 @@ public class BookController {
             filteredBooks = bookService.getBooksBySubject(subject);
 
         } else {
-            //filteredBooks = bookService.getBooks();
             filteredBooks = bookService.getBooksExceptInactive();
         }
 
         model.addAttribute("allBooks", filteredBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
-/*
-        if(filteredBooks.isEmpty())
-        {
-            model.addAttribute("MessageNoBooksExist","No Books exist to this subject!");
-        }
-
- */
 
         return "books/itemSells"; // Return the view name where books are displayed
     }
@@ -280,7 +271,6 @@ public class BookController {
                 }
                 else{
                     cartService.addToCart(currentUser,id);
-                    //cartService.addToCartWithQuantity(currentUser,id,quantity);
                     redirectAttributes.addFlashAttribute("message", "Book added to cart successfully!");
                 }
             }
@@ -288,8 +278,7 @@ public class BookController {
                 redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
             }
         }
-        //return "redirect:books/bookDetails/{id}"; // Redirect back to the items sell page
-        return "redirect:/bookDetails/{id}"; // Redirect back to the items sell page
+        return "redirect:/bookDetails/{id}";
 
     }
 
@@ -370,11 +359,10 @@ public class BookController {
 
         bookService.addBook(book);
 
-        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+        redirectAttributes.addFlashAttribute("message", "Book updated to active successfully!");
 
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
-        //return "books/bookList";
 
         return "redirect:/bookList";
 
@@ -394,13 +382,15 @@ public class BookController {
 
         bookService.addBook(book);
 
-        redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+        redirectAttributes.addFlashAttribute("message", "Book updated to inactive successfully!");
 
         List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
 
-        return "redirect:/bookList";
 
+        model.addAttribute("message", "Password changed successfully.");
+
+        return "redirect:/bookList";
     }
 
     /**
@@ -411,7 +401,7 @@ public class BookController {
     @PostMapping("/delete/{id}")
     public String deleteBook(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bookService.delete(id);
-        redirectAttributes.addFlashAttribute("message", "Book deleted successfully!");
+        redirectAttributes.addFlashAttribute("message", "Book was deleted successfully!");
         return "redirect:/bookList";
     }
 
