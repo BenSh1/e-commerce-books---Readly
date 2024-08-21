@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit New Book</title>
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 15px;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1em;
+        }
+
+        input[type="file"] {
+            padding: 6px;
+            font-size: 0.9em;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4CAF50;
+            outline: none;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .image-preview {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .image-preview img {
+            max-height: 200px;
+            max-width: 100%;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            background-color: #f4f4f4;
+            padding: 5px;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #0056b3;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                padding: 15px;
+            }
+
+            button {
+                padding: 12px;
+            }
+
+            input, textarea {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h2>Edit Book</h2>
+</header>
+
+<form th:action="@{/editBook/{id}(id=${book.bookId})}" th:object="${book}" method="post" enctype="multipart/form-data">
+    <label for="id">ID:</label>
+    <input readonly id="id" name="id" type="text" th:value="*{bookId}" placeholder="Book ID" required />
+
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="title" th:field="*{title}" placeholder="Book Title" required />
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" th:field="*{authorName}" placeholder="Author Name" required />
+
+    <label for="category">Category:</label>
+    <input type="text" id="category" name="category" th:field="*{category}" placeholder="Category" required />
+
+    <label for="description">Description:</label>
+    <textarea id="description" name="description" th:field="*{description}" placeholder="Book Description" required></textarea>
+
+    <label for="price">Price:</label>
+    <input type="number" step="0.01" id="price" name="price" th:field="*{price}" placeholder="Price" required />
+
+    <label for="stock">Stock:</label>
+    <input type="number" id="stock" name="stock" th:field="*{stock}" placeholder="Stock Quantity" required />
+    <!--
+    <div class="image-preview">
+        <label for="image">Current Image:</label>
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" />
+    </div>
+
+
+    <label for="image">Upload New Image:</label>
+    <input type="file" id="image" name="image" th:field="*{image}" accept="image/*" />
+
+    -->
+
+    <div class="image-preview">
+        <label for="imageFile">Current Image:</label>
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image" />
+    </div>
+
+    <label for="imageFile">Upload New Image:</label>
+    <input type="file" id="imageFile" name="imageFile" accept="image/*" required/>
+
+    <button type="submit">Edit Book</button>
+    <a href="/menuForManager" class="back-link">Menu for Managers</a>
+</form>
+</body>
+</html>

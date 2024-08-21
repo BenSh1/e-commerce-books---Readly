@@ -158,47 +158,6 @@
             background-color: #218838;
         }
 
-        .alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 300px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #28a745;
-            color: white;
-            font-size: 16px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-        }
-
-        .alert.show {
-            opacity: 1;
-        }
-
-        .alert-dismissible .close {
-            position: absolute;
-            top: 0;
-            right: 10px;
-            padding: 0;
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            color: white;
-            cursor: pointer;
-        }
-
-        .alert.alert-danger {
-            background-color: #dc3545;
-        }
-
-        .alert.alert-success {
-            background-color: #28a745;
-        }
-
-
 
     </style>
 </head>
@@ -206,25 +165,6 @@
 <header>
     <h2>Book List</h2>
 </header>
-
-
-<!-- Success Message -->
-<div id="messageContainer" th:if="${message}" class="alert alert-success alert-dismissible hide" role="alert">
-    <strong>Success!</strong> <span th:text="${message}"></span>
-    <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-
-<div id="errorContainer" th:if="${error}" class="alert alert-danger alert-dismissible hide" role="alert">
-    <strong>Error!</strong> <span th:text="${error}"></span>
-    <button type="button" class="close" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-</div>
-
-
-
 <br>
 <a href="/addBook">Go to Add book</a>
 <a href="/menuForManager">Menu For Managers</a><br><br>
@@ -286,47 +226,6 @@
         </td>
     </tr>
 </table>
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var messageContainer = document.getElementById('messageContainer');
-        if (messageContainer) {
-            setTimeout(function() {
-                messageContainer.classList.add('show');
-                messageContainer.classList.remove('hide');
-            }, 100);
-            setTimeout(function() {
-                messageContainer.classList.remove('show');
-            }, 5000);
-        }
-
-        var errorContainer = document.getElementById('errorContainer');
-        if (errorContainer) {
-            setTimeout(function() {
-                errorContainer.classList.add('show');
-                errorContainer.classList.remove('hide');
-            }, 100);
-            setTimeout(function() {
-                errorContainer.classList.remove('show');
-            }, 5000);
-        }
-
-        var closeButtons = document.querySelectorAll('.alert .close');
-        closeButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var alert = this.parentElement;
-                alert.style.opacity = '0';
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            });
-        });
-    });
-</script>
-
-
 
 </body>
 </html>

@@ -228,6 +228,11 @@
                     <button type="submit" class="edit">Edit</button>
                 </form>
 
+                <form th:action="@{/changePasswordByAdmin/{id}(id=${customer.id})}" method="get" style="display:inline;">
+                    <button type="submit" class="edit">Change Password</button>
+                </form>
+
+
                 <form th:action="@{/deleteUser/{id}(id=${customer.id})}" method="post" style="display:inline;">
                     <input type="hidden" name="_method" value="delete" />
                     <button class="delete" type="submit">Delete</button>
@@ -242,8 +247,6 @@
                     <input  type="hidden" name="_method" value="update" />
                     <button class="updateToManager" type="submit" >Update To Manager</button>
                 </form>
-
-
 
                 <form th:action="@{updateRankToAdmin/{id}(id=${customer.id})}" method="post"  class="button-link" style="display:inline;">
                     <input  type="hidden" name="_method" value="update" />
