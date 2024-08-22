@@ -42,6 +42,10 @@ public class OrderController {
      * This method is mapped to the "/orderList" URL and is triggered by a GET request.
      * It retrieves all orders along with their details and adds them to the model.
      * The method also sets a title attribute for the view.
+     *
+     * @param model The model to which the list of orders and the title will be added.
+     * @return The name of the view to display the list of all orders.
+
      */
     @GetMapping("/orderList")
     public String getOrderListPage(Model model) {
@@ -54,7 +58,15 @@ public class OrderController {
         return "order/orderList";
     }
 
-
+    /**
+     * Handles the request to search for orders in the order list.
+     * This method is mapped to the "/searchInOrderList" URL and is triggered by a GET request.
+     * It retrieves orders that match the search query and adds them to the model.
+     *
+     * @param query The search query used to find orders.
+     * @param model The model to which the list of matching orders will be added.
+     * @return The name of the view to display the search results.
+     */
     @GetMapping("/searchInOrderList")
     public String searchForOrderInOrdersList(@RequestParam("query") String query,
                                               Model model) {
@@ -70,6 +82,11 @@ public class OrderController {
      * This method is mapped to the "/myOrderList" URL and is triggered by a GET request.
      * It retrieves the current user's orders along with their details and adds them to the model.
      * If the user is not logged in, it throws an exception.
+     *
+     * @param model     The model to which the list of orders and the title will be added.
+     * @param session   The HTTP session from which the current user will be retrieved.
+     * @return The name of the view to display the current user's order list.
+     * @throws RuntimeException if the user is not logged in.
      */
     @GetMapping("/myOrderList")
     public String getOrderListPerUser(Model model ,HttpSession session) {
@@ -91,6 +108,11 @@ public class OrderController {
      * This method is mapped to the "/updateToSupplied/{id}" URL and is triggered by a POST request.
      * It updates the status of the specified order to "Supplied", saves the updated order,
      * and adds a success message to the redirect attributes. The method then redirects to the order list page.
+     *
+     * @param model The model to which attributes for redirection may be added.
+     * @param id The ID of the order whose status is to be updated.
+     * @param redirectAttributes The redirect attributes to which a success message will be added.
+     * @return A redirect URL to the order list page.
      */
     @Transactional
     @PostMapping("/updateToSupplied/{id}")
@@ -116,11 +138,16 @@ public class OrderController {
      * It retrieves the current user's cart items, updates the stock for each book, creates an order
      * with the order details, and clears the cart. The order confirmation page is then returned.
      * If the user is not logged in, it throws an exception.
+     *
+     * @param model             The model to which the order object will be added.
+     * @param session           The HTTP session from which the current user will be retrieved.
+     * @return The name of the view to display the order confirmation.
+     * @throws RuntimeException if the user is not logged in or if a book in the cart is out of stock.
+
      */
     @PostMapping("/addOrder")
     @Transactional
-    public String addOrder(Model model, HttpSession session ,
-                           @AuthenticationPrincipal Authentication authentication) {
+    public String addOrder(Model model, HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
@@ -152,13 +179,10 @@ public class OrderController {
         List<OrderDetails> orderDetails = orderService.convertToOrderDetails(cartItems);
 
         Order order = orderService.createOrder(orderDetails, currentUser);
-
         model.addAttribute("order", order);
 
         cartService.clearCart(currentUser);
 
         return "order/orderConfirmation";
     }
-
-
 }

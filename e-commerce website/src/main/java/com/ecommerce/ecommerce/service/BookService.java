@@ -34,8 +34,6 @@ public class BookService {
 
     private final List<Book> books = new ArrayList<>();
 
-
-
     /**
      * This function adds a new book to the database.
      * It saves the provided book object using the `bookDao`.
@@ -101,7 +99,6 @@ public class BookService {
      */
     @Transactional
     public void update(Long id, Book book) {
-        //Book existingBook = entityManager.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
 
         Book existingBook = bookDao.findById(id);
 
@@ -130,8 +127,6 @@ public class BookService {
 
         cartItemsRepository.deleteByBook(existingBook);
 
-        //List<Order> orders = orderDao.findOrdersByIdOfBook(((long)existingBook.getBookId()));
-
         List<OrderDetails> orderDetails = orderDetailsRepository.findOrderDetailsByBook(existingBook);
 
         List<Order> orders = new ArrayList<>();
@@ -140,17 +135,13 @@ public class BookService {
             {
                 orders.add(o.getOrder());
             }
-            //Order temp = o.getOrder();
             orderDetailsRepository.deleteDistinctByOrderDetailID(o.getOrderDetailID());
-            //orderDao.deleteOrderById(temp.getOrderId());
         }
         for(Order o : orders){
             orderDao.deleteOrderById(o.getOrderId());
         }
 
         if (existingBook != null) {
-            // Mark for deletion
-            //entityManager.remove(entity);
             bookDao.deleteBookById(id);
         }
 
@@ -206,10 +197,8 @@ public class BookService {
                 iterator.remove(); // Safe removal
             }
         }
-        //return bookRepository.findByCategory(subject);
 
         return allBooksRelatedToSubject;
-
     }
 
     /**

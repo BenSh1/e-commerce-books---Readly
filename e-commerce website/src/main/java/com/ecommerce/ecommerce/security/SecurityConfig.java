@@ -20,13 +20,27 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @EnableWebSecurity
 public class SecurityConfig {
 
-    //bcrypt bean definition
+    /**
+     * Defines a bean for BCryptPasswordEncoder.
+     *
+     * This bean provides an instance of BCryptPasswordEncoder, which is used
+     * to encode passwords securely using the BCrypt hashing algorithm.
+     *
+     * @return A BCryptPasswordEncoder instance.
+     */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    //authenticationProvider bean definition
+    /**
+     * This bean sets up a DaoAuthenticationProvider that uses a custom UserService
+     * to retrieve user details and a BCryptPasswordEncoder to encode passwords.
+     * It is responsible for handling the authentication process using the specified user service and password encoder.
+     *
+     * @param userService The custom user details service that provides user data.
+     * @return A configured DaoAuthenticationProvider instance.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider(UserService userService) {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
@@ -35,27 +49,37 @@ public class SecurityConfig {
         return auth;
     }
 
+    /**
+     * Configures the security filter chain for the application.
+     *
+     * This bean defines the security settings, including which URLs are publicly accessible
+     * and which require authentication. It also sets up the login page, logout behavior,
+     * and handles access-denied scenarios. The custom authentication success handler is used
+     * to manage redirection upon successful login.
+     *
+     * @param http The HttpSecurity object used to configure security settings.
+     * @param customAuthenticationSuccessHandler A custom handler to manage successful authentication.
+     * @return A configured SecurityFilterChain instance.
+     * @throws Exception if an error occurs during configuration.
+     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, AuthenticationSuccessHandler customAuthenticationSuccessHandler) throws Exception {
 
         http.authorizeRequests(configurer ->
                         configurer
-                                .requestMatchers("/","/static/**", "/images/**", "/register/**"
+                                .requestMatchers("/","/images/**" ,"/register/**"
                                         , "/showMyLoginPage","/itemSells"
-                                        , "/addBook","/bookList", "/bookList/**","/bookDetails/**" ,
-                                        "/bookList2","/cart/**" ,"/bookDetails/{id}" , "/search", "/filterBooks"
-                                ,"/forgetPassword","/book/itemSells","/contact").permitAll()  // Allow access to URLs starting with /public
-                                //.requestMatchers("/home/**").hasRole("EMPLOYEE")
+                                        ,"/bookDetails/**","/contact").permitAll()  // Allow access to URLs starting with /public
 
-                                .requestMatchers("/home/**","/home", "/cart",
-                                        "/shopping_cart" ,"/editCustomer","/myOrderList",
+                                .requestMatchers("/cart" ,"/myOrderList",
                                         "/editCustomer/**","/changePassword").hasRole("CUSTOMER")
 
                                 .requestMatchers( "/addBook","/bookList"
-                                        ,"/leaders/**" , "/orderList"
+                                        , "/orderList", "/editBook/**"
                                         ,"/menuForManager").hasRole("MANAGER")
 
-                                .requestMatchers("/systems/**", "/customersList").hasRole("ADMIN")
+                                .requestMatchers("/customersList"
+                                        , "/changePasswordByAdmin/**").hasRole("ADMIN")
 
                                 .anyRequest().authenticated()
                 )
@@ -80,119 +104,16 @@ public class SecurityConfig {
 
     }
 
+    /**
+     * This bean provides an instance of BCryptPasswordEncoder, which can be used
+     * to encode passwords securely. It is similar to the passwordEncoder() method
+     * but returns a PasswordEncoder interface.
+     *
+     * @return A PasswordEncoder instance.
+     */
     @Bean
     public PasswordEncoder passwordEncoderFunction() {
         return new BCryptPasswordEncoder();
     }
-/*
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails customer = User.withUsername("customer")
-                .passwordEncoder(passwordEncoderFunction) // Pass the function reference
-                .password("password")
-                .roles("CUSTOMER")
-                .build();
-
-        UserDetails manager = User.withDefaultPasswordEncoder()
-                .username("manager")
-                .password("password")
-                .roles("CUSTOMER", "MANAGER")
-                .build();
-
-        UserDetails admin = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("password")
-                .roles("CUSTOMER", "MANAGER", "ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(customer, manager, admin);
-
-    }
-
- */
-
-
-
-/*
-    @Bean
-    protected UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("user")
-                .password("password")
-                .roles("USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-
- */
-
-    //  add support for JDBC... no more hardcoded users :-)
-    /*
-    The JdbcUserDetailsManager in Spring Security uses specific SQL queries to manage user details
-    in the database. By default, it expects certain tables and columns to exist for users and authorities
-    (roles/permissions). These tables and columns can be customized if your database schema does not match
-    the defaults.
-    Default Table and Column Names
-    By default, JdbcUserDetailsManager uses the following tables and columns:
-
-    Users Table:
-
-    Table Name: users
-    Columns: username, password, enabled
-    Authorities Table:
-
-    Table Name: authorities
-    Columns: username, authority
-
-     */
-    /*
-    @Bean
-    public UserDetailsManager userDetailsManager(DataSource dataSource) {
-
-        JdbcUserDetailsManager jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
-        // define query to retrieve a user by username
-        jdbcUserDetailsManager.setUsersByUsernameQuery(
-                "select username, password, enabled from user where username=?");
-        // define query to retrieve the authorities/roles by username
-        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
-                "select name " +
-                        "from role " +
-                        "INNER JOIN users_roles ON role.id = users_roles.role_id" +
-                        "INNER JOIN user ON users_roles.user_id = user_id" +
-                        "where username=?");
-                        //"where  users_roles.user_id =username.id");
-
-        return new JdbcUserDetailsManager(dataSource);
-    }
-    */
-
-
-   /*
-    @Bean
-    public InMemoryUserDetailsManager userDetailsManager(){
-
-        UserDetails john = User.builder()
-                .username("john")
-                .password("{noop}test123")
-                .roles("EMPLOYEE")
-                .build();
-
-
-        UserDetails mary = User.builder()
-                .username("mary")
-                .password("{noop}test123")
-                .roles("EMPLOYEE","MANAGER")
-                .build();
-
-        UserDetails susan = User.builder()
-                .username("susan")
-                .password("{noop}test123")
-                .roles("EMPLOYEE","MANAGER","ADMIN")
-                .build();
-
-        return new InMemoryUserDetailsManager(john, mary, susan);
-    }
-    */
 }
 

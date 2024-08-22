@@ -17,10 +17,27 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
     private UserService userService;
 
+    /**
+     * This constructor initializes the CustomAuthenticationSuccessHandler with a UserService.
+     * The UserService is used to retrieve user details after successful authentication.
+     *
+     * @param theUserService The UserService used to interact with the user data.
+     */
     public CustomAuthenticationSuccessHandler(UserService theUserService) {
         userService = theUserService;
     }
 
+    /**
+     * This method is invoked when a user successfully logs in. It retrieves the authenticated user's
+     * username, fetches the corresponding User object from the database using the UserService, and
+     * stores the User object in the session. After that, the user is redirected to the "itemSells" page.
+     *
+     * @param request The HttpServletRequest object for the current request.
+     * @param response The HttpServletResponse object for the current response.
+     * @param authentication The Authentication object containing details about the authenticated user.
+     * @throws IOException If an input or output exception occurs.
+     * @throws ServletException If a servlet-specific error occurs.
+     */
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
             throws IOException, ServletException {
@@ -38,10 +55,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("user", theUser);
 
         // forward to home page
-        //response.sendRedirect(request.getContextPath() + "/home");
         response.sendRedirect(request.getContextPath() + "/itemSells");
-        //response.sendRedirect(request.getContextPath() + "books/itemSells");
-
     }
 
 }

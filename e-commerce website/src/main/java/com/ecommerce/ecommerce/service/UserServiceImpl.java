@@ -44,13 +44,6 @@ public class UserServiceImpl implements UserService {
 	private BCryptPasswordEncoder passwordEncoder;
 
 
-
-/*
-	@Autowired
-	private JavaMailSender mailSender;
-
- */
-
 	/**
 	 * Constructor for the UserServiceImpl class.
 	 * It initializes the UserService implementation with the required dependencies, which are injected via constructor injection.
@@ -146,6 +139,15 @@ public class UserServiceImpl implements UserService {
 		return users;
 	}
 
+	/**
+	 * This method retrieves a User object from the database based on the provided username.
+	 * If no user is found, a UsernameNotFoundException is thrown. If the user is found,
+	 * their roles are mapped to authorities and a UserDetails object is returned for authentication.
+	 *
+	 * @param userName The username of the user to be loaded.
+	 * @return A UserDetails object containing the user's credentials and authorities.
+	 * @throws UsernameNotFoundException If the username is not found in the database.
+	 */
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
 		User user = userDao.findByUserName(userName);
@@ -160,6 +162,15 @@ public class UserServiceImpl implements UserService {
 				authorities);
 
 	}
+
+	/**
+	 * This method converts a collection of Role objects into a collection of
+	 * SimpleGrantedAuthority objects, which represent the roles and permissions
+	 * granted to a user in Spring Security.
+	 *
+	 * @param roles The collection of Role objects to be mapped.
+	 * @return A collection of SimpleGrantedAuthority objects representing the user's roles.
+	 */
 	private Collection<SimpleGrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
 		Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
@@ -282,10 +293,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void update(Long id, User theUser) {
 
-		//=================
-
 		User existingUser = userDao.findById(id);
-		System.out.println("==================in update in user service================");
 		existingUser.setFirstName(theUser.getFirstName());
 		existingUser.setLastName(theUser.getLastName());
 		existingUser.setPhone(theUser.getPhone());
@@ -300,18 +308,11 @@ public class UserServiceImpl implements UserService {
 		existingUser.setCardExpiryYear(theUser.getCardExpiryYear());
 		existingUser.setEnabled(true);
 
-		//Role newRole = roleDao.findRoleByName(role);
 		existingUser.setRoles(new ArrayList<Role>());
 		List<Role> userRoles = new ArrayList<>();
 		List<Role> r = roleDao.getAllRoles();
 		userRoles.add(r.getFirst());
 		existingUser.setRoles(userRoles);
-
-		/*
-		// give user default role of "customer"
-		existingUser.setRoles(Arrays.asList(roleDao.findRoleByName(role)));
-
- 		*/
 
 		userDao.save(existingUser);
 	}
@@ -375,7 +376,15 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
-
+	/**
+	 * Allows an admin to change a user's password.
+	 * This method checks if the new password and confirm password match.
+	 * If they do, it encodes the new password and updates the user's password in the database.
+	 *
+	 * @param username The username of the user whose password is to be changed.
+	 * @param passwordChangeDto A DTO containing the new password and its confirmation.
+	 * @return true if the password was successfully changed, false otherwise.
+	 */
 	public boolean changeUserPasswordByAdmin(String username, PasswordChangeDto passwordChangeDto) {
 		User user = userDao.findByUserName(username);
 
@@ -386,14 +395,20 @@ public class UserServiceImpl implements UserService {
 
 		// Encode and set the new password
 		user.setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
-		//userRepository.save(user);
 		userDao.save(user);
 
 		return true;
 	}
 
 
-
+	/**
+	 * Searches for users based on a query string.
+	 * This method retrieves a list of users whose username or other fields match
+	 * the query string, ignoring case. It then filters out any users who are not enabled.
+	 *
+	 * @param query The search query string.
+	 * @return A list of enabled users that match the search criteria.
+	 */
 	public List<User> searchUsers(String query) {
 
 		// Assuming userDao has a method to find users by username or other fields
@@ -428,55 +443,6 @@ public class UserServiceImpl implements UserService {
 		}
 		return currentUser;
 	}
-
-
-/*
-	public String getCurrentCustomerUsername() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-			UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-			System.out.println("userDetails.getUsername() : " + userDetails.getUsername());
-			return userDetails.getUsername();
-		}
-		return null;
-	}
-
- */
-
-/*
-	@Override
-	public User getCurrentlyLoggedInUser(Authentication authentication) {
-		if(authentication == null)
-			return null;
-
-		User user = null;
-		Object principal = authentication.getPrincipal();
-
-		if(principal instanceof UserDetails){
-			user = ((User) principal);
-		}
-		else if(principal instanceof ){}
-	}
-
- */
-
-
-
-
-
-
-
-
-	/*
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
-    }
-
-	 */
-
-
-
-
 
 }
 

@@ -25,6 +25,8 @@ public class RegistrationController {
 
     private UserService userService;
 
+
+
 	@Autowired
 	public RegistrationController(UserService userService) {
 		this.userService = userService;
@@ -34,7 +36,10 @@ public class RegistrationController {
      * This method is called automatically whenever the controller receives web requests.
      * The @InitBinder annotation tells Spring to register a custom editor (StringTrimmerEditor)
      * for all String fields in the model. The StringTrimmerEditor will trim leading and trailing
-     * whitespace from input Strings. If the input is empty after trimming, it will be converted to null.
+     * whitespace from input Strings. If the input is empty after trimming,
+     * it will be converted to null.
+     *
+     * @param dataBinder The WebDataBinder used to register custom editors for model attributes.
      */
 	@InitBinder
 	public void initBinder(WebDataBinder dataBinder) {
@@ -49,6 +54,12 @@ public class RegistrationController {
      * This method is mapped to the "/showRegistrationForm" URL and is triggered by a GET request.
      * It adds a new WebUser object to the model, which will be used to bind form data.
      * The registration form view is then returned.
+     *
+     * @param theWebUser The WebUser object to be used for form data binding
+     * @param theBindingResult The binding result to hold validation errors (if any).
+     * @param session The HTTP session to be used for storing user information.
+     * @param theModel The model to which the WebUser object will be added.
+     * @return The name of the view to display the registration form.
      */
     @GetMapping("/showRegistrationForm")
     public String showMyRegisterPage(
@@ -69,6 +80,13 @@ public class RegistrationController {
      * It validates the form data, checks if the username already exists in the database, and
      * creates a new user account if validation passes. If there are errors, the registration
      * form is redisplayed with appropriate error messages.
+     *
+     * @param theWebUser The WebUser object containing the registration form data.
+     * @param theBindingResult The binding result to hold validation errors (if any).
+     * @param session The HTTP session to store the newly registered user.
+     * @param theModel The model to which form data and error messages will be added.
+     * @return The name of the view to display the registration confirmation or the registration form with errors.
+
      */
     @PostMapping("/processRegistrationForm")
     public String processRegistrationForm(

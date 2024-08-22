@@ -36,17 +36,14 @@ public class UserController {
     @Value("${roles}")
     private List<String> roles;
 
-    /*
-    public RegistrationController(UserService userService) {
-        this.userService = userService;
-    }
-     */
-
     /**
      * Displays the list of customers.
      * This method is mapped to the "/customersList" URL and is triggered by a GET request.
      * It retrieves the list of users from the userService and adds it to the model.
      * The view to display the customers is then returned.
+     *
+     * @param model The model to which the list of customers will be added.
+     * @return The name of the view to display the list of customers.
      */
     @GetMapping("/customersList")
     public String customersList(Model model) {
@@ -56,6 +53,16 @@ public class UserController {
         return "user/customersList";// Return the view to display the books
     }
 
+    /**
+     * Searches for customers in the user list based on a query string.
+     * This method is mapped to the "/searchInCustomerList" URL and is triggered by a GET request.
+     * It retrieves a list of users matching the search query and adds it to the model.
+     * The view to display the search results is then returned.
+     *
+     * @param query The search query string used to find customers.
+     * @param model The model to which the list of matching customers will be added.
+     * @return The name of the view to display the search results.
+     */
     @GetMapping("/searchInCustomerList")
     public String searchForCustomerInUserList(@RequestParam("query") String query,
                                               Model model) {
@@ -71,21 +78,22 @@ public class UserController {
      * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a GET request.
      * It retrieves the user by the provided ID and adds it to the model for editing.
      * The current user's role is also determined and added to the model for use in the view.
+     *
+     * @param id        The ID of the user to be edited.
+     * @param model     The model to which the user and current user's role will be added.
+     * @param session   The HTTP session from which the current user information is retrieved.
+     * @return The name of the view to display the edit customer form.
+
      */
     @GetMapping("/editCustomer/{id}")
     public String editCustomer(@PathVariable Long id,
-                               /*@Valid @ModelAttribute("user") User theUser,*/
                                Model model,
                                HttpSession session) {
-        //WebUser webUser = userService.getCustomer(id);
+
         User user = userService.getUser(id);
         model.addAttribute("user", user);
 
         User currentUser = userService.getCurrentUser(session);
-
-        //System.out.println("===========in editCustomer ===========");
-        //System.out.println(currentUser.toString());
-        //System.out.println("currentUser.getRoles().size() = "+ currentUser.getRoles().size());
 
         if ( currentUser.getRoles().size() == 3)
             model.addAttribute("currentUserRole ", "ROLE_ADMIN");
@@ -102,46 +110,26 @@ public class UserController {
         return "user/editCustomer";
     }
 
-/*
-    @PostMapping("/editCustomer/{id}")
-    public String updateCustomer(Model model , @PathVariable Long id,
-                                 @ModelAttribute User theUser,
-                                 RedirectAttributes redirectAttributes,
-                                @RequestParam String role) {
-
-        System.out.println("=======================role================ : " + role);
-
-        userService.update(id, theUser, role);
-        redirectAttributes.addFlashAttribute("message", "user updated successfully!");
-
-        return "redirect:/customersList";
-    }
-
- */
-
-    /*
-        edit with the same role of the member of the site.
-     */
-
     /**
      * Updates the customer information.
      * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a POST request.
      * It updates the user's information and their role, then redirects back to the edit page.
+     *
+     * @param id                    The ID of the user to be updated.
+     * @param theUser               The user information to be updated.
+     * @param redirectAttributes    The redirect attributes used to add flash attributes for messages.
+     * @return The redirect URL to the edit customer page.
      */
     @Transactional
     @PostMapping("/editCustomer/{id}")
-    public String updateCustomer(Model model , @PathVariable Long id,
+    public String updateCustomer( @PathVariable Long id,
                                  @ModelAttribute User theUser,
-                                 RedirectAttributes redirectAttributes,
-                                 HttpSession session) {
-
-
+                                 RedirectAttributes redirectAttributes) {
         User user = userService.getUser(id);
 
         Collection<Role> rolesOfCurrentUser = user.getRoles();
 
         List<Role> list = new ArrayList<>(rolesOfCurrentUser);
-        System.out.println("=======list.getLast()=====:" + list.getLast());
 
         userService.update(id, theUser, list.getLast().getName());
 
@@ -150,87 +138,15 @@ public class UserController {
         return "redirect:/editCustomer/{id}";
     }
 
-
-/*
-    @PostMapping("/editCustomer/{id}")
-    public String updateCustomer2(@Valid @ModelAttribute("user") User user,
-                                  BindingResult theBindingResult,
-                                  @PathVariable Long id,
-                                  Model model,
-                                  RedirectAttributes redirectAttributes) {
-
-        System.out.println("==================in updateCustomer2 ===========");
-
-        if (theBindingResult.hasErrors()) {
-            System.out.println("==================in hasErrors ===========");
-            model.addAttribute("user", user);
-            //return "editCustomerForm"; // Replace with your form view name
-            return "redirect:/editCustomer/" + id;
-        }
-
-        userService.update(id, user);
-        redirectAttributes.addFlashAttribute("updateMessage", "The User has been updated successfully!");
-        return "redirect:/editCustomer/" + id;
-    }
-
- */
-
-
-
-/*
-    @InitBinder
-    public void initBinder(WebDataBinder dataBinder) {
-
-        StringTrimmerEditor stringTrimmerEditor = new StringTrimmerEditor(true);
-
-        dataBinder.registerCustomEditor(String.class, stringTrimmerEditor);
-    }
-
- */
-
-/*
-    @PostMapping("/editCustomer/{id}")
-    public String updateCustomer2(Model model , @PathVariable Long id,
-                                 RedirectAttributes redirectAttributes,
-                                @Valid @ModelAttribute("user") User user,
-                                BindingResult theBindingResult) {
-
-        System.out.println("==================in editCustomer ===========");
-
-        // Handle form data
-        String userName = user.getUserName();
-        logger.info("Processing EDIT form for: " + userName);
-
-        User tempUser = userService.getUser(id);
-        logger.info("Processing EDIT form for: " + tempUser.getUserName());
-
-
-        // form validation
-        if (theBindingResult.hasErrors()){
-            System.out.println("==================in hasErrors ===========");
-            User currentUser = userService.getUser(id);
-            model.addAttribute("user", currentUser);
-            //return "redirect:/home";
-            return "redirect:/editCustomer/" + id;
-        }
-
-        //userService.update(id, theUser);
-        User currentUser = userService.getUser(id);
-        userService.update(id, user);
-
-        redirectAttributes.addFlashAttribute("updateMessage", "The User has been updated successfully!");
-
-        //return "redirect:/editCustomer";
-        return "redirect:/editCustomer/" + id;
-
-    }
-
- */
-
     /**
      * Updates the user's role to "Customer".
      * This method is mapped to the "/updateRankToCustomer/{id}" URL and is triggered by a POST request.
      * It assigns the "Customer" role to the user and saves the changes in the database.
+     *
+     * @param id                    The ID of the user whose role is to be updated.
+     * @param redirectAttributes    The redirect attributes used to add flash attributes for success messages.
+     * @return The redirect URL to the customers list page.
+
      */
     @PostMapping("/updateRankToCustomer/{id}")
     public String updateRankToCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -244,8 +160,8 @@ public class UserController {
         userRoles.add(r.getFirst());
         theUser.setRoles(userRoles);
 
-
         userService.addUser(theUser);
+        redirectAttributes.addFlashAttribute("message", "User updated successfully to the customer rank!");
 
         return "redirect:/customersList";
     }
@@ -255,6 +171,10 @@ public class UserController {
      * Updates the user's role to "Manager".
      * This method is mapped to the "/updateRankToManager/{id}" URL and is triggered by a POST request.
      * It assigns the "Manager" role to the user and saves the changes in the database.
+     *
+     * @param id                    The ID of the user whose role is to be updated.
+     * @param redirectAttributes    The redirect attributes used to add flash attributes for success messages.
+     * @return The redirect URL to the customers list page.
      */
     @PostMapping("/updateRankToManager/{id}")
     public String updateRankToManager(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -270,6 +190,7 @@ public class UserController {
         theUser.setRoles(userRoles);
 
         userService.addUser(theUser);
+        redirectAttributes.addFlashAttribute("message", "User updated successfully to the manager rank!");
 
         return "redirect:/customersList";
 
@@ -279,6 +200,10 @@ public class UserController {
      * Updates the user's role to "Admin".
      * This method is mapped to the "/updateRankToAdmin/{id}" URL and is triggered by a POST request.
      * It assigns the "Admin" role to the user and saves the changes in the database.
+     *
+     * @param id                    The ID of the user whose role is to be updated.
+     * @param redirectAttributes    The redirect attributes used to add flash attributes for success messages.
+     * @return The redirect URL to the customers list page.
      */
     @PostMapping("/updateRankToAdmin/{id}")
     public String updateRankToAdmin(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -295,6 +220,7 @@ public class UserController {
 
         theUser.setRoles(userRoles);
         userService.addUser(theUser);
+        redirectAttributes.addFlashAttribute("message", "User updated successfully to the admin rank!");
 
         return "redirect:/customersList";
 
@@ -304,6 +230,10 @@ public class UserController {
      * Deletes a user by ID.
      * This method is mapped to the "/deleteUser/{id}" URL and is triggered by a POST request.
      * It deletes the user from the database and redirects to the customers list page with a success message.
+     *
+     * @param id                    The ID of the user to be deleted.
+     * @param redirectAttributes    The redirect attributes used to add flash attributes for success messages.
+     * @return The redirect URL to the customers list page.
      */
     @PostMapping("/deleteUser/{id}")
     public String deleteUser(@PathVariable Long id, RedirectAttributes redirectAttributes) {
@@ -315,7 +245,11 @@ public class UserController {
     /**
      * Displays the change password page.
      * This method is mapped to the "/changePassword" URL and is triggered by a GET request.
-     * It initializes a PasswordChangeDto object and adds it to the model, then returns the view to display the change password form.
+     * It initializes a PasswordChangeDto object and adds it to the model,
+     * then returns the view to display the change password form.
+     *
+     * @param model The model to which the PasswordChangeDto object will be added.
+     * @return The name of the view to display the change password form.
      */
     @GetMapping("/changePassword")
     public String changePassword(  Model model) {
@@ -330,7 +264,14 @@ public class UserController {
     /**
      * Handles the password change process.
      * This method is mapped to the "/changePassword" URL and is triggered by a POST request.
-     * It takes the password change details from the form, attempts to change the user's password, and returns the appropriate view with a success or error message.
+     * It takes the password change details from the form, attempts to change the user's password,
+     * and returns the appropriate view with a success or error message.
+     *
+     * @param passwordChangeDto The DTO containing the new password information.
+     * @param principal         The principal object representing the currently authenticated user.
+     * @param model             The model to which success or error messages will be added.
+     * @return The name of the view to display the password change form with a success or error message.
+
      */
     @PostMapping("/changePassword")
     public String changePassword(@ModelAttribute PasswordChangeDto passwordChangeDto, Principal principal, Model model) {
@@ -346,7 +287,16 @@ public class UserController {
     }
 
 
-
+    /**
+     * Handles the GET request for changing a user's password by an admin.
+     * This method retrieves the user with the given ID from the service layer
+     * and adds the user to the model. It also creates a new instance of
+     * `PasswordChangeDto` to hold the new password data and adds it to the model.
+     *
+     * @param id    The ID of the user whose password is to be changed.
+     * @param model The model to which user data and password change DTO will be added.
+     * @return The name of the Thymeleaf template for changing the user's password.
+     */
     @GetMapping("/changePasswordByAdmin/{id}")
     public String changePasswordByAdmin(@PathVariable Long id,  Model model) {
 
@@ -359,6 +309,19 @@ public class UserController {
         return "user/changePasswordByAdmin";
     }
 
+
+    /**
+     * Handles the POST request for changing a user's password by an admin.
+     * This method retrieves the user with the given ID and attempts to change
+     * their password using the provided `PasswordChangeDto`. It adds the user
+     * and either a success or error message to the model depending on the
+     * outcome of the password change operation.
+     *
+     * @param id                The ID of the user whose password is to be changed.
+     * @param passwordChangeDto The DTO containing the new password information.
+     * @param model             The model to which user data and success/error messages will be added.
+     * @return The name of the Thymeleaf template for changing the user's password.
+     */
     @PostMapping("/changePasswordByAdmin/{id}")
     public String changePasswordByAdmin(@PathVariable Long id,
                                         @ModelAttribute PasswordChangeDto passwordChangeDto,
@@ -367,9 +330,6 @@ public class UserController {
         User currentUser = userService.getUser(id);
 
         boolean isSuccess = userService.changeUserPasswordByAdmin(currentUser.getUserName(), passwordChangeDto);
-
-        System.out.println("=======in changePasswordByAdmin=======================");
-        System.out.println("currentUser.getUserName() : " + currentUser.getUserName());
 
         model.addAttribute("user",currentUser);
 
@@ -380,46 +340,5 @@ public class UserController {
         }
         return "user/changePasswordByAdmin";
     }
-
-/*
-    @GetMapping("/forgetPassword")
-    public String getForgotPassword() {
-
-        return "user/forgetPassword";
-    }
-
- */
-/*
-    @PostMapping("/forgotPassword")
-    public String processForgotPassword(Model model, String email) {
-        // Find user by email
-        User user = userService.findUserByEmail(email);
-
-        if (user == null) {
-            model.addAttribute("error", "No account found with that email.");
-            return "forgotPassword";
-        }
-
-        // Generate reset token
-        String token = UUID.randomUUID().toString();
-        userService.createPasswordResetTokenForUser(user, token);
-
-        // Create the email
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Password Reset Request");
-        mailMessage.setText("To reset your password, click the link below:\n"
-                + "http://localhost:8080/resetPassword?token=" + token);
-
-        // Send the email
-        mailSender.send(mailMessage);
-
-        model.addAttribute("message", "Password reset link sent to your email.");
-        return "user/forgotPassword";
-    }
-
- */
-
-
 
 }

@@ -14,6 +14,16 @@ public class ContactController {
         this.contactInfoService = contactInfoService;
     }
 
+
+    /**
+     * Handles GET requests to the "/contact" URL.
+     * This method populates the model with the manager's contact information
+     * by adding the manager's email and phone number to the model attributes.
+     * It then returns the "contact" view name to be rendered.
+     *
+     * @param model The Model object used to pass data to the view.
+     * @return The name of the view to render, in this case, "contact".
+     */
     @GetMapping("/contact")
     public String showContactPage(Model model) {
         model.addAttribute("managerEmail", contactInfoService.getManagerEmail());
