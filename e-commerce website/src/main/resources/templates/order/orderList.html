@@ -151,6 +151,36 @@
         }
 
 
+
+        .search-bar {
+            width: 30%; /* Expands the entire form to fill its container */
+            display: flex; /* Aligns the input and button on the same line */
+        }
+
+        .search-bar input[type="text"] {
+            flex: 1; /* Makes the input field take up most of the space */
+            padding: 10px; /* Adds padding for better look */
+            font-size: 16px; /* Increases font size for readability */
+            border: 1px solid #ccc; /* Adds border to the input */
+            border-radius: 4px 0 0 4px; /* Rounded corners on the left side */
+        }
+
+        .search-bar button {
+            padding: 10px 20px; /* Adds padding for the button */
+            font-size: 16px; /* Increases font size for readability */
+            border: 1px solid #ccc; /* Adds border to the button */
+            border-left: none; /* Removes the border between input and button */
+            border-radius: 0 4px 4px 0; /* Rounded corners on the right side */
+            background-color: #007bff; /* Button background color */
+            color: white; /* Button text color */
+            cursor: pointer; /* Changes cursor to pointer on hover */
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3; /* Darkens button color on hover */
+        }
+
+
     </style>
 </head>
 <body>
@@ -170,8 +200,8 @@
 <a href="/menuForManager">Menu for Managers</a><br><br>
 <hr>
 
-<form th:action="@{/searchInOrderList}" method="get">
-    <input type="text" name="query" placeholder="Search for orders by username...">
+<form th:action="@{/searchInOrderList}" method="get" class="search-bar">
+    <input type="text" name="query" placeholder="Search for orders by username">
     <button type="submit">Search</button>
 </form>
 
