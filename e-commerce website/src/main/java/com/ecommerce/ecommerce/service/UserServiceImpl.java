@@ -3,8 +3,7 @@ package com.ecommerce.ecommerce.service;
 import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.entity.*;
-import com.ecommerce.ecommerce.service.UserService;
-import com.ecommerce.ecommerce.user.WebUser;
+import com.ecommerce.ecommerce.dto.WebUser;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.*;
 
 

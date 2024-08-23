@@ -3,7 +3,6 @@ package com.ecommerce.ecommerce.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
-
 import java.util.Collection;
 import java.util.List;
 

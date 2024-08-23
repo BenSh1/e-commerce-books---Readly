@@ -1,10 +1,7 @@
 package com.ecommerce.ecommerce.dao;
 
-import com.ecommerce.ecommerce.entity.Role;
-import com.ecommerce.ecommerce.entity.User;
-import com.ecommerce.ecommerce.user.WebUser;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.ecommerce.ecommerce.entity.User;
 import java.util.List;
 
 
@@ -17,16 +14,13 @@ public interface UserDao  {
     void save(User theUser);
 
     List<User> findAll();
-    //List<WebUser> findAll();
-
     User findById(Long id);
-    //WebUser findById(Long id);
+    List<User> findByUsernameContainingIgnoreCase(String username);
 
     void deleteUserById(Long id);
 
     public Long count();
 
-    List<User> findByUsernameContainingIgnoreCase(String username);
 
 
 }

@@ -1,7 +1,6 @@
 package com.ecommerce.ecommerce.dao;
 
 import com.ecommerce.ecommerce.entity.Book;
-import com.ecommerce.ecommerce.entity.Role;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import jakarta.persistence.Query;
@@ -126,4 +125,42 @@ public class BookDaoImpl implements BookDao{
         return Optional.ofNullable(book);
     }
 
+    @Override
+    @Transactional
+    public List<Book> findByCategory(String category) {
+        // Create the JPQL query
+        TypedQuery<Book> query = entityManager.createQuery(
+                "SELECT b FROM Book b WHERE b.category = :category", Book.class);
+        // Set the parameter
+        query.setParameter("category", category);
+
+        // Execute the query and get the result list
+        return query.getResultList();
+    }
+
+    @Override
+    public List<String> findDistinctCategory() {
+
+        // Create a JPQL query to select distinct categories
+        TypedQuery<String> query = entityManager.createQuery(
+                "SELECT DISTINCT b.category FROM Book b", String.class);
+
+        // Execute the query and return the result list
+        return query.getResultList();
+    }
+
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Book> findByTitleContainingIgnoreCase(String query) {
+        // Create a JPQL query to search for titles containing the query string, ignoring case
+        TypedQuery<Book> typedQuery = entityManager.createQuery(
+                "SELECT b FROM Book b WHERE LOWER(b.title) LIKE LOWER(CONCAT('%', :query, '%'))", Book.class);
+
+        // Set the parameter for the query
+        typedQuery.setParameter("query", query);
+
+        // Execute the query and return the result list
+        return typedQuery.getResultList();
+    }
 }

@@ -3,7 +3,6 @@ package com.ecommerce.ecommerce.dao;
 
 import com.ecommerce.ecommerce.entity.Order;
 import com.ecommerce.ecommerce.entity.OrderDetails;
-import com.ecommerce.ecommerce.entity.User;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
@@ -41,8 +40,13 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     @Transactional
     public void save(Order theOrder ) {
-        entityManager.merge(theOrder);
+        //entityManager.merge(theOrder);
+        entityManager.persist(theOrder);
     }
+
+
+
+
 
     /**
      * Finds all Order entities associated with a specific customer ID.

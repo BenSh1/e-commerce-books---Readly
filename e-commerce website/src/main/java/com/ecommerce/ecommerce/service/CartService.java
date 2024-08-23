@@ -5,15 +5,11 @@ import com.ecommerce.ecommerce.dao.BookDao;
 import com.ecommerce.ecommerce.dao.CartItemsRepository;
 import com.ecommerce.ecommerce.dao.UserDao;
 import com.ecommerce.ecommerce.entity.Book;
-
 import com.ecommerce.ecommerce.entity.CartItems;
 import com.ecommerce.ecommerce.entity.User;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

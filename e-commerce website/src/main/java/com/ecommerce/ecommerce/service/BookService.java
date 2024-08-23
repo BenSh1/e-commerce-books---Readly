@@ -7,9 +7,6 @@ import com.ecommerce.ecommerce.entity.OrderDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -20,8 +17,7 @@ public class BookService {
     @Autowired
     private BookDao bookDao;
 
-    @Autowired
-    private BookRepository bookRepository;
+
 
     @Autowired
     private OrderDao orderDao;
@@ -156,7 +152,7 @@ public class BookService {
      * @return a list of books whose titles match the query and are active.
      */
     public List<Book> searchBooks(String query) {
-        List<Book> books = bookRepository.findByTitleContainingIgnoreCase(query);
+        List<Book> books = bookDao.findByTitleContainingIgnoreCase(query);
 
         Iterator<Book> iterator = books.iterator();
         while (iterator.hasNext()) {
@@ -188,7 +184,7 @@ public class BookService {
      * @return a list of active books in the specified category.
      */
     public List<Book> getBooksBySubject(String subject) {
-        List<Book> allBooksRelatedToSubject = bookRepository.findByCategory(subject);
+        List<Book> allBooksRelatedToSubject = bookDao.findByCategory(subject);
 
         Iterator<Book> iterator = allBooksRelatedToSubject.iterator();
         while (iterator.hasNext()) {
@@ -207,7 +203,7 @@ public class BookService {
      * @return a list of distinct book categories.
      */
     public List<String> getAllSubjects() {
-        return bookRepository.findDistinctCategory();
+        return bookDao.findDistinctCategory();
     }
 
 }

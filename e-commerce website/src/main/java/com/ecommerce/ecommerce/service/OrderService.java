@@ -2,21 +2,16 @@ package com.ecommerce.ecommerce.service;
 
 import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.entity.*;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Autowired
     private OrderDao orderDao;
@@ -72,6 +67,9 @@ public class OrderService {
         }
 
         User user = userService.findByUserName(query);
+        if(user == null){
+            return orderDao.findAll();
+        }
 
         // Assuming userDao has a method to find users by username or other fields
         List<Order> orders = orderDao.findOrdersByUsername(user.getId());
@@ -93,7 +91,7 @@ public class OrderService {
     @Transactional
     public List<Order> getAllMyOrdersWithDetails(User user) {
 
-        List<Order> orders = orderRepository.findAll();
+        List<Order> orders = orderDao.findAll();
 
         // Ensure orderDetails are initialized
         List<Order> tempOrders = new ArrayList<Order>();
@@ -117,7 +115,9 @@ public class OrderService {
      */
     @Transactional
     public List<Order> getAllOrdersWithDetails() {
-        List<Order> orders = orderRepository.findAll();
+
+        List<Order> orders = orderDao.findAll();
+
         // Ensure orderDetails are initialized
         for (Order order : orders) {
             order.getOrderDetails().size(); // Trigger lazy loading
@@ -170,8 +170,7 @@ public class OrderService {
         order.setUser(currentUser);
         order.setStatus("Pending");
 
-        order = orderRepository.save(order);
-
+        orderDao.save(order);
 
         for (OrderDetails detail : orderDetailsList) {
             //order.add(detail);

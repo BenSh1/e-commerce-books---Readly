@@ -1,10 +1,8 @@
 package com.ecommerce.ecommerce.controller;
 
-
-
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.UserService;
-import com.ecommerce.ecommerce.user.WebUser;
+import com.ecommerce.ecommerce.dto.WebUser;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

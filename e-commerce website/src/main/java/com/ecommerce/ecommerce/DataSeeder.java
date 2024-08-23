@@ -3,21 +3,13 @@ package com.ecommerce.ecommerce;
 import com.ecommerce.ecommerce.dao.BookDao;
 import com.ecommerce.ecommerce.dao.RoleDao;
 import com.ecommerce.ecommerce.dao.UserDao;
-//import com.ecommerce.ecommerce.dao.UserRoleDao;
-//import com.ecommerce.ecommerce.dao.UserRoleDaoImpl;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 

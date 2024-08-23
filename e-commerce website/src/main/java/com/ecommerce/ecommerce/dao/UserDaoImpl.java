@@ -1,9 +1,7 @@
 package com.ecommerce.ecommerce.dao;
 
 
-import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.User;
-import com.ecommerce.ecommerce.user.WebUser;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
 import jakarta.persistence.TypedQuery;
