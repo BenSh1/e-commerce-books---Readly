@@ -150,7 +150,6 @@ public class OrderController {
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
         }
-        System.out.println("currentUser.getFirstName()  = " + currentUser.getFirstName());
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
@@ -165,8 +164,7 @@ public class OrderController {
                     cartService.removeBookFromCart(book.getBookId(),currentUser);
                 }
                 model.addAttribute("titleOfBook", book.getTitle());
-                return "bookIsOutOfStock";
-                //throw new RuntimeException("Not enough stock for book: " + book.getTitle());
+                return "books/bookIsOutOfStock";
             }
 
             book.setStock(book.getStock() - cartItem.getQuantity());

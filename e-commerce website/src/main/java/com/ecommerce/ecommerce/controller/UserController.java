@@ -1,17 +1,21 @@
 package com.ecommerce.ecommerce.controller;
 
+import com.ecommerce.ecommerce.UserConverter;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
+import com.ecommerce.ecommerce.dto.WebUser;
 import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.RoleService;
 import com.ecommerce.ecommerce.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -85,6 +89,7 @@ public class UserController {
      * @return The name of the view to display the edit customer form.
 
      */
+
     @GetMapping("/editCustomer/{id}")
     public String editCustomer(@PathVariable Long id,
                                Model model,
@@ -109,6 +114,41 @@ public class UserController {
 
         return "user/editCustomer";
     }
+
+
+/*
+    public String editCustomer(@PathVariable Long id,
+                               Model model,
+                               HttpSession session) {
+
+
+        User user = userService.getUser(id);
+        System.out.println("=======================user: " + user);
+        // Convert User entity to WebUser DTO
+        WebUser webUser = UserConverter.convertToWebUser(user);
+        model.addAttribute("user", webUser);
+
+        System.out.println("=======================after webUser model ====================: ");
+
+
+        User currentUser = userService.getCurrentUser(session);
+        if ( currentUser.getRoles().size() == 3)
+            model.addAttribute("currentUserRole ", "ROLE_ADMIN");
+        else if( currentUser.getRoles().size() == 2) {
+            model.addAttribute("currentUserRole" , "ROLE_MANAGER");
+        }
+        else{
+            model.addAttribute("currentUserRole ", "ROLE_CUSTOMER");
+        }
+
+        // add the list of languages to the model
+        model.addAttribute("roles",roles);
+
+        return "user/editCustomerWithWebUser";
+    }
+
+ */
+
 
     /**
      * Updates the customer information.

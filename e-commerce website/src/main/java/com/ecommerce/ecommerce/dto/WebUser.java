@@ -8,8 +8,13 @@ public class WebUser {
 	@Size(min = 1, message = "is required")
 	private String userName;
 
-	@NotNull(message = "is required")
-	@Size(min = 1, message = "is required")
+
+	@NotNull(message = "Password is required")
+	@Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
+	@Pattern(
+			regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,128}$",
+			message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character (@#$%^&+=!)"
+	)
 	private String password;
 
 	@NotNull(message = "is required")
