@@ -6,8 +6,6 @@ public class PasswordChangeDto {
     private String confirmPassword;
 
     // Getters and setters
-
-
     public String getCurrentPassword() {
         return currentPassword;
     }

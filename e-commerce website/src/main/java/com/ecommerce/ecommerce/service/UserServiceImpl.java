@@ -351,7 +351,8 @@ public class UserServiceImpl implements UserService {
 
 	/**
 	 * Changes a user's password.
-	 * This function updates the user's password after validating the current password and ensuring the new password matches the confirmation password.
+	 * This function updates the user's password after validating the current password
+	 * and ensuring the new password matches the confirmation password.
 	 *
 	 * @param username the username of the user whose password is to be changed.
 	 * @param passwordChangeDto the data transfer object containing the current password, new password, and confirmation password.
@@ -380,7 +381,14 @@ public class UserServiceImpl implements UserService {
 
 
 
-
+	/**
+	 * Checks if the provided password matches the stored password
+	 * for the user with the given username.
+	 *
+	 * @param username The username of the user whose password is to be checked.
+	 * @param password The plain text password to check against the stored password.
+	 * @return {@code true} if the provided password matches the stored password for the user, {@code false} otherwise.
+	 */
 	public boolean isConfirmPasswordEqualToPassword(String username, String password) {
 		User user = userDao.findByUserName(username);
 
@@ -417,6 +425,12 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	/**
+	 * Converts a `User` entity to a `WebUser` DTO for use in web forms or data transfer.
+	 *
+	 * @param user The `User` entity to convert.
+	 * @return A `WebUser` DTO populated with data from the `User` entity.
+	 */
 	public WebUser convertToWebUser(User user) {
 		WebUser webUser = new WebUser();
 		webUser.setUserName(user.getUserName());
@@ -437,7 +451,13 @@ public class UserServiceImpl implements UserService {
 		return webUser;
 	}
 
-	// Converts WebUser DTO back to User entity
+	/**
+	 * Converts a `WebUser` DTO back to a `User` entity, updating the entity's properties with the DTO's values.
+	 *
+	 * @param webUser The `WebUser` DTO containing the updated information.
+	 * @param user The existing `User` entity to update.
+	 * @return The updated `User` entity with values from the `WebUser` DTO.
+	 */
 	public User convertToUser(WebUser webUser, User user) {
 		user.setUserName(webUser.getUserName());
 		user.setPassword(passwordEncoder.encode(webUser.getPassword()));
@@ -457,7 +477,6 @@ public class UserServiceImpl implements UserService {
 		// Optionally update the password if it has been changed
 		return user;
 	}
-
 
 	/**
 	 * Searches for users based on a query string.

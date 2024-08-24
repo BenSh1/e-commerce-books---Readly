@@ -14,13 +14,21 @@ public class WebUser {
 			message = "Password must contain at least one digit, one lowercase letter, " +
 					"one uppercase letter, and one special character (@#$%^&+=!)")
 	private String password;
-
+/*
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
+
+ */
+	@NotBlank(message = "First name is required")
+	@Pattern(regexp = "^[A-Za-z]+$", message = "First name must contain only letters")
 	private String firstName;
 
+	/*
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
+	 */
+	@NotBlank(message = "Last name is required")
+	@Pattern(regexp = "^[A-Za-z]+$", message = "Last name must contain only letters")
 	private String lastName;
 
 	@NotNull(message = "is required")
@@ -70,10 +78,7 @@ public class WebUser {
 	private int cardExpiryYear;
 
 
-
-
 	public WebUser() {
-
 	}
 
 	public String getUserName() {

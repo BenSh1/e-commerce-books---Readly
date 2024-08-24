@@ -46,7 +46,6 @@ public class SecurityConfig {
 
     /**
      * Configures the security filter chain for the application.
-     *
      * This bean defines the security settings, including which URLs are publicly accessible
      * and which require authentication. It also sets up the login page, logout behavior,
      * and handles access-denied scenarios. The custom authentication success handler is used
@@ -73,8 +72,7 @@ public class SecurityConfig {
                                         , "/orderList", "/editBook/**"
                                         ,"/menuForManager").hasRole("MANAGER")
 
-                                .requestMatchers("/customersList"
-                                        , "/changePasswordByAdmin/**").hasRole("ADMIN")
+                                .requestMatchers( "/changePasswordByAdmin/**","/customersList").hasRole("ADMIN")
 
                                 .anyRequest().authenticated()
                 )

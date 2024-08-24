@@ -125,6 +125,14 @@ public class BookDaoImpl implements BookDao{
         return Optional.ofNullable(book);
     }
 
+    /**
+     * Finds and returns a list of books that belong to a specific category.
+     * This method uses a JPQL query to select books from the database where
+     * the category matches the specified parameter.
+     *
+     * @param category The category to filter books by.
+     * @return A list of books that belong to the specified category.
+     */
     @Override
     @Transactional
     public List<Book> findByCategory(String category) {
@@ -138,6 +146,12 @@ public class BookDaoImpl implements BookDao{
         return query.getResultList();
     }
 
+    /**
+     * Finds and returns a list of distinct book categories.
+     * This method uses a JPQL query to select unique categories from the Book entity.
+     *
+     * @return A list of distinct book categories.
+     */
     @Override
     public List<String> findDistinctCategory() {
 
@@ -149,7 +163,14 @@ public class BookDaoImpl implements BookDao{
         return query.getResultList();
     }
 
-
+    /**
+     * Finds and returns a list of books whose titles contain the specified query string,
+     * ignoring case sensitivity. This method uses a JPQL query with a case-insensitive
+     * search to match book titles.
+     *
+     * @param query The search string to look for within book titles.
+     * @return A list of books with titles containing the specified query string.
+     */
     @Override
     @Transactional(readOnly = true)
     public List<Book> findByTitleContainingIgnoreCase(String query) {

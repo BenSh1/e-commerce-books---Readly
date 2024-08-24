@@ -140,6 +140,14 @@ public class UserDaoImpl implements UserDao {
         return totalEntities;
     }
 
+    /**
+     * Finds and returns a list of users whose usernames contain the specified
+     * search string, ignoring case sensitivity. This method utilizes JPQL
+     * to perform a case-insensitive search for partial matches within the username field.
+     *
+     * @param username The search string to look for within usernames. The search is case-insensitive.
+     * @return A list of users whose usernames contain the specified search string, ignoring case.
+     */
     @Override
     public List<User> findByUsernameContainingIgnoreCase(String username) {
 

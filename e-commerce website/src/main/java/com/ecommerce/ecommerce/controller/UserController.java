@@ -74,8 +74,16 @@ public class UserController {
         return "/user/customersList";
     }
 
-
-    //@GetMapping("/editCustomerWithWebUser")
+    /**
+     * Handles the GET request to display the edit profile page for a user.
+     * This method retrieves the current user from the session, converts
+     * the User entity to a WebUser DTO, and adds it to the model to
+     * pre-populate the form fields.
+     *
+     * @param model   The model object used to pass attributes to the view.
+     * @param session The HttpSession object to retrieve the current user's session.
+     * @return The name of the Thymeleaf template to render the edit profile page.
+     */
     @GetMapping("/editForUser")
     public String editCustomerPerUser(Model model,
                                HttpSession session) {
@@ -89,7 +97,20 @@ public class UserController {
         return "user/editForUser";
     }
 
-    // Handle profile form submission
+    /**
+     * Handles the POST request to process the profile form submission.
+     * This method validates the submitted WebUser data, checks for any
+     * errors, compares the passwords, and if validation is successful
+     * saves the updated user entity. If there are errors, it returns the
+     * form with error messages.
+     *
+     * @param webUser         The WebUser object populated with form data and validated.
+     * @param bindingResult   The BindingResult object holding validation results.
+     * @param model           The model object used to pass attributes to the view.
+     * @param session         The HttpSession object to retrieve the current user's session.
+     * @param confirmPassword The password confirmation string entered by the user.
+     * @return The name of the Thymeleaf template to render based on validation success or failure.
+     */
     @PostMapping("/editForUser")
     public String processProfileForm(
             @Valid @ModelAttribute("webUser") WebUser webUser,
@@ -102,8 +123,6 @@ public class UserController {
 
         // Convert WebUser DTO back to User entity
         User currentUser = userService.convertToUser(webUser, user);
-
-
 
         if (bindingResult.hasErrors()) {
             // If there are validation errors, return to the form page
@@ -128,7 +147,7 @@ public class UserController {
 
 
     /**
-     * Displays the edit customer page for a specific user.
+     * Displays to admin member the edit customer page for a specific user.
      * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a GET request.
      * It retrieves the user by the provided ID and adds it to the model for editing.
      * The current user's role is also determined and added to the model for use in the view.
@@ -162,7 +181,7 @@ public class UserController {
         // add the list of languages to the model
         model.addAttribute("roles",roles);
 
-        return "user/editCustomer";
+        return "user/editCustomerByAdmin";
     }
 
 
@@ -203,7 +222,6 @@ public class UserController {
      * @param id                    The ID of the user whose role is to be updated.
      * @param redirectAttributes    The redirect attributes used to add flash attributes for success messages.
      * @return The redirect URL to the customers list page.
-
      */
     @PostMapping("/updateRankToCustomer/{id}")
     public String updateRankToCustomer(@PathVariable Long id, RedirectAttributes redirectAttributes) {
