@@ -239,7 +239,6 @@
             color: #333; /* Adjust text color */
         }
 
-        /*================================*/
         /* Flex container for the buttons */
         .button-container {
             display: flex;
@@ -285,7 +284,9 @@
 
         <div class="button-container">
             <div class="action-buttons">
-                <a th:href="@{/editCustomer/{id}(id=${currentUser.id})}" class="btn btn-primary">Edit Profile</a>
+
+                <a th:href="@{/editForUser}" class="btn btn-primary">Edit Profile</a>
+
                 <a th:href="@{/changePassword}" class="btn btn-primary">Change Password</a>
                 <a th:href="@{/myOrderList}" class="btn btn-primary">My Order List</a>
 

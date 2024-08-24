@@ -307,9 +307,6 @@
 
         <td class="vertical-line" style="white-space:nowrap">
             <div class="action-buttons">
-                <!--
-                <a  th:href="@{editCustomer/{id}(id=${customer.id})}" class="button-link">Edit</a>
-                -->
                 <form th:action="@{editCustomer/{id}(id=${customer.id})}" method="get" style="display:inline;">
                     <button type="submit" class="edit">Edit</button>
                 </form>
