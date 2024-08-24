@@ -378,6 +378,21 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+
+
+
+	public boolean isConfirmPasswordEqualToPassword(String username, String password) {
+		User user = userDao.findByUserName(username);
+
+		// Check if current password matches
+		if (!passwordEncoder.matches(password, user.getPassword())) {
+			return false; // Current password doesn't match
+		}
+		return true;
+	}
+
+
+
 	/**
 	 * Allows an admin to change a user's password.
 	 * This method checks if the new password and confirm password match.

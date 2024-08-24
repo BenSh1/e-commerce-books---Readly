@@ -8,13 +8,11 @@ public class WebUser {
 	@Size(min = 1, message = "is required")
 	private String userName;
 
-
 	@NotNull(message = "Password is required")
 	@Size(min = 8, max = 128, message = "Password must be between 8 and 128 characters")
-	@Pattern(
-			regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,128}$",
-			message = "Password must contain at least one digit, one lowercase letter, one uppercase letter, and one special character (@#$%^&+=!)"
-	)
+	@Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,128}$",
+			message = "Password must contain at least one digit, one lowercase letter, " +
+					"one uppercase letter, and one special character (@#$%^&+=!)")
 	private String password;
 
 	@NotNull(message = "is required")
@@ -57,14 +55,12 @@ public class WebUser {
 	@Size(min = 1, message = "is required")
 	private String zipCode;
 
-
     @NotEmpty(message = "Credit card number is required")
     @Pattern(regexp = "\\d{16}", message = "Credit card number must be 16 digits")
     private String creditCardNumber;
 
 	@NotEmpty(message = "Credit card company is required")
 	private String creditCardCompany;
-
 
 	@Min(value = 1, message = "Month must be between 1 and 12")
 	@Max(value = 12, message = "Month must be between 1 and 12")

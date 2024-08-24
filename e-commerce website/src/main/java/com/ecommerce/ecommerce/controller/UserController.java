@@ -1,10 +1,7 @@
 package com.ecommerce.ecommerce.controller;
 
-import com.ecommerce.ecommerce.UserConverter;
-import com.ecommerce.ecommerce.dao.UserDaoImpl;
 import com.ecommerce.ecommerce.dto.PasswordChangeDto;
 import com.ecommerce.ecommerce.dto.WebUser;
-import com.ecommerce.ecommerce.entity.Book;
 import com.ecommerce.ecommerce.entity.Role;
 import com.ecommerce.ecommerce.entity.User;
 import com.ecommerce.ecommerce.service.RoleService;
@@ -24,7 +21,6 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Controller
 public class UserController {
@@ -78,6 +74,59 @@ public class UserController {
         return "/user/customersList";
     }
 
+
+    //@GetMapping("/editCustomerWithWebUser")
+    @GetMapping("/editForUser")
+    public String editCustomerPerUser(Model model,
+                               HttpSession session) {
+
+        User user = userService.getCurrentUser(session);
+
+        // Convert User entity to WebUser DTO
+        WebUser webUser = userService.convertToWebUser(user);
+        model.addAttribute("webUser", webUser);
+
+        return "user/editForUser";
+    }
+
+    // Handle profile form submission
+    @PostMapping("/editForUser")
+    public String processProfileForm(
+            @Valid @ModelAttribute("webUser") WebUser webUser,
+            BindingResult bindingResult, Model model, HttpSession session,
+            @RequestParam(name = "confirmPassword", defaultValue = "notProvided") String confirmPassword )
+    {
+
+        // Get the currently logged-in user
+        User user = userService.getCurrentUser(session);
+
+        // Convert WebUser DTO back to User entity
+        User currentUser = userService.convertToUser(webUser, user);
+
+
+
+        if (bindingResult.hasErrors()) {
+            // If there are validation errors, return to the form page
+            model.addAttribute("error","Profile hasn't been edited!");
+            model.addAttribute("webUser", webUser);
+            return "user/editForUser";
+        }
+
+        else if( !(webUser.getPassword().equals(confirmPassword)) ) {
+            model.addAttribute("error","The password is incorrect, Please try again!");
+            model.addAttribute("webUser", webUser);
+            return "user/editForUser";
+        }
+
+        // Save the updated user entity
+        userService.save(currentUser);
+        model.addAttribute("message","Profile has been edited successfully!");
+
+        // Redirect to profile page or display success message
+        return "user/editForUser";
+    }
+
+
     /**
      * Displays the edit customer page for a specific user.
      * This method is mapped to the "/editCustomer/{id}" URL and is triggered by a GET request.
@@ -98,6 +147,7 @@ public class UserController {
         User user = userService.getUser(id);
         model.addAttribute("user", user);
 
+
         User currentUser = userService.getCurrentUser(session);
 
         if ( currentUser.getRoles().size() == 3)
@@ -114,64 +164,6 @@ public class UserController {
 
         return "user/editCustomer";
     }
-
-
-    @GetMapping("/editCustomerWithWebUser")
-    public String editCustomerPerUser(Model model,
-                               HttpSession session) {
-
-        User user = userService.getCurrentUser(session);
-
-        // Convert User entity to WebUser DTO
-        //WebUser webUser = UserConverter.convertToWebUser(user);
-        WebUser webUser = userService.convertToWebUser(user);
-        model.addAttribute("webUser", webUser);
-
-        User currentUser = userService.getCurrentUser(session);
-        if ( currentUser.getRoles().size() == 3)
-            model.addAttribute("currentUserRole ", "ROLE_ADMIN");
-        else if( currentUser.getRoles().size() == 2) {
-            model.addAttribute("currentUserRole" , "ROLE_MANAGER");
-        }
-        else{
-            model.addAttribute("currentUserRole ", "ROLE_CUSTOMER");
-        }
-
-        // add the list of languages to the model
-        model.addAttribute("roles",roles);
-
-        return "user/editCustomerWithWebUser";
-    }
-
-    // Handle profile form submission
-    @PostMapping("/editCustomerWithWebUser")
-    public String processProfileForm(
-            @Valid @ModelAttribute("webUser") WebUser webUser,
-            BindingResult bindingResult, Model model, HttpSession session,
-            @RequestParam(name = "currentPassword", defaultValue = "notProvided") String currentPassword ) {
-
-        // Get the currently logged-in user
-        User user = userService.getCurrentUser(session);
-
-        // Convert WebUser DTO back to User entity
-        //User currentUser = UserConverter.convertToUser(webUser, user);
-        User currentUser = userService.convertToUser(webUser, user);
-
-        if (bindingResult.hasErrors()) {
-            // If there are validation errors, return to the form page
-            System.out.println("======there is an error!!!!===============");
-            model.addAttribute("webUser", webUser);
-            return "user/editCustomerWithWebUser";
-        }
-        System.out.println("=======================checking ====================: ");
-
-        // Save the updated user entity
-        userService.save(currentUser);
-
-        // Redirect to profile page or display success message
-        return "redirect:/editCustomerWithWebUser";
-    }
-
 
 
 

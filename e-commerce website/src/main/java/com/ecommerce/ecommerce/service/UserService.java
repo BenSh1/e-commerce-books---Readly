@@ -37,6 +37,7 @@ public interface UserService extends UserDetailsService {
 
 	boolean changeUserPassword(String username, PasswordChangeDto passwordChangeDto);
 	boolean changeUserPasswordByAdmin(String username, PasswordChangeDto passwordChangeDto);
+	boolean isConfirmPasswordEqualToPassword(String username, String password);
 
 	User getCurrentUser(HttpSession session);
 
