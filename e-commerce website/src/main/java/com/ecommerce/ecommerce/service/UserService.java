@@ -13,6 +13,9 @@ public interface UserService extends UserDetailsService {
 
 	void save(WebUser webUser);
 
+	void save(User user);
+
+
 	void addUser(User user);
 
 	List<User> getUsers();
@@ -36,6 +39,12 @@ public interface UserService extends UserDetailsService {
 	boolean changeUserPasswordByAdmin(String username, PasswordChangeDto passwordChangeDto);
 
 	User getCurrentUser(HttpSession session);
+
+	WebUser convertToWebUser(User user);
+	User convertToUser(WebUser webUser, User user);
+
+
+
 
 
 	}

@@ -21,8 +21,6 @@ public class UserServiceImpl implements UserService {
 	final int SECOND_ITEM_IN_ROLES_LIST  = 1;
 	final int THIRD_ITEM_IN_ROLES_LIST  = 2;
 
-
-
 	@Autowired
 	private UserDao userDao;
 
@@ -98,6 +96,12 @@ public class UserServiceImpl implements UserService {
 		user.setRoles(Arrays.asList(roleDao.findRoleByName("ROLE_CUSTOMER")));
 
 		// save user in the database
+		userDao.save(user);
+	}
+
+	@Override
+	@Transactional
+	public void save(User user) {
 		userDao.save(user);
 	}
 
@@ -398,6 +402,47 @@ public class UserServiceImpl implements UserService {
 		return true;
 	}
 
+	public WebUser convertToWebUser(User user) {
+		WebUser webUser = new WebUser();
+		webUser.setUserName(user.getUserName());
+		webUser.setFirstName(user.getFirstName());
+		webUser.setLastName(user.getLastName());
+		webUser.setEmail(user.getEmail());
+		webUser.setPhone(user.getPhone());
+		webUser.setCountry(user.getCountry());
+		webUser.setCity(user.getCity());
+		webUser.setStreetAddress(user.getStreetAddress());
+		webUser.setApartmentNumber(user.getApartmentNumber());
+		webUser.setZipCode(user.getZipCode());
+		webUser.setCreditCardNumber(user.getCreditCardNumber());
+		webUser.setCreditCardCompany(user.getCreditCardCompany());
+		webUser.setCardExpiryMonth(user.getCardExpiryMonth());
+		webUser.setCardExpiryYear(user.getCardExpiryYear());
+		// Password is not set here for security reasons or if you want to let the user input it.
+		return webUser;
+	}
+
+	// Converts WebUser DTO back to User entity
+	public User convertToUser(WebUser webUser, User user) {
+		user.setUserName(webUser.getUserName());
+		user.setPassword(passwordEncoder.encode(webUser.getPassword()));
+		user.setFirstName(webUser.getFirstName());
+		user.setLastName(webUser.getLastName());
+		user.setEmail(webUser.getEmail());
+		user.setPhone(webUser.getPhone());
+		user.setCountry(webUser.getCountry());
+		user.setCity(webUser.getCity());
+		user.setStreetAddress(webUser.getStreetAddress());
+		user.setApartmentNumber(webUser.getApartmentNumber());
+		user.setZipCode(webUser.getZipCode());
+		user.setCreditCardNumber(webUser.getCreditCardNumber());
+		user.setCreditCardCompany(webUser.getCreditCardCompany());
+		user.setCardExpiryMonth(webUser.getCardExpiryMonth());
+		user.setCardExpiryYear(webUser.getCardExpiryYear());
+		// Optionally update the password if it has been changed
+		return user;
+	}
+
 
 	/**
 	 * Searches for users based on a query string.
@@ -441,6 +486,9 @@ public class UserServiceImpl implements UserService {
 		}
 		return currentUser;
 	}
+
+
+
 
 }
 

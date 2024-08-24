@@ -27,7 +27,8 @@ public class WebUser {
 
 	@NotNull(message = "is required")
 	@Size(min = 1, message = "is required")
-	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$")
+	@Pattern(regexp="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$",
+			message = "Please enter a valid email address. For example, user@example.com.")
 	private String email;
 
 	@NotNull(message = "is required")

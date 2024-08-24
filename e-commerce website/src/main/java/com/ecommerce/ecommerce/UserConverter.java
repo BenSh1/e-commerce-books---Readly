@@ -2,11 +2,15 @@ package com.ecommerce.ecommerce;
 
 import com.ecommerce.ecommerce.dto.WebUser;
 import com.ecommerce.ecommerce.entity.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 
 public class UserConverter {
 
+    private BCryptPasswordEncoder passwordEncoder;
+
     // Converts User entity to WebUser DTO
-    public static WebUser convertToWebUser(User user) {
+    public WebUser convertToWebUser(User user) {
         WebUser webUser = new WebUser();
         webUser.setUserName(user.getUserName());
         webUser.setFirstName(user.getFirstName());
@@ -29,6 +33,7 @@ public class UserConverter {
     // Converts WebUser DTO back to User entity
     public static User convertToUser(WebUser webUser, User user) {
         user.setUserName(webUser.getUserName());
+        //user.setPassword(passwordEncoder.encode(webUser.getPassword()));
         user.setFirstName(webUser.getFirstName());
         user.setLastName(webUser.getLastName());
         user.setEmail(webUser.getEmail());
