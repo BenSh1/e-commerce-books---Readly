@@ -296,20 +296,18 @@
         <td th:text="${customer.email}" class="vertical-line"></td>
 
         <td class="vertical-line">
-
             <ul>
                 <li  th:each="role : ${customer.getRoles()}" th:text="${role.getName()}">Role</li>
             </ul>
-
         </td>
-
-
 
         <td class="vertical-line" style="white-space:nowrap">
             <div class="action-buttons">
                 <form th:action="@{editCustomer/{id}(id=${customer.id})}" method="get" style="display:inline;">
                     <button type="submit" class="edit">Edit</button>
                 </form>
+
+
 
                 <form th:action="@{/changePasswordByAdmin/{id}(id=${customer.id})}" method="get" style="display:inline;">
                     <button type="submit" class="edit">Change Password</button>
@@ -337,10 +335,7 @@
                 </form>
 
             </div>
-
-
         </td>
-
     </tr>
 </table>
 <script>

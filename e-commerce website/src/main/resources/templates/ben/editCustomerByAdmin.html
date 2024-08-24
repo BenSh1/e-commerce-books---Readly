@@ -166,78 +166,80 @@
 <div class="container">
     <form th:action="@{/editCustomer/{id}(id=${user.id})}" th:object="${user}" method="post">
 
-        <div class="form-group">
-            <label for="id">ID:</label>
-            <input readonly id="id" name="id" class="form-control-plaintext" type="text" th:value="*{id}" placeholder="Id Name" required />
+        <div sec:authorize="hasRole('MANAGER') or hasRole('ADMIN')">
+            <div class="form-group">
+                <label for="id">ID:</label>
+                <input readonly id="id" name="id" class="form-control-plaintext" type="text" th:value="*{id}" placeholder="Id Name" required />
+            </div>
         </div>
 
         <!-- First Name -->
         <div class="form-group">
             <label for="firstName">First Name:</label>
-            <input readonly type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name" required />
+            <input type="text" id="firstName" name="firstName" th:field="*{firstName}" placeholder="First Name" required />
         </div>
 
         <div class="form-group">
             <label for="lastName">Last Name:</label>
-            <input readonly type="text" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Last Name" required />
+            <input type="text" id="lastName" name="lastName" th:field="*{lastName}" placeholder="Last Name" required />
         </div>
 
         <div class="form-group">
             <label for="phone">Phone:</label>
-            <input readonly type="text" id="phone" name="phone" th:field="*{phone}" placeholder="phone" required />
+            <input type="text" id="phone" name="phone" th:field="*{phone}" placeholder="phone" required />
         </div>
 
         <div class="form-group">
             <label for="country">Country:</label>
-            <input readonly type="text" id="country" name="country" th:field="*{country}"  required />
+            <input type="text" id="country" name="country" th:field="*{country}"  required />
         </div>
 
         <div class="form-group">
             <label for="city">City:</label>
-            <input readonly type="text" id="city" name="city" th:field="*{city}"  required />
+            <input type="text" id="city" name="city" th:field="*{city}"  required />
         </div>
 
         <div class="form-group">
             <label for="streetAddress">Street Address:</label>
-            <input readonly type="text" id="streetAddress" name="streetAddress" th:field="*{streetAddress}"  required />
+            <input type="text" id="streetAddress" name="streetAddress" th:field="*{streetAddress}"  required />
         </div>
 
         <div class="form-group">
             <label for="streetAddress">Apartment Number :</label>
-            <input readonly type="text" id="apartmentNumber" name="apartmentNumber" th:field="*{apartmentNumber}"  required />
+            <input type="text" id="apartmentNumber" name="apartmentNumber" th:field="*{apartmentNumber}"  required />
         </div>
 
         <div class="form-group">
             <label for="zipCode">Zip Code:</label>
-            <input readonly type="text" id="zipCode" name="zipCode" th:field="*{zipCode}"  required />
+            <input type="text" id="zipCode" name="zipCode" th:field="*{zipCode}"  required />
         </div>
 
         <div class="form-group">
             <label for="creditCardNumber">Credit Card Number:</label>
-            <input readonly type="text" id="creditCardNumber" name="creditCardNumber" th:field="*{creditCardNumber}"  required />
+            <input type="text" id="creditCardNumber" name="creditCardNumber" th:field="*{creditCardNumber}"  required />
         </div>
 
         <div class="form-group">
             <label for="creditCardCompany">Credit Card Company:</label>
-            <input readonly type="text" id="creditCardCompany" name="creditCardCompany" th:field="*{creditCardCompany}"  required />
+            <input type="text" id="creditCardCompany" name="creditCardCompany" th:field="*{creditCardCompany}"  required />
         </div>
 
         <div class="form-group">
             <label for="cardExpiryMonth">Credit Card Month:</label>
-            <input readonly type="text" id="cardExpiryMonth" name="cardExpiryMonth" th:field="*{cardExpiryMonth}"  required />
+            <input type="text" id="cardExpiryMonth" name="cardExpiryMonth" th:field="*{cardExpiryMonth}"  required />
         </div>
 
         <div class="form-group">
             <label for="cardExpiryYear">Credit Card Year:</label>
-            <input readonly type="text" id="cardExpiryYear" name="cardExpiryYear" th:field="*{cardExpiryYear}"  required />
+            <input type="text" id="cardExpiryYear" name="cardExpiryYear" th:field="*{cardExpiryYear}"  required />
         </div>
-        <!--
-        <button type="submit">Edit </button>
-        -->
-    </form>
-    <a th:href="@{/itemSells}">Item for Sale</a><br>
-    <a th:href="@{/customersList}">back to customer list</a>
 
+        <button type="submit">Edit </button>
+    </form>
+    <a th:href="@{/itemSells}">Item for Sale</a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/customersList}">back to customer list</a>
+    </div>
 
 </div>
 

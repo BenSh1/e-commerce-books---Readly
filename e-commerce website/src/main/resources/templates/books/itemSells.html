@@ -287,7 +287,6 @@
 
                 <a th:href="@{/editForUser}" class="btn btn-primary">Edit Profile</a>
 
-                <a th:href="@{/changePassword}" class="btn btn-primary">Change Password</a>
                 <a th:href="@{/myOrderList}" class="btn btn-primary">My Order List</a>
 
                 <div sec:authorize="hasRole('MANAGER') or hasRole('ADMIN')">
