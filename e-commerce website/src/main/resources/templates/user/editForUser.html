@@ -172,10 +172,6 @@
 <div class="container">
     <form th:action="@{/editForUser}" th:object="${webUser}" method="post">
 
-        <!--
-        <div th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">userName Error</div>
-        <input type="userName" th:field="*{userName}" placeholder="userName" />
-        -->
         <div class="form-group">
             <!-- Label for Username Field -->
             <label for="userName" >Username:</label>

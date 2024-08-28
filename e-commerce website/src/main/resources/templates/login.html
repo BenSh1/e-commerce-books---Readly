@@ -34,30 +34,18 @@
 
     <body>
         <div style="justify-content: center; align-items: center;"  >
-            <!--
-            <div id="loginbox"  style="margin-top: 50px; margin-left: 50px;" class="col-md-3 col-md-offset-2 col-sm-6 col-sm-offset-2">
-            -->
             <div id="loginbox" class="card border-info mt-5">
-                <!--
-                <div class="card border-info">
-                -->
                 <div class="card-header bg-info text-white">
-
                     <div class="card-header bg-info text-white">
                         Sign In
                     </div>
 
                     <div class="card-body">
-                        <!--
-                        <div class="card-text">
-                        -->
-
                             <!-- Login Form -->
                             <form action="#" th:action="@{/authenticateTheUser}" method="POST" class="form-horizontal">
 
                                 <!-- Place for messages: error, alert etc ... -->
                                 <div th:if="${param.error}">
-
                                     <div class="alert alert-danger">
                                         Invalid username and password.
                                     </div>

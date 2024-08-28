@@ -286,7 +286,6 @@
             <div class="action-buttons">
 
                 <a th:href="@{/editForUser}" class="btn btn-primary">Edit Profile</a>
-
                 <a th:href="@{/myOrderList}" class="btn btn-primary">My Order List</a>
 
                 <div sec:authorize="hasRole('MANAGER') or hasRole('ADMIN')">
@@ -299,6 +298,7 @@
 
         <div class="button-container">
             <div class="nav-buttons">
+
                 <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing Page</a>
                 <a th:href="@{cart}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Go to Cart</a>
                 <a th:href="@{/contact}" class="btn btn-primary mt-3" role="button" aria-pressed="true">contact the managers</a>
@@ -309,18 +309,18 @@
         <form action="#" th:action="@{/logout}" method="POST" class="logout-form">
             <input type="submit" value="Logout" class="btn btn-danger" />
         </form>
+
     </div>
 
     <div th:if="${currentUser == null}">
+
         Welcome, Guest!
         <br>
         <a th:href="@{/showMyLoginPage}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-in</a>
         <a th:href="@{/register/showRegistrationForm}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Sign-up</a>
         <a th:href="@{/}" class="btn btn-primary mt-3" role="button" aria-pressed="true">Landing</a>
+
     </div>
-
-
-
 </div>
 
 <hr>
@@ -396,6 +396,7 @@
 </div>
 
 <script>
+
     document.addEventListener('DOMContentLoaded', function() {
         var messageContainer = document.getElementById('messageContainer');
         if (messageContainer) {
@@ -436,21 +437,7 @@
             }, 5000);
         }
 
-        var closeButton = document.querySelector('.alert .close');
-        var closeButtons = document.querySelectorAll('.alert .close'); // This line is missing in your script
-        /*
-                if (closeButton) {
-                    closeButton.addEventListener('click', function() {
-                        var alert = this.parentElement;
-                        alert.style.opacity = '0';
-                        setTimeout(function() {
-                            alert.style.display = 'none';
-                        }, 500); // Duration should match CSS transition
-                    });
-                }
-
-         */
-
+        var closeButtons = document.querySelectorAll('.alert .close');
         closeButtons.forEach(function(button) {
             button.addEventListener('click', function() {
                 var alert = this.parentElement;
@@ -461,6 +448,7 @@
             });
         });
     });
+
 </script>
 </body>
 </html>

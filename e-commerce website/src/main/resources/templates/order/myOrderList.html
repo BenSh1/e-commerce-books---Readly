@@ -129,9 +129,6 @@
         <td th:text="${order.totalAmount}" class="vertical-line"></td>
         <td class="vertical-line">
             <ul>
-                <!--
-                <li th:each="orderDetail : ${order.orderDetails}" th:text="${orderDetail.book.title}"></li>
-                -->
                 <li th:each="orderDetail : ${order.orderDetails}">
                     <span th:text="${orderDetail.book.title}"></span> (quantity:
                     <span th:text="${orderDetail.quantity}"></span>)
@@ -139,20 +136,6 @@
             </ul>
         </td>
         <td th:text="${order.status}" class="vertical-line"></td>
-
-
-        <!--
-    <td class="vertical-line" style="white-space:nowrap">
-
-        <a  th:href="@{editBook/{id}(id=${book.bookId})}" class="button-link">Edit</a>
-
-        <form th:action="@{delete/{id}(id=${book.bookId})}" method="post" style="display:inline;">
-            <input type="hidden" name="_method" value="delete" />
-            <button type="submit">Delete</button>
-        </form>
-    </td>
-    -->
-
     </tr>
 </table>
 

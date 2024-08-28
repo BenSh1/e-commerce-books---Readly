@@ -142,74 +142,6 @@
         }
 
     </style>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var messageContainer = document.getElementById('messageContainer');
-            if (messageContainer) {
-                // Show the message with fade-in effect
-                setTimeout(function() {
-                    messageContainer.classList.add('show');
-                    messageContainer.classList.remove('hide');
-                }, 100);
-
-                // Automatically hide the message after 5 seconds
-                setTimeout(function() {
-                    messageContainer.classList.remove('show');
-                    messageContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var errorContainer = document.getElementById('errorContainer');
-            if (errorContainer) {
-                setTimeout(function() {
-                    errorContainer.classList.add('show');
-                    errorContainer.classList.remove('hide');
-                }, 100);
-                setTimeout(function() {
-                    errorContainer.classList.add('hide');
-                    errorContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var warningContainer = document.getElementById('warningContainer');
-            if (warningContainer) {
-                setTimeout(function() {
-                    warningContainer.classList.add('show');
-                    warningContainer.classList.remove('hide');
-                }, 100);
-                setTimeout(function() {
-                    warningContainer.classList.add('hide');
-                    warningContainer.classList.remove('show');
-                }, 5000);
-            }
-
-            var closeButton = document.querySelector('.alert .close');
-
-            if (closeButton) {
-                closeButton.addEventListener('click', function() {
-                    var alert = this.parentElement;
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500); // Duration should match CSS transition
-                });
-            }
-
-
-
-            closeButtons.forEach(function(button) {
-                button.addEventListener('click', function() {
-                    var alert = this.parentElement;
-                    alert.style.opacity = '0';
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
-                });
-            });
-        });
-    </script>
-
 </head>
 <body>
 <div class="container">
@@ -249,9 +181,6 @@
         </div>
     </div>
 
-    <!--
-    <div sec:authorize="hasRole('CUSTOMER') or hasRole('MANAGER') or hasRole('ADMIN')">
-    -->
     <div th:if="${currentUser != null}">
         <!-- Add the form for selecting quantity and adding to cart -->
         <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post" class="buy-form">
@@ -260,12 +189,63 @@
         </form>
 
     </div>
-
-
-
 </div>
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageContainer = document.getElementById('messageContainer');
+        if (messageContainer) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                messageContainer.classList.add('show');
+                messageContainer.classList.remove('hide');
+            }, 100);
+
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                messageContainer.classList.remove('show');
+                messageContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var errorContainer = document.getElementById('errorContainer');
+        if (errorContainer) {
+            setTimeout(function() {
+                errorContainer.classList.add('show');
+                errorContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                errorContainer.classList.add('hide');
+                errorContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var warningContainer = document.getElementById('warningContainer');
+        if (warningContainer) {
+            setTimeout(function() {
+                warningContainer.classList.add('show');
+                warningContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                warningContainer.classList.add('hide');
+                warningContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+    });
+</script>
 
 
 </body>

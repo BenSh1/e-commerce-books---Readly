@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Book</title>
+
     <style>
         header {
             background-color: #343a40;
@@ -165,6 +166,7 @@
     </button>
 </div>
 
+<!-- Error Message -->
 <div id="errorContainer" th:if="${error}" class="alert alert-danger alert-dismissible hide" role="alert">
     <strong>Error!</strong> <span th:text="${error}"></span>
     <button type="button" class="close" aria-label="Close">
@@ -188,37 +190,97 @@
     <a th:href="@{bookList}" class="back-link">back to Books List</a>
 </form>
 
-
-
 <script>
+    /**
+     * This event listener waits until the entire HTML document has been completely loaded and parsed,
+     * ensuring that all DOM(Document Object Model) elements are accessible before executing the enclosed functions.
+     */
     document.addEventListener('DOMContentLoaded', function() {
+
+        /**
+         * Retrieves the DOM (Document Object Model) element with the ID 'messageContainer'.
+         * This is a container for messages or alerts.
+         */
         var messageContainer = document.getElementById('messageContainer');
+
+        /**
+         * Checks if the 'messageContainer' element exists on the page.
+         * If it does, the following code will execute.
+         */
         if (messageContainer) {
+            /**
+             * Sets a delay of 100 milliseconds before adding the 'show' class
+             * and removing the 'hide' class from the 'messageContainer' element.
+             */
             setTimeout(function() {
                 messageContainer.classList.add('show');
                 messageContainer.classList.remove('hide');
             }, 100);
+
+            /**
+             * After 5000 milliseconds (5 seconds), this removes the 'show' class from 'messageContainer'.
+             */
             setTimeout(function() {
                 messageContainer.classList.remove('show');
             }, 5000);
         }
 
+        /**
+         * Retrieves the DOM element with the ID 'errorContainer'.
+         * This is a container for error messages.
+         */
         var errorContainer = document.getElementById('errorContainer');
+
+        /**
+         * Checks if the 'errorContainer' element exists on the page.
+         * If it does, the following code will execute.
+         */
         if (errorContainer) {
+            /**
+             * Sets a delay of 100 milliseconds before adding the 'show' class
+             * and removing the 'hide' class from the 'errorContainer' element.
+             */
             setTimeout(function() {
                 errorContainer.classList.add('show');
                 errorContainer.classList.remove('hide');
             }, 100);
+
+            /**
+             * After 5000 milliseconds (5 seconds), this removes the 'show' class from 'errorContainer'.
+             */
             setTimeout(function() {
                 errorContainer.classList.remove('show');
             }, 5000);
         }
 
+        /**
+         * Selects all elements with the class 'close' that are within an element with the class 'alert'.
+         * These are close buttons for alerts/messages.
+         */
         var closeButtons = document.querySelectorAll('.alert .close');
         closeButtons.forEach(function(button) {
+            /**
+             * Adds a click event listener to each close button.
+             * When the button is clicked, the following code will execute.
+             */
             button.addEventListener('click', function() {
+
+                /**
+                 * Retrieves the parent element of the clicked close button.
+                 * This is the alert container that the close button is part of.
+                 */
                 var alert = this.parentElement;
+
+                /**
+                 * Sets the CSS opacity of the alert to 0, making it fully transparent.
+                 * This is used to create a fade-out effect.
+                 */
                 alert.style.opacity = '0';
+
+                /**
+                 * After 500 milliseconds (0.5 seconds), sets the CSS display property of the alert to 'none',
+                 * removing it from the page layout. This finalizes the fade-out effect.
+                 */
                 setTimeout(function() {
                     alert.style.display = 'none';
                 }, 500);
@@ -226,9 +288,6 @@
         });
     });
 </script>
-
-
-
 
 </body>
 </html>
