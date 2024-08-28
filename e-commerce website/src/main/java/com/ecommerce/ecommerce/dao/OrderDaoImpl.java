@@ -67,9 +67,13 @@ public class OrderDaoImpl implements OrderDao {
         return orders;
     }
 
-
+    /**
+     * Finds a list of orders associated with a specific user based on the user's ID.
+     *
+     * @param theId The ID of the user whose orders are being retrieved.
+     * @return A list of Order objects associated with the specified user.
+     */
     @Override
-    //public List<Order> findOrdersByUsername(String username) {
     public List<Order> findOrdersByUsername(Long theId) {
 
         String queryStr = "SELECT o FROM Order o JOIN FETCH o.orderDetails WHERE o.user.id = :userId";
@@ -80,27 +84,17 @@ public class OrderDaoImpl implements OrderDao {
         return query.getResultList();
     }
 
+    /**
+     * Retrieves a list of all orders, including their associated order details.
+     *
+     * @return A list of all Order objects with their associated order details.
+     */
     @Override
     public List<Order> findAll() {
         String queryStr = "SELECT o FROM Order o JOIN FETCH o.orderDetails";
         TypedQuery<Order> query = entityManager.createQuery(queryStr, Order.class);
         return query.getResultList();
     }
-
-
-/*
-    @Override
-    public List<Order> findOrdersByIdOfBook(Long theId) {
-
-        String hql = "FROM Order WHERE book.id = :bookId";
-        Query query = entityManager.createQuery(hql);
-        query.setParameter("bookId", theId);
-
-        List<Order> orders = query.getResultList();
-        return orders;
-    }
-
- */
 
     /**
      * Deletes an Order entity by its ID.

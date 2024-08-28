@@ -17,7 +17,6 @@ public class UserDaoImpl implements UserDao {
     // define field for entity manager
     private EntityManager entityManager;
 
-    // inject entity manager using constructor injection
     /**
      * Constructs a UserDaoImpl instance with the given EntityManager.
      * This constructor initializes the UserDaoImpl with the provided EntityManager to interact with the database.
@@ -52,11 +51,19 @@ public class UserDaoImpl implements UserDao {
         }
         return theUser;
     }
-
+    /**
+     * Finds a user by their email address if the user is enabled.
+     *
+     * @param email The email address of the user to be retrieved.
+     * @return The User object that matches the given email and is enabled,
+     *         or null if no such user is found or an exception occurs.
+     */
     @Override
     public User findByEmail(String email) {
-        // retrieve/read from database using username
+        // Create a TypedQuery to select a User from the database where the email matches
+        // the provided email and the user is enabled (enabled=true).
         TypedQuery<User> theQuery = entityManager.createQuery("from User where email=:email and enabled=true", User.class);
+        // Set the parameter 'email' in the query to the provided email address.
         theQuery.setParameter("email", email);
 
         User theUser = null;

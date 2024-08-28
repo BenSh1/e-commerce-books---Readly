@@ -80,7 +80,6 @@ public class SecurityConfig {
                         form
                                 .loginPage("/showMyLoginPage")
                                 .loginProcessingUrl("/authenticateTheUser")
-                                //.defaultSuccessUrl("/home", true) // Redirect to home page on successful login
                                 .successHandler(customAuthenticationSuccessHandler)
                                 .permitAll()
                 )
