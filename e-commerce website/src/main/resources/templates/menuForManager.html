@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu For Manager</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+            font-size: 2em;
+            margin-top: 20px;
+        }
+
+        h2 {
+            color: white;
+            margin: 0;
+            font-size: 1.5em;
+        }
+
+        .content {
+            width: 100%;
+            max-width: 600px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            margin: 10px 0 30px;
+            padding: 0;
+            line-height: 1.6;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ddd;
+            margin: 30px 0;
+        }
+
+        .links {
+            text-align: center;
+        }
+
+        .links a {
+            display: inline-block;
+            margin: 10px 0;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .links a:hover {
+            background-color: #0056b3;
+        }
+
+        .logout-form {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logout-form input[type="submit"] {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-form input[type="submit"]:hover {
+            background-color: #c82333;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="content">
+    <h1>Welcome to the Menu For Manager Page!</h1>
+
+    <div th:if="${currentUser != null}" style="text-align: center;">
+        <strong> Hello <span class="user-name" th:text="${currentUser.userName}"></span> </strong>
+    </div>
+
+    <p>Manage your books, orders, and customers from here.</p>
+    <hr>
+
+    <div class="links">
+        <a href="/itemSells">Go to Item Sells</a>
+
+        <div sec:authorize="hasRole('MANAGER')">
+            <a href="/addBook">Go to Add Book</a>
+            <a href="/bookList">Go to Books List</a>
+            <a href="/orderList">Go to Orders List</a>
+        </div>
+
+        <div sec:authorize="hasRole('ADMIN')">
+            <a href="/customersList">Go to Customers List</a>
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="logout-form">
+        <form action="#" th:action="@{/logout}" method="POST">
+            <input type="submit" value="Logout" />
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

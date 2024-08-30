@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .book-image img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+
+        .book-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .book-info h2 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+
+        .book-info .author {
+            font-size: 18px;
+            color: #6c757d;
+            margin-bottom: 20px;
+        }
+
+        .book-info .description {
+            margin-bottom: 20px;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .details {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .details p {
+            margin: 5px 0;
+        }
+
+        .buy-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .buy-button:hover {
+            background-color: #0056b3;
+        }
+
+        .go-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .go-back:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade-in transition */
+
+        }
+
+
+        .alert.show {
+            opacity: 1; /* Show alert */
+        }
+
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem; /* Make it larger for easier clicking */
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .alert.alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .alert.alert-warning {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <div id="messageContainer" th:if="${message}" class="alert alert-success alert-dismissible hide" role="alert">
+        <strong>Success!</strong> <span th:text="${message}"></span>
+        <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div id="errorContainer" th:if="${errorMessage}" class="alert alert-danger alert-dismissible hide" role="alert">
+        <strong>Error!</strong> <span th:text="${errorMessage}"></span>
+        <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div id="warningContainer" th:if="${warningMessage}" class="alert alert-warning alert-dismissible hide" role="alert">
+        <strong>Warning!</strong> <span th:text="${warningMessage}"></span>
+        <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <a href="/itemSells" class="go-back"><i class="fas fa-arrow-left"></i> Go to Item Sells</a><br> <br>
+
+    <div class="book-image">
+        <img th:src="@{'/images/' + ${book.image}}" alt="Book Image"/>
+    </div>
+
+    <div class="book-info">
+        <h2 th:text="${book.title}"></h2>
+        <p class="author" th:text="${book.authorName}" ></p>
+        <p class = "description" th:text="${book.description}" ></p>
+        <div class="details">
+            Category:  <p th:text="${book.category}" ><b></b> </p>
+        </div>
+    </div>
+
+    <div th:if="${currentUser != null}">
+        <!-- Add the form for selecting quantity and adding to cart -->
+        <form th:action="@{itemSells/{id}(id=${book.bookId})}" method="post" class="buy-form">
+            <input type="hidden" name="bookId" th:value="${book.bookId}"/>
+            <button type="submit" class="buy-button">Add to Cart</button>
+        </form>
+
+    </div>
+</div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var messageContainer = document.getElementById('messageContainer');
+        if (messageContainer) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                messageContainer.classList.add('show');
+                messageContainer.classList.remove('hide');
+            }, 100);
+
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                messageContainer.classList.remove('show');
+                messageContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var errorContainer = document.getElementById('errorContainer');
+        if (errorContainer) {
+            setTimeout(function() {
+                errorContainer.classList.add('show');
+                errorContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                errorContainer.classList.add('hide');
+                errorContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var warningContainer = document.getElementById('warningContainer');
+        if (warningContainer) {
+            setTimeout(function() {
+                warningContainer.classList.add('show');
+                warningContainer.classList.remove('hide');
+            }, 100);
+            setTimeout(function() {
+                warningContainer.classList.add('hide');
+                warningContainer.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <style>
+
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: white;
+            text-align: center;
+
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+
+        .vertical-line {
+            border-left: 2px solid black; /* Border on the left side */
+            height: 200px; /* Specify the height */
+            margin: 20px; /* Optional margin */
+        }
+
+        .vertical-line {
+            border-left: 2px solid black; /* Add left border */
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #007bff;
+            border-radius: 4px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #007bff;
+            color: #fff;
+        }
+        button {
+            padding: 5px 10px;
+            border: none;
+            background-color: #dc3545;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+
+        button:hover {
+            background-color: #c82333;
+        }
+
+        .add-book-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-book-link:hover {
+            background-color: #218838;
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            max-width: 300px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #28a745; /* Green background */
+            color: white; /* White text */
+            font-size: 16px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            opacity: 0; /* Start invisible */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade-in transition */
+
+        }
+
+
+        .alert.show {
+            opacity: 1; /* Show alert */
+        }
+
+        .alert-dismissible .close {
+            position: absolute;
+            top: 0; /* Adjust as needed */
+            right: 10px; /* Adjust as needed */
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem; /* Make it larger for easier clicking */
+            color: white;
+            cursor: pointer;
+        }
+
+
+        .alert.alert-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .alert.alert-success {
+            background-color: #28a745;
+            color: white;
+        }
+        .alert.alert-warning {
+            background-color: #FFD700;
+            color: #333;
+        }
+
+
+
+        .search-bar {
+            width: 30%; /* Expands the entire form to fill its container */
+            display: flex; /* Aligns the input and button on the same line */
+        }
+
+        .search-bar input[type="text"] {
+            flex: 1; /* Makes the input field take up most of the space */
+            padding: 10px; /* Adds padding for better look */
+            font-size: 16px; /* Increases font size for readability */
+            border: 1px solid #ccc; /* Adds border to the input */
+            border-radius: 4px 0 0 4px; /* Rounded corners on the left side */
+        }
+
+        .search-bar button {
+            padding: 10px 20px; /* Adds padding for the button */
+            font-size: 16px; /* Increases font size for readability */
+            border: 1px solid #ccc; /* Adds border to the button */
+            border-left: none; /* Removes the border between input and button */
+            border-radius: 0 4px 4px 0; /* Rounded corners on the right side */
+            background-color: #007bff; /* Button background color */
+            color: white; /* Button text color */
+            cursor: pointer; /* Changes cursor to pointer on hover */
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3; /* Darkens button color on hover */
+        }
+
+
+    </style>
+</head>
+<body>
+<header>
+    <h2  th:text="${title}">Default Message </h2>
+</header>
+
+
+<div id="SuppliedMessage" th:if="${SuppliedMessage}" class="alert alert-success alert-dismissible hide" role="alert">
+    <strong>The Order has been supplied!</strong> <span th:text="${message}"></span>
+    <button type="button" class="close" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+
+<a href="/menuForManager">Menu for Managers</a><br><br>
+<hr>
+
+<form th:action="@{/searchInOrderList}" method="get" class="search-bar">
+    <input type="text" name="query" placeholder="Search for orders by username">
+    <button type="submit">Search</button>
+</form>
+
+
+<table>
+
+    <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Total Amount</th>
+        <th>Username</th>
+        <th>books</th>
+        <th>Order status</th>
+        <th>Action</th>
+    </tr>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.orderId} " ></td>
+        <td th:text="${order.orderDate} " class="vertical-line"></td>
+        <td th:text="${order.totalAmount}" class="vertical-line"></td>
+        <td th:text="${order.user.userName}" class="vertical-line"></td>
+        <td class="vertical-line">
+            <ul>
+                <li th:each="orderDetail : ${order.orderDetails}">
+                    <span th:text="${orderDetail.book.title}"></span> (quantity:
+                    <span th:text="${orderDetail.quantity}"></span>)
+                </li>
+            </ul>
+        </td>
+
+        <td th:text="${order.status}" class="vertical-line"></td>
+
+        <td class="vertical-line">
+            <!--
+            <a  th:href="@{updateToSupplied/{id}(id=${order.orderId})}" class="button-link">Supplied</a>
+            -->
+            <form th:action="@{/updateToSupplied/{id}(id=${order.orderId})}" method="post">
+                <input type="hidden" name="_method" value="supplied" />
+                <button type="submit">Supplied</button>
+            </form>
+        </td>
+
+    </tr>
+</table>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var SuppliedMessage = document.getElementById('SuppliedMessage');
+        if (SuppliedMessage) {
+            // Show the message with fade-in effect
+            setTimeout(function() {
+                SuppliedMessage.classList.add('show');
+                SuppliedMessage.classList.remove('hide');
+            }, 100);
+
+            // Automatically hide the message after 5 seconds
+            setTimeout(function() {
+                SuppliedMessage.classList.remove('show');
+                SuppliedMessage.classList.remove('show');
+            }, 5000);
+        }
+
+        var closeButton = document.querySelector('.alert .close');
+
+        if (closeButton) {
+            closeButton.addEventListener('click', function() {
+                var alert = this.parentElement;
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.style.display = 'none';
+                }, 500); // Duration should match CSS transition
+            });
+        }
+    });
+</script>
+
+
+</body>
+</html>
