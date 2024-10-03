@@ -60,19 +60,21 @@ public class DataSeeder implements ApplicationRunner {
 
             List<Book> books = List.of(
                     new Book("Everything Is F*cked", "Mark Manson",
-                            "Mark Manson's Everything is F*cked is a book about hope and much, much more...",
+                            "Everything is F*cked by Mark Manson is a self-help book that explores the paradoxical nature of hope and how our values shape the way we approach life. It offers insight into the importance of finding meaning in our lives and navigating the challenges of existence.",
                             "Personal Development", 20, 10, "active", "Everything Is Fcked.jpg"),
 
                     new Book("The Subtle Art of Not Giving a F*ck", "Mark Manson",
-                            "The Subtle Art of Not Giving a F*ck: A Counterintuitive Approach to Living a Good Life...",
+                            "The Subtle Art of Not Giving a F*ck: A Counterintuitive Approach to Living a Good Life is a 2016 nonfiction self-help book by American blogger and author Mark Manson.[1] The book covers Manson's belief that life's struggles give it meaning and argues that typical self-help books offer meaningless positivity which is neither practical nor helpful, thus improperly approaching the problems many individuals face.",
                             "Personal Development", 25, 10, "active", "The Subtle Art of Not Giving a Fck.jpg"),
 
                     new Book("12 Rules for Life", "Jordan Peterson",
-                            "12 Rules for Life: An Antidote to Chaos is a 2018 self-help book...",
+                            "12 Rules for Life: An Antidote to Chaos is a 2018 self-help book by the Canadian clinical psychologist Jordan Peterson. It provides life advice through essays in abstract ethical principles, psychology, mythology, religion, and personal anecdotes. The book topped bestseller lists in Canada, the United States, and the United Kingdom, and had sold over ten million copies worldwide, as of May 2023.[1] Peterson went on a world tour to promote the book, receiving much attention following an interview with Channel 4 News.[2][3] The book is written in a more accessible style than his previous academic book, Maps of Meaning: The Architecture of Belief (1999).[9] A sequel, Beyond Order: 12 More Rules for Life, was published in March 2021.",
                             "Self-help, psychology, philosophy", 25, 10, "active", "12 Rules for Life.jpg"),
 
                     new Book("From Animals into Gods: A Brief History of Humankind", "Yuval Noah Harari",
-                            "In \"From Animals into Gods: A Brief History of Humankind,\" Yuval Noah Harari...",
+                            "In \"From Animals into Gods: A Brief History of Humankind,\" Yuval Noah Harari takes readers on an enthralling journey through the annals of history, \n" +
+                                    "detailing the transformative events that catapulted Homo sapiens from mere creatures of the animal kingdom to the architects of civilizations \n" +
+                                    "and masters of the planet.",
                             "History, social philosophy", 20, 10, "active", "From Animals into Gods A Brief History of Humankind.jpg")
             );
 

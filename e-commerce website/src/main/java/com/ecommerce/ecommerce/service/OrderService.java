@@ -71,7 +71,6 @@ public class OrderService {
             return orderDao.findAll();
         }
 
-        // Assuming userDao has a method to find users by username or other fields
         List<Order> orders = orderDao.findOrdersByUsername(user.getId());
 
         return orders;

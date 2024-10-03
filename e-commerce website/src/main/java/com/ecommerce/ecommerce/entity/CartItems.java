@@ -22,7 +22,7 @@ public class CartItems {
 
     // a book can be in multiple cart items.
     @ManyToOne(fetch = FetchType.EAGER , cascade = {CascadeType.PERSIST,CascadeType.REFRESH,
-                                            CascadeType.DETACH, CascadeType.MERGE})
+             CascadeType.DETACH, CascadeType.MERGE})
     @JoinColumn(name = "book_id")
     private Book book;
 

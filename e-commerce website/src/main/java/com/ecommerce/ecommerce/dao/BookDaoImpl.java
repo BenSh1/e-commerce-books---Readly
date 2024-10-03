@@ -127,7 +127,7 @@ public class BookDaoImpl implements BookDao{
 
     /**
      * Finds and returns a list of books that belong to a specific category.
-     * This method uses a JPQL query to select books from the database where
+     * This method uses a JPQL (Java Persistence Query Language) query to select books from the database where
      * the category matches the specified parameter.
      *
      * @param category The category to filter books by.

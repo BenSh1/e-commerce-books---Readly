@@ -17,6 +17,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentHashMap;
+
 import java.util.List;
 
 @Controller
@@ -29,6 +33,9 @@ public class BookController {
 
     @Autowired
     private CartService cartService;
+
+    // Map to store locks for each book
+    private final ConcurrentHashMap<Long, Lock> bookLocks = new ConcurrentHashMap<>();
 
 
     /**
@@ -377,6 +384,7 @@ public class BookController {
      * @param redirectAttributes The redirect attributes to which a success message will be added.
      * @return A redirect URL to the book list page.
      */
+    /*
     @PostMapping("/editBook/{id}")
     public String updateBook(Model model ,
                              @PathVariable Long id,
@@ -396,6 +404,47 @@ public class BookController {
 
         return "redirect:/bookList";
     }
+
+     */
+
+    @PostMapping("/editBook/{id}")
+    public String updateBook(Model model ,
+                             @PathVariable Long id,
+                             @ModelAttribute Book theBook,
+                             @RequestParam("imageFile") MultipartFile imageFile,
+                             RedirectAttributes redirectAttributes) {
+
+
+        // Acquire a lock for the specific book by its ID
+        Lock lock = bookLocks.computeIfAbsent(id, key -> new ReentrantLock());
+
+
+        // Attempt to lock the book before updating its details
+        lock.lock();
+        try {
+            // Handle file upload and update the book's image field if necessary
+            if (!imageFile.isEmpty()) {
+                String fileName = imageFile.getOriginalFilename();
+                // Save the file and update book's image field
+                theBook.setImage(fileName);
+            }
+
+            // Update the book's details in the database
+            bookService.update(id, theBook);
+
+            // Add success message after the update
+            redirectAttributes.addFlashAttribute("message", "Book updated successfully!");
+
+        }
+        finally {
+            // Always release the lock to avoid deadlocks
+            lock.unlock();
+            // Optionally clean up the lock after the update
+            bookLocks.remove(id);
+        }
+        return "redirect:/bookList";
+    }
+
 
     /**
      * Handles the request to change a book's status to "active".

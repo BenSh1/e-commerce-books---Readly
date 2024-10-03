@@ -41,6 +41,7 @@ public class SecurityConfig {
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
         auth.setUserDetailsService(userService); //set the custom user details service
         auth.setPasswordEncoder(passwordEncoder()); //set the password encoder - bcrypt
+
         return auth;
     }
 
@@ -79,7 +80,9 @@ public class SecurityConfig {
                 .formLogin(form ->
                         form
                                 .loginPage("/showMyLoginPage")
+                                // automatically handles the authentication process
                                 .loginProcessingUrl("/authenticateTheUser")
+                                // allows you to define custom logic for what should happen when a user successfully logs in
                                 .successHandler(customAuthenticationSuccessHandler)
                                 .permitAll()
                 )

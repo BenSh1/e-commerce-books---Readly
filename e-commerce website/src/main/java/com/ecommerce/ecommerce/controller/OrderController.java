@@ -16,6 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentHashMap;
+
+
 import java.util.List;
 
 @Controller
@@ -32,6 +38,9 @@ public class OrderController {
 
     @Autowired
     private BookDao bookDao;
+
+    // ConcurrentHashMap to hold locks for each book
+    private final ConcurrentHashMap<Long, Lock> bookLocks = new ConcurrentHashMap<>();
 
 
     /**
@@ -142,6 +151,7 @@ public class OrderController {
      * @throws RuntimeException if the user is not logged in or if a book in the cart is out of stock.
 
      */
+    /*
     @PostMapping("/addOrder")
     @Transactional
     public String addOrder(Model model, HttpSession session) {
@@ -180,4 +190,61 @@ public class OrderController {
 
         return "order/orderConfirmation";
     }
+
+     */
+
+
+    @PostMapping("/addOrder")
+    @Transactional
+    public String addOrder(Model model, HttpSession session) {
+
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            throw new RuntimeException("User not logged in");
+        }
+
+        List<CartItems> cartItems = cartService.getCartForUser(currentUser);
+
+        //update the stock for each book in the cartItems
+        for(CartItems cartItem : cartItems) {
+
+            int bookId = cartItem.getBook().getBookId();
+            Lock lock = bookLocks.computeIfAbsent((long)bookId, id -> new ReentrantLock());
+
+            // Attempt to acquire the lock for the book
+            lock.lock();
+            try {
+                // Fetch the book with a pessimistic lock (if you want to use database-level locking too)
+                Book book = bookDao.findByIdWithLock((long)bookId)
+                        .orElseThrow(() -> new RuntimeException("Book not found"));
+
+                if (book.getStock() < cartItem.getQuantity()) {
+                    // Handle out-of-stock scenario
+                    if (cartItem.getQuantity() == 1) {
+                        cartService.removeBookFromCart(book.getBookId(), currentUser);
+                    }
+                    model.addAttribute("titleOfBook", book.getTitle());
+                    return "books/bookIsOutOfStock";
+                }
+                // Update the stock
+                book.setStock(book.getStock() - cartItem.getQuantity());
+                bookService.addBook(book);
+            }finally {
+                // Always release the lock after operation is complete
+                lock.unlock();
+                // Optionally clean up the lock to avoid memory leaks for rarely sold books
+                bookLocks.remove((long)bookId);
+            }
+        }
+
+        List<OrderDetails> orderDetails = orderService.convertToOrderDetails(cartItems);
+
+        Order order = orderService.createOrder(orderDetails, currentUser);
+        model.addAttribute("order", order);
+
+        cartService.clearCart(currentUser);
+
+        return "order/orderConfirmation";
+    }
+
 }

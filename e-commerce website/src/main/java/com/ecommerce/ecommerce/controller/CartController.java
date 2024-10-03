@@ -48,7 +48,11 @@ public class CartController {
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
-        // Calculate the total amount
+        // Calculate the total amount by -
+        // 1. converts the list of cartItems into a Stream
+        // 2. 'mapToDouble' this operation converts each cartItem in the stream into a double value ,
+        //     item -> item.getBook().getPrice() * item.getQuantity(): This is a lambda expression
+        // 3. After mapping each cartItem to its total price, the sum() operation sums up all these double values
         double totalAmount = cartItems.stream()
                 .mapToDouble(item -> item.getBook().getPrice() * item.getQuantity())
                 .sum();
