@@ -63,8 +63,8 @@ public class SecurityConfig {
         http.authorizeRequests(configurer ->
                         configurer
                                 .requestMatchers("/","/images/**" ,"/register/**"
-                                        , "/showMyLoginPage","/itemSells"
-                                        ,"/bookDetails/**","/contact").permitAll()  // Allow access to URLs starting with /public
+                                        , "/showMyLoginPage","/ItemsForSale"
+                                        ,"/bookDetails/**","/contact","/filterBooks","/search").permitAll()  // Allow access to URLs starting with /public
 
                                 .requestMatchers("/cart" ,"/myOrderList",
                                         "/editCustomer/**","/changePassword").hasRole("CUSTOMER")

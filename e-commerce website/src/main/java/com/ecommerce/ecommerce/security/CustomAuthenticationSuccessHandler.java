@@ -29,7 +29,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
     /**
      * This method is invoked when a user successfully logs in. It retrieves the authenticated user's
      * username, fetches the corresponding User object from the database using the UserService, and
-     * stores the User object in the session. After that, the user is redirected to the "itemSells" page.
+     * stores the User object in the session. After that, the user is redirected to the "ItemsForSale" page.
      *
      * @param request The HttpServletRequest object for the current request.
      * @param response The HttpServletResponse object for the current response.
@@ -54,7 +54,8 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         session.setAttribute("user", theUser);
 
         // forward to home page
-        response.sendRedirect(request.getContextPath() + "/itemSells");
+        response.sendRedirect(request.getContextPath() + "/ItemsForSale");
+
     }
 
 }

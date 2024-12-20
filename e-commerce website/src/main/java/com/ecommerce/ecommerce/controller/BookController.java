@@ -118,16 +118,16 @@ public class BookController {
 
     /**
      * Handles the request to display the items available for sale.
-     * This method is mapped to the "/itemSells" URL and is triggered by a GET request.
+     * This method is mapped to the "/ItemsForSale" URL and is triggered by a GET request.
      * It retrieves the current user from the session, adds the user to the model if logged in,
-     * retrieves all active books and subjects, and returns the view "books/itemSells" to display the items.
+     * retrieves all active books and subjects, and returns the view "books/ItemsForSale" to display the items.
      *
      * @param model The model to which the list of books and subjects will be added.
      * @param session The HTTP session from which the current user will be retrieved.
      * @return The name of the view to display the items available for sale.
      */
-    @GetMapping("/itemSells" )
-    public String getItemsForSell(Model model , HttpSession session) {
+    @GetMapping("/ItemsForSale" )
+    public String getItemsForSale(Model model , HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
 
@@ -140,24 +140,26 @@ public class BookController {
         model.addAttribute("allBooks", allBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
 
-        return "books/itemSells";
+        return "books/ItemsForSale";
     }
+
+
 
     /**
      * Handles the request to add an item (book) to the user's cart.
-     * This method is mapped to the "/itemSells/{id}" URL and is triggered by a POST request.
+     * This method is mapped to the "/ItemsForSale/{id}" URL and is triggered by a POST request.
      * It checks if the book is available and if the book is already in the user's cart.
      * If the book is available and not already in the cart, it adds the book to the cart.
-     * It sets appropriate feedback messages and redirects to the "itemSells" page.
+     * It sets appropriate feedback messages and redirects to the "ItemsForSale" page.
      *
      * @param session The HTTP session from which the current user will be retrieved.
      * @param id The ID of the book to be added to the cart.
      * @param redirectAttributes The redirect attributes to which feedback messages will be added.
-     * @return A redirect URL to the itemSells page.
+     * @return A redirect URL to the ItemsForSale page.
      */
     @Transactional
-    @PostMapping("/itemSells/{id}")
-    public String addItemToCart(HttpSession session ,@PathVariable Long id,
+    @PostMapping("/ItemsForSale/{id}")
+    public String addItemToCArt(HttpSession session ,@PathVariable Long id,
                                 RedirectAttributes redirectAttributes) {
 
         boolean isExistTheBookId = false;
@@ -196,15 +198,15 @@ public class BookController {
             redirectAttributes.addFlashAttribute("errorMessage", "Sorry, this book is out of stock!");
         }
 
-
-        return "redirect:/itemSells";
+        return "redirect:/ItemsForSale";
     }
+
 
     /**
      * Handles the request to filter books based on a selected subject.
      * This method is mapped to the "/filterBooks" URL and is triggered by a GET request.
      * It filters the books by the given subject, adds the filtered books and subjects to the model,
-     * and returns the view "books/itemSells" to display the filtered books.
+     * and returns the view "books/ItemsForSale" to display the filtered books.
      *
      * @param subject The subject to filter books by.
      * @param model The model to which the filtered books and subjects will be added.
@@ -212,7 +214,7 @@ public class BookController {
      * @return The name of the view to display the filtered books.
      */
     @GetMapping("/filterBooks")
-    public String filterForBooks(@RequestParam("subject") String subject,
+    public String filterBooks(@RequestParam("subject") String subject,
                                  Model model, HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
@@ -232,14 +234,14 @@ public class BookController {
         model.addAttribute("allBooks", filteredBooks);
         model.addAttribute("subjects", bookService.getAllSubjects());
 
-        return "books/itemSells"; // Return the view name where books are displayed
+        return "books/ItemsForSale"; // Return the view name where books are displayed
     }
 
     /**
      * Handles the request to search for books based on a query.
      * This method is mapped to the "/search" URL and is triggered by a GET request.
      * It searches for books that match the given query, adds the results to the model,
-     * and returns the view "books/itemSells" to display the search results.
+     * and returns the view "books/ItemsForSale" to display the search results.
      *
      * @param query The search query to find books.
      * @param model The model to which the list of matching books will be added.
@@ -247,7 +249,7 @@ public class BookController {
      * @return The name of the view to display the search results.
      */
     @GetMapping("/search")
-    public String searchForBooks(@RequestParam("query") String query,
+    public String searchBooks(@RequestParam("query") String query,
                                  Model model,HttpSession session) {
 
         User currentUser = (User) session.getAttribute("user");
@@ -258,12 +260,12 @@ public class BookController {
 
         List<Book> books = bookService.searchBooks(query);
         model.addAttribute("allBooks", books);
-        return "books/itemSells";
+        return "books/ItemsForSale";
     }
 
     /**
      * Handles the request to add an item (book) to the cart from the book details page.
-     * This method is mapped to the "bookDetails/itemSells/{id}" URL and is triggered by a POST request.
+     * This method is mapped to the "bookDetails/ItemsForSale/{id}" URL and is triggered by a POST request.
      * It checks if the book is available and if the book is already in the user's cart.
      * If the book is available and not already in the cart, it adds the book to the cart.
      * It sets appropriate feedback messages and redirects the user back to the book details page.
@@ -275,7 +277,7 @@ public class BookController {
      * @param redirectAttributes The redirect attributes to which feedback messages will be added.
      * @return A redirect URL to the book details page.
      */
-    @PostMapping("bookDetails/itemSells/{id}")
+    @PostMapping("bookDetails/ItemsForSale/{id}")
     public String addItemToCartFromDetailBook(Model model,
                                               HttpSession session ,
                                               @PathVariable Long id,

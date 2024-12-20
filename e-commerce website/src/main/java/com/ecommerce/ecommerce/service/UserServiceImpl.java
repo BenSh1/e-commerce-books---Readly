@@ -37,8 +37,17 @@ public class UserServiceImpl implements UserService {
 	private CartItemsRepository cartItemsRepository;
 
 
+
 	private BCryptPasswordEncoder passwordEncoder;
 
+/*
+	@Autowired
+	private ResetTokenRepository resetTokenRepository;
+
+	@Autowired
+	private EmailService emailService;
+
+ */
 
 	/**
 	 * Constructor for the UserServiceImpl class.
