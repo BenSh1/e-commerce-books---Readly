@@ -83,6 +83,7 @@
 
 <body>
 
+<!-- User name Unavailable! -->
 <div id="registrationError" th:if="${registrationError}" class="alert alert-warning alert-dismissible hide" role="alert">
     <strong>User name Unavailable! </strong> <span th:text="${registrationError}"></span>
     <button type="button" class="close" aria-label="Close">
@@ -277,6 +278,7 @@
 
                 <div class="back-link">
                     <a th:href="@{/}" class="btn btn-secondary" role="button" aria-pressed="true">Landing Page</a>
+
                 </div>
             </div>
         </div>

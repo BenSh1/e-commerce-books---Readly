@@ -345,7 +345,9 @@
 
         <button type="submit">Edit </button>
     </form>
-    <a th:href="@{/itemSells}">Item for Sale</a>
+
+    <a th:href="@{/ItemsForSale}">Item for Sale</a>
+
     <div sec:authorize="hasRole('ADMIN')">
         <a th:href="@{/customersList}">back to customer list</a>
     </div>
