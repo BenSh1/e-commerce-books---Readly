@@ -138,6 +138,12 @@ public class UserServiceImpl implements UserService {
 		return userDao.findByUserName(userName);
 	}
 
+	@Override
+	public User findById(Long userId) {
+		// check the database if the user already exists
+		return userDao.findById(userId);
+	}
+
 	/**
 	 * This function returns a list of all users currently stored in the database.
 	 *

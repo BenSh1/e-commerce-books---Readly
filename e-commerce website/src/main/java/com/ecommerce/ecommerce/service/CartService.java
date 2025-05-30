@@ -62,22 +62,24 @@ public class CartService {
 
     }
 
-    @Transactional
-    public void addToCartWithQuantity(User user, Long bookId, int quantity) {
-        Book book = bookDao.findById(bookId);
-
-        User currentUser = userDao.findByUserName(user.getUserName());
-
-        CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
-                .orElseGet(CartItems::new);
-
-        cartItems.setUser(currentUser);
-        cartItems.setBook(book);
-        cartItems.setPrice(book.getPrice());
-        cartItems.setQuantity(quantity);
-
-        cartItemsRepository.save(cartItems);
-    }
+//
+//
+//    @Transactional
+//    public void addToCartWithQuantity(User user, Long bookId, int quantity) {
+//        Book book = bookDao.findById(bookId);
+//
+//        User currentUser = userDao.findByUserName(user.getUserName());
+//
+//        CartItems cartItems = cartItemsRepository.findByUserAndBook(currentUser, book)
+//                .orElseGet(CartItems::new);
+//
+//        cartItems.setUser(currentUser);
+//        cartItems.setBook(book);
+//        cartItems.setPrice(book.getPrice());
+//        cartItems.setQuantity(quantity);
+//
+//        cartItemsRepository.save(cartItems);
+//    }
 
     /**
      * This function removes a specific book from a user's cart.

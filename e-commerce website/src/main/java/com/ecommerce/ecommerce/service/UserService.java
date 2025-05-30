@@ -10,9 +10,9 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
 
 	User findByUserName(String userName);
+	User findById(Long userId);
 
 	void save(WebUser webUser);
-
 	void save(User user);
 
 
