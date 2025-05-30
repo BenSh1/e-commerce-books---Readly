@@ -63,10 +63,10 @@ public class SecurityConfig {
         http.authorizeRequests(configurer ->
                         configurer
                                 .requestMatchers("/","/images/**" ,"/register/**"
-                                        , "/showMyLoginPage","/ItemsForSale"
+                                        , "/showMyLoginPage","/showMyLoginPage","/ItemsForSale"
                                         ,"/bookDetails/**","/contact","/filterBooks","/search").permitAll()  // Allow access to URLs starting with /public
 
-                                .requestMatchers("/cart" ,"/myOrderList",
+                                .requestMatchers("/cart" ,"/myOrderList", "/bookIsOutOfStockList",
                                         "/editCustomer/**","/changePassword").hasRole("CUSTOMER")
 
                                 .requestMatchers( "/addBook","/bookList"
@@ -79,6 +79,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form ->
                         form
+                                //.loginPage("/showMyLoginPage")
                                 .loginPage("/showMyLoginPage")
                                 // automatically handles the authentication process
                                 .loginProcessingUrl("/authenticateTheUser")

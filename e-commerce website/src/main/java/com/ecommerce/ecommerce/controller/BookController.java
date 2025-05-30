@@ -55,6 +55,7 @@ public class BookController {
         return "books/addBook";
     }
 
+
     /**
      * Handles the submission of the form for adding a new book.
      * This method is mapped to the "/addBook" URL and is triggered by a POST request.
@@ -75,6 +76,12 @@ public class BookController {
         model.addAttribute("message", "The Book has been added successfully");
 
         return "books/addBook";
+    }
+
+    @GetMapping("/bookIsOutOfStockList")
+    public String getBookOutOfStock(@RequestParam("title") String title, Model model) {
+        model.addAttribute("titleOfBook", title);
+        return "books/bookIsOutOfStockList";
     }
 
     /**

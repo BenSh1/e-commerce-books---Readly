@@ -14,11 +14,17 @@ public class LoginController {
      *
      * @return The name of the view to render, in this case, "login".
      */
+//    @GetMapping("/showMyLoginPage")
+//    public String showMyLoginPage() {
+//
+//        return "login";
+//    }
+
+
     @GetMapping("/showMyLoginPage")
     public String showMyLoginPage() {
 
-        return "login";
+        return "login-page";
     }
-
 
 }

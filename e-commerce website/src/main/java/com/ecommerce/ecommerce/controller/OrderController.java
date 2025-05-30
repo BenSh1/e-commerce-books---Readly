@@ -2,9 +2,11 @@ package com.ecommerce.ecommerce.controller;
 
 import com.ecommerce.ecommerce.dao.*;
 import com.ecommerce.ecommerce.entity.*;
+import com.ecommerce.ecommerce.exception.OutOfStockException;
 import com.ecommerce.ecommerce.service.BookService;
 import com.ecommerce.ecommerce.service.CartService;
 import com.ecommerce.ecommerce.service.OrderService;
+import com.ecommerce.ecommerce.service.StockService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +44,13 @@ public class OrderController {
     // ConcurrentHashMap to hold locks for each book
     private final ConcurrentHashMap<Long, Lock> bookLocks = new ConcurrentHashMap<>();
 
+
+    private final StockService stockService;        // ← declare it here
+
+    // Spring will auto-wire all for you
+    public OrderController(StockService stockService) {
+        this.stockService = stockService;          // ← assign it here
+    }
 
     /**
      * Handles the request to display the list of all orders.
@@ -174,7 +183,7 @@ public class OrderController {
                     cartService.removeBookFromCart(book.getBookId(),currentUser);
                 }
                 model.addAttribute("titleOfBook", book.getTitle());
-                return "books/bookIsOutOfStock";
+                return "books/bookIsOutOfStockList";
             }
 
             book.setStock(book.getStock() - cartItem.getQuantity());
@@ -194,10 +203,89 @@ public class OrderController {
      */
 
 
-    @PostMapping("/addOrder")
-    @Transactional
-    public String addOrder(Model model, HttpSession session) {
+//    @PostMapping("/addOrder")
+//    @Transactional
+//    public String addOrder(Model model, HttpSession session) {
+//
+//        User currentUser = (User) session.getAttribute("user");
+//        if (currentUser == null) {
+//            throw new RuntimeException("User not logged in");
+//        }
+//
+//        List<CartItems> cartItems = cartService.getCartForUser(currentUser);
+//
+//        //update the stock for each book in the cartItems
+//        for(CartItems cartItem : cartItems) {
+//
+//            int bookId = cartItem.getBook().getBookId();
+//            Lock lock = bookLocks.computeIfAbsent((long)bookId, id -> new ReentrantLock());
+//
+//            // Attempt to acquire the lock for the book
+//            lock.lock();
+//            try {
+//                // Fetch the book with a pessimistic lock (if you want to use database-level locking too)
+//                Book book = bookDao.findByIdWithLock((long)bookId)
+//                        .orElseThrow(() -> new RuntimeException("Book not found"));
+//
+//                if (book.getStock() < cartItem.getQuantity()) {
+//                    // Handle out-of-stock scenario
+//                    if (cartItem.getQuantity() == 1) {
+//                        cartService.removeBookFromCart(book.getBookId(), currentUser);
+//                    }
+//                    model.addAttribute("titleOfBook", book.getTitle());
+//                    return "books/bookIsOutOfStockList";
+//                }
+//                // Update the stock
+//                book.setStock(book.getStock() - cartItem.getQuantity());
+//                bookService.addBook(book);
+//            }finally {
+//                // Always release the lock after operation is complete
+//                lock.unlock();
+//                // Optionally clean up the lock to avoid memory leaks for rarely sold books
+//                bookLocks.remove((long)bookId);
+//            }
+//        }
+//
+//
+//        List<OrderDetails> orderDetails = orderService.convertToOrderDetails(cartItems);
+//
+//        Order order = orderService.createOrder(orderDetails, currentUser);
+//        model.addAttribute("order", order);
+//
+//        cartService.clearCart(currentUser);
+//
+//        return "order/orderConfirmation";
+//    }
+//}
 
+//
+//    @PostMapping("/addOrder")
+//    public String addOrder(Model model, HttpSession session) {
+//
+//        User currentUser = (User) session.getAttribute("user");
+//        if (currentUser == null) {
+//            throw new RuntimeException("User not logged in");
+//        }
+//
+//        List<CartItems> cartItems = cartService.getCartForUser(currentUser);
+//
+//        try {
+//            Order order = orderService.placeOrder(currentUser, cartItems);
+//            model.addAttribute("order", order);
+//
+//            return "order/orderConfirmation";
+//
+//        }catch (OutOfStockException ex) {
+//            // service tells us exactly which title failed
+//            model.addAttribute("titleOfBook", ex.getBookTitle());
+//            return "books/bookIsOutOfStockList";
+//        }
+//
+//    }
+
+
+    @PostMapping("/addOrder")
+    public String addOrder(Model model, HttpSession session) {
         User currentUser = (User) session.getAttribute("user");
         if (currentUser == null) {
             throw new RuntimeException("User not logged in");
@@ -205,46 +293,19 @@ public class OrderController {
 
         List<CartItems> cartItems = cartService.getCartForUser(currentUser);
 
-        //update the stock for each book in the cartItems
-        for(CartItems cartItem : cartItems) {
-
-            int bookId = cartItem.getBook().getBookId();
-            Lock lock = bookLocks.computeIfAbsent((long)bookId, id -> new ReentrantLock());
-
-            // Attempt to acquire the lock for the book
-            lock.lock();
-            try {
-                // Fetch the book with a pessimistic lock (if you want to use database-level locking too)
-                Book book = bookDao.findByIdWithLock((long)bookId)
-                        .orElseThrow(() -> new RuntimeException("Book not found"));
-
-                if (book.getStock() < cartItem.getQuantity()) {
-                    // Handle out-of-stock scenario
-                    if (cartItem.getQuantity() == 1) {
-                        cartService.removeBookFromCart(book.getBookId(), currentUser);
-                    }
-                    model.addAttribute("titleOfBook", book.getTitle());
-                    return "books/bookIsOutOfStock";
-                }
-                // Update the stock
-                book.setStock(book.getStock() - cartItem.getQuantity());
-                bookService.addBook(book);
-            }finally {
-                // Always release the lock after operation is complete
-                lock.unlock();
-                // Optionally clean up the lock to avoid memory leaks for rarely sold books
-                bookLocks.remove((long)bookId);
-            }
+        // now stockService is available
+        List<String> outOfStock = stockService.findOutOfStockTitles(cartItems);
+        if (!outOfStock.isEmpty()) {
+            model.addAttribute("outOfStockBooks", outOfStock);
+            return "books/bookIsOutOfStockList";
         }
 
-        List<OrderDetails> orderDetails = orderService.convertToOrderDetails(cartItems);
-
-        Order order = orderService.createOrder(orderDetails, currentUser);
+        Order order = orderService.placeOrder(currentUser, cartItems);
         model.addAttribute("order", order);
-
-        cartService.clearCart(currentUser);
-
         return "order/orderConfirmation";
     }
 
+
+
 }
+
